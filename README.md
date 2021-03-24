@@ -2,7 +2,7 @@
 
 + [Machine learning](#Machine-learning) ![icon][done]
 
-[done]:done.png
+[done]:img/done.png
 
 ## Machine learning
 + [Функции активации](nn.md#Функции-активации)

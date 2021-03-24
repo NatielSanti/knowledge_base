@@ -10,11 +10,15 @@
 ![icon][hyper]
 ![icon][softmax]
 
-[activationfunc]:activationfunc.JPG
-[sigmoid]:sigmoid.JPG
-[hyper]:hyper.JPG
-[softmax]:softmax.JPG
-[relu]:relu.JPG
+[activationfunc]:img/activationfunc.JPG
+[sigmoid]:img/sigmoid.JPG
+[hyper]:img/hyper.JPG
+[softmax]:img/softmax.JPG
+[relu]:img/relu.JPG
+
+[к оглавлению](#Neuron-Networks)
+
+[Заглавная](README.md)
 <!-- ```java
 public class SomePhone {
 
@@ -44,6 +48,4 @@ public class SomePhone {
 !!! a() called
 !!! done
 ``` -->
-[к оглавлению](#Neuron-Networks)
 
-[Вопросы для собеседования](README.md)
