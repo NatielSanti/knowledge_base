@@ -4,7 +4,17 @@
 + [Функции активации](#Функции-активации)
 
 ## Функции активации
+[icon][activationfunc]
+[icon][sigmoid]
+[icon][relu]
+[icon][hyper]
+[icon][softmax]
 
+[done]:activationfunc.JPG
+[sigmoid]:sigmoid.JPG
+[hyper]:hyper.JPG
+[softmax]:softmax.JPG
+[relu]:relu.JPG
 <!-- ```java
 public class SomePhone {
 
