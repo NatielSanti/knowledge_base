@@ -10,7 +10,7 @@
 ![icon][hyper]
 ![icon][softmax]
 
-[done]:activationfunc.JPG
+[activationfunc]:activationfunc.JPG
 [sigmoid]:sigmoid.JPG
 [hyper]:hyper.JPG
 [softmax]:softmax.JPG
