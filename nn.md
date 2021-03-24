@@ -2,6 +2,8 @@
 
 # Neuron Networks
 + [Функции активации](#Функции-активации)
++ [Keras regression](#Keras-regression)
++ [Keras classification](#Keras-classification)
 
 ## Функции активации
 ![icon][activationfunc]
@@ -18,34 +20,127 @@
 
 [к оглавлению](#Neuron-Networks)
 
+## Keras regression
+
+Проверка данных
+```python
+import pandas as pd
+import numpy as np
+
+concrete_data = pd.read_csv('https://s3-api.us-geo.objectstorage.softlayer.net/cf-courses-data/CognitiveClass/DL0101EN/labs/data/concrete_data.csv')
+concrete_data.head()
+# Размер данных. Кол-во записей против количества столбцов
+concrete_data.shape
+# Оценка данных. Кол-во непустых столбцов, среднее пропорциональное, std, min, max и прочее
+concrete_data.describe()
+# Кол-во пустых значений в столбцах
+concrete_data.isnull().sum()
+
+```
+Подготовка данных
+```python
+concrete_data_columns = concrete_data.columns
+# делим данные на target и prediction
+predictors = concrete_data[concrete_data_columns[concrete_data_columns != 'Strength']] # all columns except Strength
+target = concrete_data['Strength'] # Strength column
+# Нормализуем данные
+predictors_norm = (predictors - predictors.mean()) / predictors.std()
+n_cols = predictors_norm.shape[1] # number of predictors
+```
+Импортируем библиотеку Keras, создаём модель NN, обучаем модель
+```python
+import keras # Using TensorFlow backend
+from keras.models import Sequential
+from keras.layers import Dense
+
+# define regression model
+def regression_model():
+    # create model
+    model = Sequential()
+    model.add(Dense(50, activation='relu', input_shape=(n_cols,)))
+    model.add(Dense(50, activation='relu'))
+    model.add(Dense(1))
+    
+    # compile model
+    model.compile(optimizer='adam', loss='mean_squared_error')
+    return model
+
+# build the model
+model = regression_model()
+# fit the model
+model.fit(predictors_norm, target, validation_split=0.3, epochs=100, verbose=2)
+```
+
+[к оглавлению](#Neuron-Networks)
+
+## Keras classification
+
+Импорт пакетов и тестовых данных из библиотеку Keras. Это числа
+```python
+import keras
+
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.utils import to_categorical
+import matplotlib.pyplot as plt
+# import the data
+from keras.datasets import mnist
+
+# read the data
+(X_train, y_train), (X_test, y_test) = mnist.load_data()
+plt.imshow(X_train[0]) #образец данных
+# flatten images into one-dimensional vector
+
+```
+Подготавливаем данные
+```python
+num_pixels = X_train.shape[1] * X_train.shape[2] # find size of one-dimensional vector
+
+X_train = X_train.reshape(X_train.shape[0], num_pixels).astype('float32') # flatten training images
+X_test = X_test.reshape(X_test.shape[0], num_pixels).astype('float32') # flatten test images
+# normalize inputs from 0-255 to 0-1
+X_train = X_train / 255
+X_test = X_test / 255
+# one hot encode outputs
+y_train = to_categorical(y_train)
+y_test = to_categorical(y_test)
+
+num_classes = y_test.shape[1]
+print(num_classes)
+```
+Строим модель NN и обучаем её
+```python
+# define classification model
+def classification_model():
+    # create model
+    model = Sequential()
+    model.add(Dense(num_pixels, activation='relu', input_shape=(num_pixels,)))
+    model.add(Dense(100, activation='relu'))
+    model.add(Dense(num_classes, activation='softmax'))
+    
+    
+    # compile model
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
+
+# build the model
+model = classification_model()
+
+# fit the model
+model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=10, verbose=2)
+
+# evaluate the model
+scores = model.evaluate(X_test, y_test, verbose=0)
+```
+Оцениваем точность, затем сохраняем нашу модель в файл. После загружаем модель из файла
+```python
+print('Accuracy: {}% \n Error: {}'.format(scores[1], 1 - scores[1]))   
+model.save('classification_model.h5')
+
+from keras.models import load_model
+pretrained_model = load_model('classification_model.h5')
+```
+
+[к оглавлению](#Neuron-Networks)
+
 [Заглавная](README.md)
-<!-- ```java
-public class SomePhone {
-
-    private int year;
-    private String company;
-    public SomePhone(int year, String company) {
-        this.year = year;
-        this.company = company;
-    }
-    private void openConnection(){
-        //findComutator
-        //openNewConnection...
-    }
-    public void call() {
-        openConnection();
-        System.out.println("Вызываю номер");
-    }
-
-    public void ring() {
-        System.out.println("Дзынь-дзынь");
-    }
-
-}
-```
-```
-!!! a() called
-!!! a() called
-!!! done
-``` -->
-
