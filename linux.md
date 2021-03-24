@@ -11,14 +11,14 @@ netstat -tulpn
 firewall-cmd --zone=public --add-port=5432/tcp --permanent
 firewall-cmd --reload
 netstat -tulpn
+netstat -ano | grep '5432'
 ```
 
 [к оглавлению](#Linux)
 
 ## Запустить процесс демон на примере Angular 2 приложения
 
-На примере мы запускаем Angular 2 приложение.
-в папке ```/etc/systemd/system/``` создаём файл ```test2.service```
+В папке ```/etc/systemd/system/``` создаём файл ```test2.service```
 В нём записываем:
 ```linux
 [Unit]
