@@ -204,7 +204,7 @@ scores = model.evaluate(X_test, y_test, verbose=0)
 print("Accuracy: {} \n Error: {}".format(scores[1], 100-scores[1]*100))
 ```
 Пример с двумя конволюционными и пул модулями
-```puthon
+```python
 def convolutional_model():
     
     # create model
