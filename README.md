@@ -8,8 +8,10 @@
 + [Keras regression](nn.md#Keras-regression)
 + [Keras classification](nn.md#Keras-classification)
 + [Keras Convolutional NN](nn.md#Keras-Convolutional-NN)
-+ [PyTorch 1D Tensors Operations](nn.md#PyTorch-1D-Tensors-Operations)
-+ [PyTorch Differentiation](nn.md#PyTorch-Differentiation)
++ [PyTorch 1D Tensors Operations](nn-pytorch.md#PyTorch-1D-Tensors-Operations)
++ [PyTorch Differentiation](nn-pytorch.md#PyTorch-Differentiation)
++ [PyTorch Simple Dataset](nn-pytorch.md#PyTorch-Simple-Dataset)
++ [PyTorch Получение данных из архива и обработка изображений](nn-pytorch.md#PyTorch-Получение-данных-из-архива-и-обработка-изображений)
 
 ## Linux
 + [Открыть порт](linux.md#Открыть-порт)
