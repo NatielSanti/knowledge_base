@@ -5,6 +5,7 @@
 
 ## Machine learning
 + [Функции активации](nn.md#Функции-активации)
+### Keras
 + [Keras regression](nn.md#Keras-regression)
 + [Keras classification](nn.md#Keras-classification)
 + [Keras Convolutional NN](nn.md#Keras-Convolutional-NN)
