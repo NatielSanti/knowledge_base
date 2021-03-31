@@ -2,12 +2,18 @@
 
 # Neuron Networks
 + [Функции активации](#Функции-активации)
+
+## Keras
 + [Keras regression](#Keras-regression)
 + [Keras classification](#Keras-classification)
 + [Keras Convolutional NN](#Keras-Convolutional-NN)
+
+## Spark
 + [Spark Parquet](nn-spark.md#Parquet)
 + [Spark Metrics](nn-spark.md#Metrics)
 + [Spark Multiple File](nn-spark.md#Multiple-File)
+
+## SKLearn
 + [SKLearn Simple Linear Regression](nn-sklearn.md#Simple-Linear-Regression)
 + [SKLearn Nonlinear Regression](nn-sklearn.md#Nonlinear-Regression)
 + [SKLearn Multiple Linear Regression](nn-sklearn.md#Multiple-Linear-Regression)
@@ -22,6 +28,8 @@
 + [SKLearn Collaborative Recomendation System](nn-sklearn.md#Collaborative-Recomendation-System)
 + [SKLearn Content Based Recommendation System](nn-sklearn.md#Content-Based-Recommendation-System)
 + [Sklearn Final Project](nn-sklearn.md#Sklearn-Final-Project)
+
+## PyTorch
 + [PyTorch 1D Tensors Operations](nn-pytorch.md#PyTorch-1D-Tensors-Operations)
 + [PyTorch Differentiation](nn-pytorch.md#PyTorch-Differentiation)
 + [PyTorch Simple Dataset](nn-pytorch.md#PyTorch-Simple-Dataset)
