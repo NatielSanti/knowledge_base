@@ -5,7 +5,8 @@
 + [Keras regression](#Keras-regression)
 + [Keras classification](#Keras-classification)
 + [Keras Convolutional NN](#Keras-Convolutional-NN)
-+ [PyTorch Tensors Operations](#PyTorch-Tensors-Operations)
++ [PyTorch 1D Tensors Operations](#PyTorch-1D-Tensors-Operations)
++ [PyTorch Differentiation](#PyTorch-Differentiation)
 
 ## Функции активации
 ![icon][activationfunc]
@@ -19,6 +20,8 @@
 [hyper]:img/hyper.JPG
 [softmax]:img/softmax.JPG
 [relu]:img/relu.JPG
+[derivative_f1]:img/derivative_f1.JPG
+[derivative_f2]:img/derivative_f2.JPG
 
 [к оглавлению](#Neuron-Networks)
 
@@ -236,7 +239,7 @@ print("Accuracy: {} \n Error: {}".format(scores[1], 100-scores[1]*100))
 ```
 [к оглавлению](#Neuron-Networks)
 
-## PyTorch Tensors Operations
+## PyTorch 1D Tensors Operations
 
 Импорт и объявление функции для начертания графиков.
 ```python
@@ -382,6 +385,117 @@ len_5_tensor = torch.linspace(-2, 2, steps = 5)
 # First Try on linspace tensor([-2., -1.,  0.,  1.,  2.])
 pi_tensor = torch.linspace(0, 2*np.pi, 100)
 ```
+
+[к оглавлению](#Neuron-Networks)
+
+## PyTorch Differentiation
+
+```python
+import torch 
+import matplotlib.pylab as plt
+```
+Derivatives
+```python
+x = torch.tensor(2.0, requires_grad = True)
+print("The tensor x: ", x) # The tensor x:  tensor(2., requires_grad=True)
+y = x ** 2
+print("The result of y = x^2: ", y) # The result of y = x^2:  tensor(4., grad_fn=<PowBackward0>)
+y.backward()
+print("The dervative at x = 2: ", x.grad) # The dervative at x = 2:  tensor(4.)
+
+print('data:',x.data) # data: tensor(2.)
+print('grad_fn:',x.grad_fn) # grad_fn: None
+print('grad:',x.grad) # grad: tensor(4.)
+print("is_leaf:",x.is_leaf) # is_leaf: True
+print("requires_grad:",x.requires_grad) # requires_grad: True
+
+print('data:',y.data) # data: tensor(4.)
+print('grad_fn:',y.grad_fn) # grad_fn: <PowBackward0 object at 0x7fa5cb396a90>
+print('grad:',y.grad) # grad: None
+print("is_leaf:",y.is_leaf) # is_leaf: False
+print("requires_grad:",y.requires_grad) # requires_grad: True
+
+x = torch.tensor(2.0, requires_grad = True)
+y = x ** 2 + 2 * x + 1
+print("The result of y = x^2 + 2x + 1: ", y) # The result of y = x^2 + 2x + 1:  tensor(9., grad_fn=<AddBackward0>)
+y.backward()
+print("The dervative at x = 2: ", x.grad) # The dervative at x = 2:  tensor(6.)
+```
+Можно самому описать функцию и её производные
+```python
+class SQ(torch.autograd.Function):
+
+
+    @staticmethod
+    def forward(ctx,i):
+        """
+        In the forward pass we receive a Tensor containing the input and return
+        a Tensor containing the output. ctx is a context object that can be used
+        to stash information for backward computation. You can cache arbitrary
+        objects for use in the backward pass using the ctx.save_for_backward method.
+        """
+        result=i**2
+        ctx.save_for_backward(i)
+        return result
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        """
+        In the backward pass we receive a Tensor containing the gradient of the loss
+        with respect to the output, and we need to compute the gradient of the loss
+        with respect to the input.
+        """
+        i, = ctx.saved_tensors
+        grad_output = 2*i
+        return grad_output
+
+
+x=torch.tensor(2.0,requires_grad=True )
+sq=SQ.apply
+
+y=sq(x)
+print(y.grad_fn) # <torch.autograd.function.SQBackward object at 0x7fa5cb432c88>
+y.backward()
+x.grad # tensor(4.)
+
+```
+Еще примеры
+```python
+u = torch.tensor(1.0,requires_grad=True)
+v = torch.tensor(2.0,requires_grad=True)
+f = u * v + u ** 2
+print("The result of v * u + u^2: ", f) # The result of v * u + u^2:  tensor(3., grad_fn=<AddBackward0>)
+f.backward()
+print("The partial derivative with respect to u: ", u.grad) # The partial derivative with respect to u:  tensor(4.)
+print("The partial derivative with respect to u: ", v.grad) # The partial derivative with respect to u:  tensor(1.)
+```
+Начертание графика функции и графика производных от X.
+```python
+x = torch.linspace(-10, 10, 10, requires_grad = True)
+Y = x ** 2
+y = torch.sum(x ** 2)
+y.backward()
+
+plt.plot(x.detach().numpy(), Y.detach().numpy(), label = 'function')
+plt.plot(x.detach().numpy(), x.grad.detach().numpy(), label = 'derivative')
+plt.xlabel('x')
+plt.legend()
+plt.show()
+```
+![icon][derivative_f1]
+Начертание графика функции и графика производных от X.
+```python
+x = torch.linspace(-10, 10, 1000, requires_grad = True)
+Y = torch.relu(x)
+y = Y.sum()
+y.backward()
+plt.plot(x.detach().numpy(), Y.detach().numpy(), label = 'function')
+plt.plot(x.detach().numpy(), x.grad.detach().numpy(), label = 'derivative')
+plt.xlabel('x')
+plt.legend()
+plt.show()
+```
+![icon][derivative_f2]
 
 [к оглавлению](#Neuron-Networks)
 

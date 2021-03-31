@@ -8,7 +8,8 @@
 + [Keras regression](nn.md#Keras-regression)
 + [Keras classification](nn.md#Keras-classification)
 + [Keras Convolutional NN](nn.md#Keras-Convolutional-NN)
-+ [PyTorch Tensors Operations](nn.md#PyTorch-Tensors-Operations)
++ [PyTorch 1D Tensors Operations](nn.md#PyTorch-1D-Tensors-Operations)
++ [PyTorch Differentiation](nn.md#PyTorch-Differentiation)
 
 ## Linux
 + [Открыть порт](linux.md#Открыть-порт)
