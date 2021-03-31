@@ -158,7 +158,7 @@ len_5_tensor = torch.linspace(-2, 2, steps = 5)
 pi_tensor = torch.linspace(0, 2*np.pi, 100)
 ```
 
-[к оглавлению](#Neuron-Networks)
+[к оглавлению](#NN-Pytorch)
 
 ## PyTorch Differentiation
 
@@ -269,7 +269,7 @@ plt.show()
 ```
 ![icon][derivative_f2]
 
-[к оглавлению](#Neuron-Networks)
+[к оглавлению](#NN-Pytorch)
 
 ## PyTorch Simple Dataset
 
@@ -391,7 +391,7 @@ for i in range(3):
 # ...
 ```
 
-[к оглавлению](#Neuron-Networks)
+[к оглавлению](#NN-Pytorch)
 
 ## PyTorch Получение данных из архива и предобработка изображений
 
@@ -506,6 +506,6 @@ dataset = Dataset(csv_file=csv_file , data_dir=directory,transform=fliptensor_da
 show_data(dataset[1])
 ```
 
-[к оглавлению](#Neuron-Networks)
+[к оглавлению](#NN-Pytorch)
 
 [Заглавная](README.md)
