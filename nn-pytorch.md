@@ -5,7 +5,7 @@
 + [PyTorch 1D Tensors Operations](#PyTorch-1D-Tensors-Operations)
 + [PyTorch Differentiation](#PyTorch-Differentiation)
 + [PyTorch Simple Dataset](#PyTorch-Simple-Dataset)
-+ [PyTorch Получение данных из архива и обработка изображений](#PyTorch-Получение-данных-из-архива-и-обработка-изображений)
++ [PyTorch Получение данных из архива и предобработка изображений](#PyTorch-Получение-данных-из-архива-и-предобработка-изображений)
 
 [derivative_f1]:img/derivative_f1.JPG
 [derivative_f2]:img/derivative_f2.JPG

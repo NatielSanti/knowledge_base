@@ -8,7 +8,7 @@
 + [PyTorch 1D Tensors Operations](nn-pytorch.md#PyTorch-1D-Tensors-Operations)
 + [PyTorch Differentiation](nn-pytorch.md#PyTorch-Differentiation)
 + [PyTorch Simple Dataset](nn-pytorch.md#PyTorch-Simple-Dataset)
-+ [PyTorch Получение данных из архива и обработка изображений](nn-pytorch.md#PyTorch-Получение-данных-из-архива-и-обработка-изображений)
++ [PyTorch Получение данных из архива и предобработка изображений](nn-pytorch.md#PyTorch-Получение-данных-из-архива-и-предобработка-изображений)
 
 ## Функции активации
 ![icon][activationfunc]
