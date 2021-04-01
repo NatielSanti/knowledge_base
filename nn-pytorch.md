@@ -6,10 +6,15 @@
 + [PyTorch Differentiation](#PyTorch-Differentiation)
 + [PyTorch Simple Dataset](#PyTorch-Simple-Dataset)
 + [PyTorch Получение данных из архива и предобработка изображений](#PyTorch-Получение-данных-из-архива-и-предобработка-изображений)
++ [PyTorch Linear 1D Regression](#PyTorch-Linear-1D-Regression)
++ [PyTorch Train 1 param Regression](#PyTorch-Train-1-param-Regression)
 
 [derivative_f1]:img/derivative_f1.JPG
 [derivative_f2]:img/derivative_f2.JPG
 [boot_1]:img/boot_1.JPG
+[pytorch_lr_1]:img/pytorch_lr_1.JPG
+[pytorch_lr_2]:img/pytorch_lr_2.JPG
+[pytorch_lr_3]:img/pytorch_lr_3.JPG
 
 ## PyTorch 1D Tensors Operations
 
@@ -505,6 +510,164 @@ fliptensor_data_transform = transforms.Compose([transforms.RandomVerticalFlip(p=
 dataset = Dataset(csv_file=csv_file , data_dir=directory,transform=fliptensor_data_transform )
 show_data(dataset[1])
 ```
+
+[к оглавлению](#NN-Pytorch)
+
+## PyTorch Linear 1D Regression
+
+```python
+import torch
+from torch.nn import Linear
+
+torch.manual_seed(1)
+
+lr = Linear(in_features=1, out_features=1, bias=True)
+print("Parameters w and b: ", list(lr.parameters())) # Parameters w and b: tensor([[0.5153]] and tensor([-0.4414]
+print("Python dictionary: ",lr.state_dict()) # OrderedDict([('weight', tensor([[0.5153]])), ('bias', tensor([-0.4414]))])
+print("keys: ",lr.state_dict().keys()) # odict_keys(['weight', 'bias'])
+print("values: ",lr.state_dict().values()) # odict_values([tensor([[0.5153]]), tensor([-0.4414])])
+print("weight:",lr.weight) # tensor([[0.5153]], requires_grad=True)
+print("bias:",lr.bias) # tensor([-0.4414], requires_grad=True)
+
+x = torch.tensor([[1.0], [2.0]])
+yhat = lr(x)
+print("The prediction: ", yhat) # tensor([[0.0739], [0.5891]], grad_fn=<AddmmBackward>)
+```
+Custom Linear Regression Class
+```python
+from torch import nn
+
+class LR(nn.Module):
+    
+    # Constructor
+    def __init__(self, input_size, output_size):
+        
+        # Inherit from parent
+        super(LR, self).__init__()
+        self.linear = nn.Linear(input_size, output_size)
+    
+    # Prediction function
+    def forward(self, x):
+        out = self.linear(x)
+        return out
+
+
+x=torch.tensor([[1.0],[2.0],[3.0]])
+lr=LR(1,1)
+yhat=lr(x)
+print(yhat) # tensor([[ 0.3030],[ 0.0973],[-0.1084]], grad_fn=<AddmmBackward>)
+```
+
+[к оглавлению](#NN-Pytorch)
+
+## PyTorch Train 1 param Regression
+
+Plot class
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+class plot_diagram():
+    
+    # Constructor
+    def __init__(self, X, Y, w, stop, go = False):
+        start = w.data
+        self.error = []
+        self.parameter = []
+        self.X = X.numpy()
+        self.Y = Y.numpy()
+        self.parameter_values = torch.arange(start, stop)
+        self.Loss_function = [criterion(forward(X), Y) for w.data in self.parameter_values] 
+        w.data = start
+        
+    # Executor
+    def __call__(self, Yhat, w, error, n):
+        self.error.append(error)
+        self.parameter.append(w.data)
+        plt.subplot(212)
+        plt.plot(self.X, Yhat.detach().numpy())
+        plt.plot(self.X, self.Y,'ro')
+        plt.xlabel("A")
+        plt.ylim(-20, 20)
+        plt.subplot(211)
+        plt.title("Data Space (top) Estimated Line (bottom) Iteration " + str(n))
+        plt.plot(self.parameter_values.numpy(), self.Loss_function)   
+        plt.plot(self.parameter, self.error, 'ro')
+        plt.xlabel("B")
+        plt.figure()
+    
+    # Destructor
+    def __del__(self):
+        plt.close('all')
+```
+Make Data
+```python
+import torch
+
+X = torch.arange(-3, 3, 0.1).view(-1, 1)
+f = -3 * X
+Y = f + 0.1 * torch.randn(X.size()) # add noise
+
+plt.plot(X.numpy(), Y.numpy(), 'rx', label = 'Y')
+plt.plot(X.numpy(), f.numpy(), label = 'f')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.show()
+```
+![icon][pytorch_lr_1]
+
+Create the model and Cost F
+```python
+def forward(x):
+    return w * x
+
+def criterion(yhat, y):
+    return torch.mean((yhat - y) ** 2)
+
+lr = 0.1
+LOSS = []
+w = torch.tensor(-10.0, requires_grad = True)
+gradient_plot = plot_diagram(X, Y, w, stop = 5)
+```
+Train the model
+```python
+def train_model(iter):
+    for epoch in range (iter):
+        
+        # make the prediction as we learned in the last lab
+        Yhat = forward(X)
+        
+        # calculate the iteration
+        loss = criterion(Yhat,Y)
+        
+        # plot the diagram for us to have a better idea
+        gradient_plot(Yhat, w, loss.item(), epoch)
+        
+        # store the loss into list
+        LOSS.append(loss.item())
+        
+        # backward pass: compute gradient of the loss with respect to all the learnable parameters
+        loss.backward()
+        
+        # updata parameters
+        w.data = w.data - lr * w.grad.data
+        
+        # zero the gradients before running the backward pass
+        w.grad.data.zero_()
+
+train_model(4)
+```
+![icon][pytorch_lr_2]
+
+Plot the Loss
+```python
+plt.plot(LOSS)
+plt.tight_layout()
+plt.xlabel("Epoch/Iterations")
+plt.ylabel("Cost")
+```
+![icon][pytorch_lr_3]
 
 [к оглавлению](#NN-Pytorch)
 
