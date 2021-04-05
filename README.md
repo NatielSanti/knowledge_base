@@ -38,6 +38,12 @@
 + [PyTorch Differentiation](nn-pytorch.md#PyTorch-Differentiation)
 + [PyTorch Simple Dataset](nn-pytorch.md#PyTorch-Simple-Dataset)
 + [PyTorch Получение данных из архива и предобработка изображений](nn-pytorch.md#PyTorch-Получение-данных-из-архива-и-предобработка-изображений)
++ [PyTorch Linear 1D Regression](nn-pytorch.md#PyTorch-Linear-1D-Regression)
++ [PyTorch Train 1 param Regression](nn-pytorch.md#PyTorch-Train-1-param-Regression)
++ [PyTorch Train 2 param Regression](nn-pytorch.md#PyTorch-Train-2-param-Regression)
++ [PyTorch Stochastic Gradient Descent](nn-pytorch.md#PyTorch-Stochastic-Gradient-Descent)
++ [PyTorch Mini Batch Gradient Descent](nn-pytorch.md#PyTorch-Mini-Batch-Gradient-Descent)
++ [PyTorch Way 2 param Mini Batch GD](nn-pytorch.md#PyTorch-Way-2-param-Mini-Batch-GD)
 
 ## Linux
 + [Открыть порт](linux.md#Открыть-порт)
