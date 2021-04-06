@@ -1,6 +1,6 @@
 [Заглавная](README.md)
 
-# NN Pytorch 1
+# NN Pytorch
 + [Neuron Networks](nn.md#Neuron-Networks)
 + [PyTorch 1D Tensors Operations](nn-pytorch-1.md#PyTorch-1D-Tensors-Operations)
 + [PyTorch Differentiation](nn-pytorch-1.md#PyTorch-Differentiation)
