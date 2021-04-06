@@ -34,6 +34,7 @@
 + [Sklearn Final Project](nn-sklearn.md#Sklearn-Final-Project)
 
 ### PyTorch
++ [Neuron Networks](nn.md#Neuron-Networks)
 + [PyTorch 1D Tensors Operations](nn-pytorch-1.md#PyTorch-1D-Tensors-Operations)
 + [PyTorch Differentiation](nn-pytorch-1.md#PyTorch-Differentiation)
 + [PyTorch Simple Dataset](nn-pytorch-1.md#PyTorch-Simple-Dataset)
@@ -45,6 +46,7 @@
 + [PyTorch Mini Batch Gradient Descent](nn-pytorch-1.md#PyTorch-Mini-Batch-Gradient-Descent)
 + [PyTorch Way 2 param Mini Batch GD](nn-pytorch-1.md#PyTorch-Way-2-param-Mini-Batch-GD)
 + [PyTorch Choose learning rate and using validation data set](nn-pytorch-1.md#PyTorch-Choose-learning-rate-and-using-validation-data-set)
++ [PyTorch Multiple Linear Regression](nn-pytorch-2.md#PyTorch-Multiple-Linear-Regression)
 
 ## Linux
 + [Открыть порт](linux.md#Открыть-порт)
