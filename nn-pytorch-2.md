@@ -27,6 +27,8 @@
 [lr_7_4]:img/pytorch_lr_7_4.JPG
 [lr_7_5]:img/pytorch_lr_7_5.JPG
 [lr_7_6]:img/pytorch_lr_7_6.JPG
+[lr_7_7]:img/pytorch_lr_7_7.JPG
+[lr_7_8]:img/pytorch_lr_7_8.JPG
 
 ## PyTorch Multiple Linear Regression
 
