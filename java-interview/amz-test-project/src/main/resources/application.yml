@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: autochecker
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: "jdbc:postgresql://45.76.32.22:5432/postgres"
+    username: "postgres"
+    password: "Moscow2020!"
+server:
+  port: 8080
+conf:
+  output:
+    dir: ""
+
