@@ -2,6 +2,7 @@
 
 # Java
 + [Mockito](java.md#Mockito)
++ [MockMvc](java.md#MockMvc)
 
 ## Mockito
 
@@ -217,6 +218,48 @@ public class QuadraticEquationServiceTest {
         double[] result = qe.method(1, -6, -7);
         Assert.assertEquals(result[0], 3, 0);
     }
+}
+```
+
+[к оглавлению](#Java)
+
+## MockMvc
+Необходимо подключить MVC Spring и сформировать WebConfig
+
+```java
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@ContextConfiguration(classes = WebConfig.class)
+public class RoleControllerIntegrationTest {
+
+    @Autowired
+    private WebApplicationContext wac;
+    private MockMvc mockMvc;
+
+    private static final String CONTENT_TYPE = "application/text;charset=ISO-8859-1";
+
+    @Before
+    public void setup() throws Exception {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+    }
+
+    @Test
+    public void givenEmployeeNameJohnWhenInvokeRoleThenReturnAdmin() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/role/John"))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(CONTENT_TYPE))
+                .andExpect(MockMvcResultMatchers.content().string("ADMIN"));
+    }
+}
+///////////
+@EnableWebMvc
+@Configuration
+@ComponentScan(basePackages = {"com.baeldung.controller.parameterized"})
+public class WebConfig {
+
+    @Autowired
+    private ServletContext ctx;
 }
 ```
 
