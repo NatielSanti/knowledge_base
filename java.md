@@ -7,14 +7,12 @@
 
 Данный пример создал некорректно, так как предполагается, что созданный mock будет передан в другой сервис и там использоваться.
 ```gradle
-***
 dependencies {
+    implementation 'junit:junit:4.12'
+    implementation 'org.springframework.boot:spring-boot-starter-test:2.2.6.RELEASE'
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.24.0'
-    testImplementation group: 'org.testng', name: 'testng', version: '6.14.3'
-    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.11.1'
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
 }
-***
 ```
 Test Service class
 ```java
@@ -146,7 +144,7 @@ DataService dataService;
 
 MockitoSession session;
 
-@BeforeMethod
+@Before
 public void beforeMethod() {
     session = Mockito.mockitoSession()
             .initMocks(this)
@@ -158,19 +156,9 @@ public void testMethod() {
     // some code using the dataService field
 }
 
-@AfterMethod
+@After
 public void afterMethod() {
     session.finishMocking();
-}
-```
-gradle зависимости
-```gradle
-dependencies {
-    implementation 'junit:junit:4.12'
-    testImplementation('org.springframework.boot:spring-boot-starter-test')
-    implementation 'org.springframework.boot:spring-boot-starter-test:2.2.6.RELEASE'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.24.0'
-    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
 }
 ```
 Живой пример.
