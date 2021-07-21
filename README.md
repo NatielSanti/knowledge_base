@@ -3,6 +3,8 @@
 + [Machine learning](#Machine-learning)
 + [Linux](#Linux)
 + [Python](#Python)
++ [Java](#Java)
++ [Docker](#Docker)
 
 ## Machine learning
 + [Функции активации](nn.md#Функции-активации)
