@@ -99,7 +99,7 @@ docker tag py localhost:5000/py //  сначала тегаем образ
 
 docker push localhost:5000/py // пушим образ в registry
 
-docker pull localhost:5000/py  // скачать из репозитория registry
+docker pull localhost:5000/py // скачать из репозитория registry
 ```
 REST API
 ```
