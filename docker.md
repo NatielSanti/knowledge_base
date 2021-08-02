@@ -3,9 +3,10 @@
 # Docker
 
 + [Commands](#Commands)
-+ [Examples](#Examples)
-+ [Compose](#Compose)
++ [docker-compose](#docker-compose)
 + [Registry](#Registry)
++ [docker-machine](#docker-machine)
++ [Examples](#Examples)
 
 ## Commands
 
@@ -78,10 +79,10 @@ alpine - лёгкий дистрибутив линукса
 
 [к оглавлению](#Intro)
 
-##  Compose
+##  docker-compose
 
 ```
-docker-compose -f app.yml build // собирает образ на основе файлов
+docker-compose -f app.yml build // собирает образ на основе файлов, работает только для тех контейнеров в которых есть секция build
 docker-compose -f app.yml up -d //  запускает собранные образы, -d для демонизированного отображения
 docker-compose -f app.yml logs -tf // лог с группы контейнеров, собранных из app.yml инструкции
 ```
@@ -104,6 +105,20 @@ docker pull localhost:5000/py // скачать из репозитория regi
 REST API
 ```
 curl localhost:5000/v2/_catalog  // список образов
+```
+
+[к оглавлению](#Intro)
+
+##  docker-machine
+
+Docker-machine это надстройка над докером, которая позволяет в качестве исполняющей платформы подключить другую машину, другой сервер, виртуальную систему.
+
+```
+docker-machine create local1 // VBoxManage должен быть установлен на macOS
+docker-machine ls // список машин и их ip
+docker-machine env local1 // параметры подключения машины
+docker-machine env --unset // параметры отключения от машины
+docker-machine ssh aws1 // подключение к консоли машины
 ```
 
 [к оглавлению](#Intro)
@@ -180,7 +195,14 @@ web:
 redis:
      image: redis
 ```
+Запускаем докер контейнер и другой контейнер, например с убунтой, и внутри убунты у нас будет докер и его команды. image docker c docker - dind       
+```
+docker run -d --privileged --name dind -v /usr/local/bin -v /var/run docker:dind // Чтобы в новом контейнере были команды и сокет самого докер демона
+docker run -it --volumes-from dind ubuntu // И в убунте у нас есть докер
+
+```
 
 [к оглавлению](#Intro)
+
 
 [Заглавная](README.md)
