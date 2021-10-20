@@ -2,16 +2,22 @@
 
 # NN Pytorch
 + [Neuron Networks](nn.md#Neuron-Networks)
-+ [PyTorch 1D Tensors Operations](#PyTorch-1D-Tensors-Operations)
-+ [PyTorch Differentiation](#PyTorch-Differentiation)
-+ [PyTorch Simple Dataset](#PyTorch-Simple-Dataset)
-+ [PyTorch Получение данных из архива и предобработка изображений](#PyTorch-Получение-данных-из-архива-и-предобработка-изображений)
-+ [PyTorch Linear 1D Regression](#PyTorch-Linear-1D-Regression)
-+ [PyTorch Train 1 param Regression](#PyTorch-Train-1-param-Regression)
-+ [PyTorch Train 2 param Regression](#PyTorch-Train-2-param-Regression)
-+ [PyTorch Stochastic Gradient Descent](#PyTorch-Stochastic-Gradient-Descent)
-+ [PyTorch Mini Batch Gradient Descent](#PyTorch-Mini-Batch-Gradient-Descent)
-+ [PyTorch Way 2 param Mini Batch GD](#PyTorch-Way-2-param-Mini-Batch-GD)
++ [PyTorch 1D Tensors Operations](nn-pytorch-1.md#PyTorch-1D-Tensors-Operations)
++ [PyTorch Differentiation](nn-pytorch-1.md#PyTorch-Differentiation)
++ [PyTorch Simple Dataset](nn-pytorch-1.md#PyTorch-Simple-Dataset)
++ [PyTorch Получение данных из архива и предобработка изображений](nn-pytorch-1.md#PyTorch-Получение-данных-из-архива-и-предобработка-изображений)
++ [PyTorch Linear 1D Regression](nn-pytorch-1.md#PyTorch-Linear-1D-Regression)
++ [PyTorch Train 1 param Regression](nn-pytorch-1.md#PyTorch-Train-1-param-Regression)
++ [PyTorch Train 2 param Regression](nn-pytorch-1.md#PyTorch-Train-2-param-Regression)
++ [PyTorch Stochastic Gradient Descent](nn-pytorch-1.md#PyTorch-Stochastic-Gradient-Descent)
++ [PyTorch Mini Batch Gradient Descent](nn-pytorch-1.md#PyTorch-Mini-Batch-Gradient-Descent)
++ [PyTorch Way 2 param Mini Batch GD](nn-pytorch-1.md#PyTorch-Way-2-param-Mini-Batch-GD)
++ [PyTorch Choose learning rate and using validation data set](nn-pytorch-1.md#PyTorch-Choose-learning-rate-and-using-validation-data-set)
++ [PyTorch Multiple Linear Regression](nn-pytorch-2.md#PyTorch-Multiple-Linear-Regression)
++ [PyTorch Multiple Linear Regression Outputs](nn-pytorch-2.md#PyTorch-Multiple-Linear-Regression-Outputs)
++ [PyTorch Logistic Regression](nn-pytorch-2.md#PyTorch-Logistic-Regression)
++ [PyTorch Softmax 1D](nn-pytorch-2.md#PyTorch-Softmax-1D)
++ [PyTorch Softmax Number Classification](nn-pytorch-2.md#PyTorch-Softmax-Number-Classification)
 
 [derivative_f1]:img/derivative_f1.JPG
 [derivative_f2]:img/derivative_f2.JPG

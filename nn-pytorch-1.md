@@ -14,6 +14,7 @@
 + [PyTorch Way 2 param Mini Batch GD](nn-pytorch-1.md#PyTorch-Way-2-param-Mini-Batch-GD)
 + [PyTorch Choose learning rate and using validation data set](nn-pytorch-1.md#PyTorch-Choose-learning-rate-and-using-validation-data-set)
 + [PyTorch Multiple Linear Regression](nn-pytorch-2.md#PyTorch-Multiple-Linear-Regression)
++ [PyTorch Multiple Linear Regression Outputs](nn-pytorch-2.md#PyTorch-Multiple-Linear-Regression-Outputs)
 + [PyTorch Logistic Regression](nn-pytorch-2.md#PyTorch-Logistic-Regression)
 + [PyTorch Softmax 1D](nn-pytorch-2.md#PyTorch-Softmax-1D)
 + [PyTorch Softmax Number Classification](nn-pytorch-2.md#PyTorch-Softmax-Number-Classification)

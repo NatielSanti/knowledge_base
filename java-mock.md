@@ -1,8 +1,8 @@
 [Заглавная](README.md)
 
 # Java
-+ [Mockito](java.md#Mockito)
-+ [MockMvc](java.md#MockMvc)
++ [Mockito](java-mock.md#Mockito)
++ [MockMvc](java-mock.md#MockMvc)
 
 ## Mockito
 
