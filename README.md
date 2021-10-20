@@ -21,7 +21,8 @@
 
 ## Java
 + [Java Mock](java-mock.md)
-+ [Java Stream](java-stream.md)
++ [Java Stream Api](java-stream.md)
++ [Java Version Features](java-version-features.md)
 
 ## Best Practices
 + [Class relations (Inheritance, Composition, Aggregation)](class-relations.md)
