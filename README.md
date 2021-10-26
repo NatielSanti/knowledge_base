@@ -27,6 +27,7 @@
 ## Best Practices
 + [Class relations (Inheritance, Composition, Aggregation)](class-relations.md)
 + [Design patterns](design-patterns.md)
++ [Theory](theory.md)
 
 ## Docker
 + [Commands](docker.md)
