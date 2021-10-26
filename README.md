@@ -27,7 +27,9 @@
 ## Best Practices
 + [Class relations (Inheritance, Composition, Aggregation)](class-relations.md)
 + [Design patterns](design-patterns.md)
-+ [Theory](theory.md)
++ [IoC, DI, IoC-контейнер](theory.md#IoC,-DI,-IoC-контейнер)
++ [SOLID](theory.md#SOLID)
++ [Database Transactions](theory.md#Database-Transactions)
 
 ## Docker
 + [Commands](docker.md)
