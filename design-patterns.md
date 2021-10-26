@@ -16,8 +16,6 @@
 + [Одиночка (singleton)](design-patterns.md#Одиночка-(singleton))
 + [Антипаттерн](design-patterns.md#Антипаттерн)
 + [Dependency Injection](design-patterns.md#Dependency-Injection)
-## Антипаттерн
-## Dependency Injection
 
 ## Условные обозначения
 ![icon][title]
