@@ -52,6 +52,8 @@ Stream<String> streamEmpty = Stream.empty();
 // Создать параллельный стрим из коллекции
 Stream<String> parallelStream = collection.parallelStream();
 ```
+[к оглавлению](#Java-Stream-API)
+
 ## Краткое описание конвейерных методов работы со стримами
 ```java
 // filter	
@@ -90,6 +92,7 @@ collection.stream().mapToInt((s) -> Integer.parseInt(s)).toArray()
 // Похоже на map, но может создавать из одного элемента несколько	
 collection.stream().flatMap((p) -> Arrays.asList(p.split(",")).stream()).toArray(String[]::new)
 ```
+[к оглавлению](#Java-Stream-API)
 
 ## Описание терминальных методов работы со стримами
 ```java
@@ -145,6 +148,7 @@ collection.stream().map(String::toUpperCase).toArray(String[]::new);
 // Позволяет выполнять агрегатные функции на всей коллекцией и возвращать один результат	
 collection.stream().reduce((s1, s2) -> s1 + s2).orElse(0)
 ```
+[к оглавлению](#Java-Stream-API)
 
 ## Краткое описание дополнительных методов у числовых стримов
 ```java
@@ -167,3 +171,7 @@ intStream.mapToObj((id) -> new Key(id)).toArray()
 // parallel	Вернуть параллельный стрим, если стрим уже параллельный, то может вернуть самого себя
 // sequential	Вернуть последовательный стрим, если стрим уже последовательный, то может вернуть самого себя
 ```
+
+[к оглавлению](#Java-Stream-API)
+
+[Заглавная](README.md)

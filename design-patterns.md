@@ -19,30 +19,43 @@
 
 ## Условные обозначения
 ![icon][title]
+[к оглавлению](#Design-patterns)
 ## Хранитель (memento) и Цепочка обязанностей (chain of responsibility)
 ![icon][memento_chainofresponsibility]
+[к оглавлению](#Design-patterns)
 ## Наблюдатель (observer) и Команда (command)
 ![icon][observer_command]
+[к оглавлению](#Design-patterns)
 ## Состояние (state) и Интерпретатор (interpreter)
 ![icon][state_interpreter]
+[к оглавлению](#Design-patterns)
 ## Стратегия (strategy) и Итератор (iterator)
 ![icon][strategy_iterator]
+[к оглавлению](#Design-patterns)
 ## Шаблонный метод (template method) и Посредник (mediator)
 ![icon][templatemethod_mediator]
+[к оглавлению](#Design-patterns)
 ## Посетитель (visitor) и Адаптер (adapter)
 ![icon][visitor_adapter]
+[к оглавлению](#Design-patterns)
 ## Прокси (proxy) и Мост (bridge)
 ![icon][proxy_bridge]
+[к оглавлению](#Design-patterns)
 ## Абстрактная фабрика (abstract factory) и Компоновщик (composite)
 ![icon][abstractfactory_composite]
+[к оглавлению](#Design-patterns)
 ## Строитель (builder) и Декоратор (decorator)
 ![icon][builder_decorator]
+[к оглавлению](#Design-patterns)
 ## Фабричный метод (factory method) и Фасад (facade)
 ![icon][factorymethod_facade]
+[к оглавлению](#Design-patterns)
 ## Прототип (prototype) и Приспособленец (flyweight)
 ![icon][prototype_flyweight]
+[к оглавлению](#Design-patterns)
 ## Одиночка (singleton)
 ![icon][singleton]
+[к оглавлению](#Design-patterns)
 
 [title]:img/pattern/pattern_1.PNG
 [memento_chainofresponsibility]:img/pattern/pattern_2.PNG
@@ -104,6 +117,11 @@
 12) **Членовредительство (Mutilation):** Излишнее «затачивание» объекта под определенную очень узкую задачу таким образом, что он не способен будет работать с никакими иными, пусть и очень схожими задачами.
 
 13) **Сохранение или смерть (Save or die):** Сохранение изменений лишь при завершении приложения.
+[к оглавлению](#Design-patterns)
 
 ## Что такое Dependency Injection?
 **Dependency Injection (внедрение зависимости)** - это набор паттернов и принципов разработки програмного обеспечения, которые позволяют писать слабосвязный код. В полном соответствии с принципом единой обязанности объект отдаёт заботу о построении требуемых ему зависимостей внешнему, специально предназначенному для этого общему механизму.
+
+[к оглавлению](#Design-patterns)
+
+[Заглавная](README.md)
