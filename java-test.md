@@ -3,6 +3,15 @@
 # Java Test
 + [Mockito](java-test.md#Mockito)
 + [MockMvc](java-test.md#MockMvc)
++ [Признаки плохого юнит-теста](java-test.md#Признаки-плохого-юнит-теста)
+
+[unit-test-1]:img/unit-test/unit-test-bad-1.jpeg
+[unit-test-2]:img/unit-test/unit-test-bad-2.jpeg
+[unit-test-3]:img/unit-test/unit-test-bad-3.jpeg
+[unit-test-4]:img/unit-test/unit-test-bad-4.jpeg
+[unit-test-5]:img/unit-test/unit-test-bad-5.jpeg
+[unit-test-6]:img/unit-test/unit-test-bad-6.jpeg
+[unit-test-7]:img/unit-test/unit-test-bad-7.jpeg
 
 [к оглавлению](#Java-Test)
 
@@ -264,6 +273,27 @@ public class WebConfig {
     private ServletContext ctx;
 }
 ```
+
+[к оглавлению](#Java-Test)
+
+## Признаки плохого юнит-теста
+
+### Условия в тестах
+#### Неправильно
+![icon][unit-test-1]
+#### Правильно
+![icon][unit-test-2]
+### Циклы в тестах
+#### Неправильно
+![icon][unit-test-3]
+#### Правильно
+![icon][unit-test-4]
+### Толстые и сложные тесты
+#### Неправильно
+![icon][unit-test-5]
+#### Правильно
+![icon][unit-test-6]
+![icon][unit-test-7]
 
 [к оглавлению](#Java-Test)
 
