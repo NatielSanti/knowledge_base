@@ -17,6 +17,8 @@
 + [Антипаттерн](design-patterns.md#Антипаттерн)
 + [Dependency Injection](design-patterns.md#Dependency-Injection)
 
+[к оглавлению](#Design-patterns)
+
 ## Условные обозначения
 ![icon][title]
 [к оглавлению](#Design-patterns)

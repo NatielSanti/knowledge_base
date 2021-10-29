@@ -1,8 +1,10 @@
 [Заглавная](README.md)
 
-# Java
-+ [Mockito](java-mock.md#Mockito)
-+ [MockMvc](java-mock.md#MockMvc)
+# Java Test
++ [Mockito](java-test.md#Mockito)
++ [MockMvc](java-test.md#MockMvc)
+
+[к оглавлению](#Java-Test)
 
 ## Mockito
 
@@ -221,7 +223,7 @@ public class QuadraticEquationServiceTest {
 }
 ```
 
-[к оглавлению](#Java)
+[к оглавлению](#Java-Test)
 
 ## MockMvc
 Необходимо подключить MVC Spring и сформировать WebConfig
@@ -263,6 +265,6 @@ public class WebConfig {
 }
 ```
 
-[к оглавлению](#Java)
+[к оглавлению](#Java-Test)
 
 [Заглавная](README.md)

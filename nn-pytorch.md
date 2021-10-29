@@ -33,6 +33,8 @@
 [pytorch_lr_4_1]:img/pytorch_lr_4_1.JPG
 [pytorch_lr_5_1]:img/pytorch_lr_5_1.JPG
 
+[к оглавлению](#NN-Pytorch)
+
 ## PyTorch 1D Tensors Operations
 
 Импорт и объявление функции для начертания графиков.

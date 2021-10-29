@@ -20,7 +20,7 @@
 + [Начертание простых графиков](python.md#Plot)
 
 ## Java
-+ [Java Mock](java-mock.md)
++ [Java Test](java-test.md)
 + [Java Stream Api](java-stream.md)
 + [Java Version Features](java-version-features.md)
 

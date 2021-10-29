@@ -30,6 +30,8 @@
 [lr_7_7]:img/pytorch_lr_7_7.JPG
 [lr_7_8]:img/pytorch_lr_7_8.JPG
 
+[к оглавлению](#NN-Pytorch)
+
 ## PyTorch Multiple Linear Regression
 
 Preparation

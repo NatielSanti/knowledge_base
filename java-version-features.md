@@ -8,6 +8,8 @@
 + [Java 12](java-version-features.md#Java-12)
 + [Java 13](java-version-features.md#Java-13)
 
+[к оглавлению](#Java-Version-Features)
+
 ## Java 8
 
 ### Java Stream Api

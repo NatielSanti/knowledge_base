@@ -17,6 +17,8 @@
 + [Content Based Recommendation System](#Content-Based-Recommendation-System)
 + [Sklearn Final Project](#Sklearn-Final-Project)
 
+[к оглавлению](#Sklearn)
+
 ## Simple Linear Regression
 
 ```python

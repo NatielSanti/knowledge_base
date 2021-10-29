@@ -36,6 +36,8 @@
 [pytorch_lr_6_2]:img/pytorch_lr_6_2.JPG
 [pytorch_lr_6_3]:img/pytorch_lr_6_3.JPG
 
+[к оглавлению](#NN-Pytorch)
+
 ## PyTorch 1D Tensors Operations
 
 Импорт и объявление функции для начертания графиков.
@@ -1324,8 +1326,6 @@ plt.legend()
 plt.show()
 ```
 ![icon][pytorch_lr_6_3]
-
-
 
 [к оглавлению](#NN-Pytorch)
 

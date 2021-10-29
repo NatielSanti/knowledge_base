@@ -5,6 +5,8 @@
 + [Association-Composition](class-relations.md#Association-Composition)
 + [Association-Aggregation](class-relations.md#Association-Aggregation)
 
+[к оглавлению](#Class-relations)
+
 ## Inheritance
 
 Прямое наследование. Автомобиль это вид транспорта.

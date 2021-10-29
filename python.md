@@ -2,6 +2,10 @@
 
 # Python
 
++ [Plot](#Plot)
+
+[к оглавлению](#Python)
+
 ## Plot
 
 ```python
