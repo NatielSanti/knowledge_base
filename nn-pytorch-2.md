@@ -19,16 +19,16 @@
 + [PyTorch Softmax 1D](nn-pytorch-2.md#PyTorch-Softmax-1D)
 + [PyTorch Softmax Number Classification](nn-pytorch-2.md#PyTorch-Softmax-Number-Classification)
 
-[mult_lr_1_1]:img/pytorch_mult_lr_1_1.JPG
-[mult_lr_1_2]:img/pytorch_mult_lr_1_2.JPG
-[lr_7_1]:img/pytorch_lr_7_1.JPG
-[lr_7_2]:img/pytorch_lr_7_2.JPG
-[lr_7_3]:img/pytorch_lr_7_3.JPG
-[lr_7_4]:img/pytorch_lr_7_4.JPG
-[lr_7_5]:img/pytorch_lr_7_5.JPG
-[lr_7_6]:img/pytorch_lr_7_6.JPG
-[lr_7_7]:img/pytorch_lr_7_7.JPG
-[lr_7_8]:img/pytorch_lr_7_8.JPG
+[mult_lr_1_1]:img/pytorch/pytorch_mult_lr_1_1.JPG
+[mult_lr_1_2]:img/pytorch/pytorch_mult_lr_1_2.JPG
+[lr_7_1]:img/pytorch/pytorch_lr_7_1.JPG
+[lr_7_2]:img/pytorch/pytorch_lr_7_2.JPG
+[lr_7_3]:img/pytorch/pytorch_lr_7_3.JPG
+[lr_7_4]:img/pytorch/pytorch_lr_7_4.JPG
+[lr_7_5]:img/pytorch/pytorch_lr_7_5.JPG
+[lr_7_6]:img/pytorch/pytorch_lr_7_6.JPG
+[lr_7_7]:img/pytorch/pytorch_lr_7_7.JPG
+[lr_7_8]:img/pytorch/pytorch_lr_7_8.JPG
 
 [к оглавлению](#NN-Pytorch)
 

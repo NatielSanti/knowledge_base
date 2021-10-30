@@ -22,16 +22,16 @@
 [derivative_f1]:img/derivative_f1.JPG
 [derivative_f2]:img/derivative_f2.JPG
 [boot_1]:img/boot_1.JPG
-[pytorch_lr_1]:img/pytorch_lr_1.JPG
-[pytorch_lr_2]:img/pytorch_lr_2.JPG
-[pytorch_lr_3]:img/pytorch_lr_3.JPG
-[pytorch_lr_2_1]:img/pytorch_lr_2_1.JPG
-[pytorch_lr_2_2]:img/pytorch_lr_2_2.JPG
-[pytorch_lr_2_3]:img/pytorch_lr_2_3.JPG
-[pytorch_lr_3_1]:img/pytorch_lr_3_1.JPG
-[pytorch_lr_3_2]:img/pytorch_lr_3_2.JPG
-[pytorch_lr_4_1]:img/pytorch_lr_4_1.JPG
-[pytorch_lr_5_1]:img/pytorch_lr_5_1.JPG
+[pytorch_lr_1]:img/pytorch/pytorch_lr_1.JPG
+[pytorch_lr_2]:img/pytorch/pytorch_lr_2.JPG
+[pytorch_lr_3]:img/pytorch/pytorch_lr_3.JPG
+[pytorch_lr_2_1]:img/pytorch/pytorch_lr_2_1.JPG
+[pytorch_lr_2_2]:img/pytorch/pytorch_lr_2_2.JPG
+[pytorch_lr_2_3]:img/pytorch/pytorch_lr_2_3.JPG
+[pytorch_lr_3_1]:img/pytorch/pytorch_lr_3_1.JPG
+[pytorch_lr_3_2]:img/pytorch/pytorch_lr_3_2.JPG
+[pytorch_lr_4_1]:img/pytorch/pytorch_lr_4_1.JPG
+[pytorch_lr_5_1]:img/pytorch/pytorch_lr_5_1.JPG
 
 [к оглавлению](#NN-Pytorch)
 
