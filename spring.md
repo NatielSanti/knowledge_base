@@ -12,6 +12,9 @@
 + [@RequestMapping Annotation](spring.md#@RequestMapping-Annotation)
 + [Spring JdbcTemplate](spring.md#Spring-JdbcTemplate)
 + [Hibernate and JPA difference](spring.md#Hibernate-and-JPA-difference)
++ [Требования JPA к Entity классам](spring.md#Требования-JPA-к-Entity-классам)
++ [Spring Boot Main Features](spring.md#Spring-Boot-Main-Features)
++ [Spring Boot Basic Annotations](spring.md#Spring-Boot-Basic-Annotations)
 
 [bean-life-cycle]:img/Spring-Bean-Life-Cycle.jpg
 
@@ -103,6 +106,44 @@ The Spring JDBC template is the primary API through which we can access database
 - **JPA** - Java Persistence API (JPA) defines the management of relational data in the Java applications.
 - **Hibernate** - Hibernate is an Object-Relational Mapping (ORM) tool which is used to save the state of Java object into the database.
 It is one of the most frequently used JPA implementation.
+
+[к оглавлению](#Spring-Questions)
+
+## Требования JPA к Entity классам
+
+1) Entity класс должен быть отмечен аннотацией Entity или описан в XML файле конфигурации JPA,
+2) Entity класс должен содержать public или protected конструктор без аргументов (он также может иметь конструкторы с аргументами),
+3) Entity класс должен быть классом верхнего уровня (top-level class),
+4) Entity класс не может быть enum или интерфейсом,
+5) Entity класс не может быть финальным классом (final class),
+6) Entity класс не может содержать финальные поля или методы, если они участвуют в маппинге (persistent final methods or persistent final instance variables),
+7) Если объект Entity класса будет передаваться по значению как отдельный объект (detached object), например через удаленный интерфейс (through a remote interface), он так же должен реализовывать Serializable интерфейс,
+8) Поля Entity класс должны быть напрямую доступны только методам самого Entity класса и не должны быть напрямую доступны другим классам, использующим этот Entity. Такие классы должны обращаться только к методам (getter/setter методам или другим методам бизнес-логики в Entity классе),
+9) Enity класс должен содержать первичный ключ, то есть атрибут или группу атрибутов которые уникально определяют запись этого Enity класса в базе данных,
+
+[к оглавлению](#Spring-Questions)
+
+## Spring Boot Main Features
+
+Spring Boot is essentially a framework for rapid application development built on top of the Spring Framework. With its auto-configuration and embedded application server support, combined with the extensive documentation and community support it enjoys, Spring Boot is one of the most popular technologies in the Java ecosystem as of date.
+
+Here are a few salient features:
+
+- **Starters** – a set of dependency descriptors to include relevant dependencies at a go
+- **Auto-configuration** – a way to automatically configure an application based on the dependencies present on the classpath
+- **Actuator** – to get production-ready features such as monitoring
+- **Security**
+- **Logging**
+
+[к оглавлению](#Spring-Questions)
+
+## Spring Boot Basic Annotations
+The primary annotations that Spring Boot offers reside in its ```org.springframework.boot.autoconfigure``` and its sub-packages.
+
+Here are a couple of basic ones:
+
+- ```@EnableAutoConfiguration``` – to make Spring Boot look for auto-configuration beans on its classpath and automatically apply them
+- ```@SpringBootApplication``` – to denote the main class of a Boot Application. This annotation combines ```@Configuration```, ```@EnableAutoConfiguration``` and ```@ComponentScan``` annotations with their default attributes.
 
 [к оглавлению](#Spring-Questions)
 
