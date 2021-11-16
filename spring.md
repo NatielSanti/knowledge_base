@@ -10,6 +10,7 @@
 + [Design Patterns Used in the Spring Framework](spring.md#Design-Patterns-Used-in-the-Spring-Framework)
 + [Controller in Spring MVC](spring.md#Controller-in-Spring-MVC)
 + [@RequestMapping Annotation](spring.md#@RequestMapping-Annotation)
++ [EntityManager и основные его функции](spring.md#EntityManager-и-основные-его-функции)
 + [Spring JdbcTemplate](spring.md#Spring-JdbcTemplate)
 + [Hibernate and JPA difference](spring.md#Hibernate-and-JPA-difference)
 + [Требования JPA к Entity классам](spring.md#Требования-JPA-к-Entity-классам)
@@ -144,6 +145,17 @@ Here are a couple of basic ones:
 
 - ```@EnableAutoConfiguration``` – to make Spring Boot look for auto-configuration beans on its classpath and automatically apply them
 - ```@SpringBootApplication``` – to denote the main class of a Boot Application. This annotation combines ```@Configuration```, ```@EnableAutoConfiguration``` and ```@ComponentScan``` annotations with their default attributes.
+
+[к оглавлению](#Spring-Questions)
+
+## EntityManager и основные его функции
+
+EntityManager это интерфейс, который описывает API для всех основных операций над Enitity, получение данных и других сущностей JPA. По сути главный API для работы с JPA. Основные операции:
+1) Для операций над Entity: persist (добавление Entity под управление JPA), merge (обновление), remove (удаления), refresh (обновление данных), detach (удаление из управление JPA), lock (блокирование Enity от изменений в других thread),
+2) Получение данных: find (поиск и получение Entity), createQuery, createNamedQuery, createNativeQuery, contains, createNamedStoredProcedureQuery, createStoredProcedureQuery
+3) Получение других сущностей JPA: getTransaction, getEntityManagerFactory, getCriteriaBuilder, getMetamodel, getDelegate
+4) Работа с EntityGraph: createEntityGraph, getEntityGraph
+4) Общие операции над EntityManager или всеми Entities: close, isOpen, getProperties, setProperty, clear
 
 [к оглавлению](#Spring-Questions)
 

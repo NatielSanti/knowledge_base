@@ -23,6 +23,7 @@
 + [Java Test](java-test.md)
 + [Java Stream Api](java-stream.md)
 + [Java Version Features](java-version-features.md)
++ [Java Core](java-core.md)
 
 ## Spring
 + [Spring](spring.md)
