@@ -1,0 +1,88 @@
+function J = computeCost(X, y, theta) //linear
+	m = length(y); % number of training examples
+	sqrError = (X*theta - y).^2;
+	J = 1/(2*m)*sum(sqrError);
+end
+
+
+function [theta, J_history] = gradientDescent(X, y, theta, alpha, num_iters)   //linear
+	m = length(y); % number of training examples
+	J_history = zeros(num_iters, 1);
+	for iter = 1:num_iters
+	    j1=(1/m)*sum((theta(1)+theta(2).*X(iter,2))-y(iter))
+	    j2=(1/m)*sum(((theta(1)+theta(2).*X(iter,2))-y(iter)).*X(iter,2))
+	    theta(1)=theta(1)-alpha*(j1);
+	    theta(2)=theta(2)-alpha*(j2);
+	    J_history(iter) = computeCost(X, y, theta); 
+	end
+end
+
+function g = sigmoid(z)
+	g = zeros(size(z));
+	line = size(z,1);
+	column = size(z,2);
+    for i = 1:line
+        for j = 1:column
+            g(i,j) = 1/(1 + exp(-z(i,j)));
+        end
+    end
+end
+
+function [J, grad] = costFunction(theta, X, y) //sigmoid
+m = length(y); % number of training examples
+J = 0;
+grad = zeros(size(theta));
+h = sigmoid(X*theta);
+J = ((-y)'*log(h)-(1-y)'*log(1-h))/m;
+grad = (X'*(h - y))/m;
+end
+
+function [J, grad] = costFunctionReg(theta, X, y, lambda) //sigmoid cost F and grad with regulation
+m = length(y); % number of training examples
+J = 0;
+grad = zeros(size(theta));
+h = sigmoid(X*theta);
+theta1 = [0 ; theta(2:size(theta), :)]; // другой вариант theta1 = theta; theta1(1) = 0;
+p = lambda*(theta1'*theta1)/(2*m);
+J = ((-y)'*log(h) - (1-y)'*log(1-h))/m + p;
+grad = (X'*(h - y))/m +lambda*theta1/m;
+end
+
+
+function [all_theta] = oneVsAll(X, y, num_labels, lambda) //OneVsAll функция определения оптимальных значений Тета для определения мультиклассовой регрессии
+m = size(X, 1);
+n = size(X, 2);
+all_theta = zeros(num_labels, n + 1);
+% Add ones to the X data matrix
+X = [ones(m, 1) X];
+for i = 1:num_labels
+  initial_theta = zeros(n+1, 1);
+  options = optimset('GradObj', 'on', 'MaxIter', 50);
+  [theta] = fmincg(@(t)(lrCostFunction(t, X, (y==i), lambda)), ...
+                   initial_theta, options);
+  all_theta(i, :) = theta';
+end
+end
+
+
+function p = predictOneVsAll(all_theta, X) // Выдаёт вектор с самыми вероятными значениями из Х, согласно all_theta
+m = size(X, 1);
+num_labels = size(all_theta, 1);
+p = zeros(size(X, 1), 1);
+X = [ones(m, 1) X];    
+local_p = sigmoid(X*all_theta');
+[p_max, i_max]=max(local_p, [], 2);
+p = i_max;
+end
+
+function p = predict(Theta1, Theta2, X) // Уже нейронка со скрытым слоем
+m = size(X, 1);
+num_labels = size(Theta2, 1);
+p = zeros(size(X, 1), 1);
+X = [ones(m, 1) X];
+L1 = sigmoid(X*Theta1');
+L1 = [ones(m, 1) L1];
+L2 = sigmoid(L1*Theta2');
+[p_max, i_max]=max(L2, [], 2);
+p = i_max;
+end

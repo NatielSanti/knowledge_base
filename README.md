@@ -20,10 +20,11 @@
 + [Начертание простых графиков](python.md#Plot)
 
 ## Java
-+ [Java Test](java-test.md)
++ [Java Core](java-core.md)
++ [Java Collection](java-collection.md)
 + [Java Stream Api](java-stream.md)
 + [Java Version Features](java-version-features.md)
-+ [Java Core](java-core.md)
++ [Java Test](java-test.md)
 
 ## Spring
 + [Spring](spring.md)
@@ -37,5 +38,6 @@
 + [IoC, DI, IoC-контейнер](theory.md#IoC,-DI,-IoC-контейнер)
 + [SOLID](theory.md#SOLID)
 + [Database Transactions](theory.md#Database-Transactions)
++ [Antipattern](antipattern.md)
 
 [к оглавлению](#Моя-база-знаний)
