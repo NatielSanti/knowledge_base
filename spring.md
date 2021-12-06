@@ -7,6 +7,7 @@
 + [Best Way of Injecting Beans](spring.md#Best-Way-of-Injecting-Beans)
 + [Difference Between BeanFactory and ApplicationContext](spring.md#Difference-Between-BeanFactory-and-ApplicationContext)
 + [Bean Life Cycle](spring.md#Bean-Life-Cycle)
++ [Differance between @Component, @Service- @Repository](spring.md#Differance-between-@Component,-@Service-and-@Repository)
 + [Design Patterns Used in the Spring Framework](spring.md#Design-Patterns-Used-in-the-Spring-Framework)
 + [Controller in Spring MVC](spring.md#Controller-in-Spring-MVC)
 + [@RequestMapping Annotation](spring.md#@RequestMapping-Annotation)
@@ -57,8 +58,11 @@ The recommended approach is to use constructor arguments for mandatory dependenc
 ## Difference Between BeanFactory and ApplicationContext
 #### Bean Factory
 - Bean instantiation/wiring
+- Create beans when they called
 #### Application Context
 - Bean instantiation/wiring
+- Create beans even if they don't called
+- Implements Bean Factory
 - Automatic BeanPostProcessor registration
 - Automatic BeanFactoryPostProcessor registration
 - Convenient MessageSource access (for i18n)
@@ -84,6 +88,15 @@ The recommended approach is to use constructor arguments for mandatory dependenc
 
 ## Controller in Spring MVC?
 Simply put, all the requests processed by the DispatcherServlet are directed to classes annotated with @Controller. Each controller class maps one or more requests to methods that process and execute the requests with provided inputs.
+
+[к оглавлению](#Spring-Questions)
+
+## Differance between @Component, @Service, @Repository
+
+In fact they are aliases to @Component.
+1) Mark different layers of application - controller, service and data layers
+2) Exception handling inside of spring.
+3) Maybe in future Spring will add some logic to those annotations
 
 [к оглавлению](#Spring-Questions)
 
