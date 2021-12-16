@@ -29,6 +29,9 @@
 ## Spring
 + [Spring](spring.md)
 
+## ORM and JPA
++ [ORM and JPA](jpa.md)
+
 ## Docker
 + [Commands](docker.md)
 
