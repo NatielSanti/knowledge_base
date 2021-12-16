@@ -3,11 +3,13 @@
 # Spring Questions
 + [What Is Spring Framework](spring.md#What-Is-Spring-Framework)
 + [Spring Benefits](spring.md#Spring-Benefits)
++ [Spring advantages and disadvantages](spring.md#Spring-advantages-and-disadvantages)
++ [Difference between JavaEE and Spring](spring.md#Difference-between-JavaEE-and-Spring)
 + [Spring Sub-Projects](spring.md#Spring-Sub-Projects)
 + [Best Way of Injecting Beans](spring.md#Best-Way-of-Injecting-Beans)
 + [Difference Between BeanFactory and ApplicationContext](spring.md#Difference-Between-BeanFactory-and-ApplicationContext)
 + [Bean Life Cycle](spring.md#Bean-Life-Cycle)
-+ [Differance between @Component, @Service- @Repository](spring.md#Differance-between-@Component,-@Service-and-@Repository)
++ [Differance between @Component, @Service and @Repository](spring.md#Differance-between-@Component,-@Service-and-@Repository)
 + [Design Patterns Used in the Spring Framework](spring.md#Design-Patterns-Used-in-the-Spring-Framework)
 + [Controller in Spring MVC](spring.md#Controller-in-Spring-MVC)
 + [@RequestMapping Annotation](spring.md#@RequestMapping-Annotation)
@@ -45,7 +47,38 @@ unchecked exceptions.
 
 [к оглавлению](#Spring-Questions)
 
-## Spring Sub-Projects
+## Spring advantages and disadvantages
+
+### Advantages of Spring
+
+- Uses POJO, don’t need an enterprise container like an application server.
+- Provides Modularity to developers.
+- Consistency of Transaction Management.
+- Well- Designed Web Framework.
+- It can effectively organize middle-tier objects
+- Spring application code is much easier to unit test.
+
+### Disadvantages of Spring
+
+- Complex and it lacks a clear focus.
+- Quite difficult to learn Spring Framework for a new developer.
+- Lots of XML in Spring.
+- No clear guidelines on several topics on spring documentation.
+- Longer Configuration
+
+## Difference between JavaEE and Spring
+
+01.	JavaEE is a Sun/Oracle standard/specification.	Spring is not a standard, strictly speaking, it is a framework.
+02.	JavaEE is used for web development.	Spring is used for a template design for an application.
+04.	JavaEE has oracle based license.	Spring has an open-source license.
+05.	It is based on three-dimensional architectural frameworks. 	It is based on layered architecture containing many modules.
+06.	It has an object-oriented language that contains a certain style and syntax.	It does not has a programming language.
+07.	JavaEE has got good speed.	Spring is slower than JavaEE.
+08.	JavaEE can be web-based or non-web-based.	Spring is based on almost 20 modules.
+09.	It is typically got a graphical user interface created from the abstract window toolkit.	This makes the same syntax independent of an IDE.
+10.	JavaEE uses JTA API with the execution.	Spring gives a certain layer to help different JTA execution merchants.
+
+##Spring Sub-Projects
 - **Core** – a key module that provides fundamental parts of the framework, such as IoC or DI
 - **JDBC** – enables a JDBC-abstraction layer that removes the need to do JDBC coding for specific vendor databases
 - **ORM integration** – provides integration layers for popular object-relational mapping APIs, such as JPA, 
@@ -65,6 +98,7 @@ This is because constructor injection allows injecting values to immutable field
 [к оглавлению](#Spring-Questions)
 
 ## Difference Between BeanFactory and ApplicationContext
+
 #### Bean Factory
 - Bean instantiation/wiring
 - Create beans when they called
@@ -95,13 +129,13 @@ This is because constructor injection allows injecting values to immutable field
 - **Data Access Object** – Spring DAO support
 - **Model View Controller** – Spring MVC
 
-## Controller in Spring MVC?
+## Controller in Spring MVC
 Simply put, all the requests processed by the DispatcherServlet are directed to classes annotated with @Controller. 
 Each controller class maps one or more requests to methods that process and execute the requests with provided inputs.
 
 [к оглавлению](#Spring-Questions)
 
-## Differance between @Component, @Service, @Repository
+## Differance between @Component, @Service and @Repository
 
 In fact they are aliases to @Component.
 1) Mark different layers of application - controller, service and data layers
