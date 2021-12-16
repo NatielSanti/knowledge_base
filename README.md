@@ -23,6 +23,9 @@
 ## Spring
 + [Spring](spring.md)
 
+## ORM and JPA
++ [ORM and JPA](jpa.md)
+
 ## Docker
 + [Commands](docker.md)
 
@@ -33,6 +36,6 @@
 + [IoC, DI, IoC-контейнер](theory.md#IoC,-DI,-IoC-контейнер)
 + [SOLID](theory.md#SOLID)
 + [Database Transactions](theory.md#Database-Transactions)
-
++ [Code Review Google Principces](theory.md#Code-Review-Google-Principces)
 
 [к оглавлению](#Моя-база-знаний)

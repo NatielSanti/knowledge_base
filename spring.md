@@ -3,19 +3,17 @@
 # Spring Questions
 + [What Is Spring Framework](spring.md#What-Is-Spring-Framework)
 + [Spring Benefits](spring.md#Spring-Benefits)
++ [Spring advantages and disadvantages](spring.md#Spring-advantages-and-disadvantages)
++ [Difference between JavaEE and Spring](spring.md#Difference-between-JavaEE-and-Spring)
 + [Spring Sub-Projects](spring.md#Spring-Sub-Projects)
 + [Best Way of Injecting Beans](spring.md#Best-Way-of-Injecting-Beans)
 + [Difference Between BeanFactory and ApplicationContext](spring.md#Difference-Between-BeanFactory-and-ApplicationContext)
 + [Bean Life Cycle](spring.md#Bean-Life-Cycle)
 + [Bean Creation Process](spring.md#Bean-Creation-Process)
-+ [Differance between @Component, @Service- @Repository](spring.md#Differance-between-@Component,-@Service-and-@Repository)
++ [Differance between @Component, @Service and @Repository](spring.md#Differance-between-@Component,-@Service-and-@Repository)
 + [Design Patterns Used in the Spring Framework](spring.md#Design-Patterns-Used-in-the-Spring-Framework)
 + [Controller in Spring MVC](spring.md#Controller-in-Spring-MVC)
 + [@RequestMapping Annotation](spring.md#@RequestMapping-Annotation)
-+ [EntityManager и основные его функции](spring.md#EntityManager-и-основные-его-функции)
-+ [Spring JdbcTemplate](spring.md#Spring-JdbcTemplate)
-+ [Hibernate and JPA difference](spring.md#Hibernate-and-JPA-difference)
-+ [Требования JPA к Entity классам](spring.md#Требования-JPA-к-Entity-классам)
 + [Spring Boot Main Features](spring.md#Spring-Boot-Main-Features)
 + [Spring Boot Basic Annotations](spring.md#Spring-Boot-Basic-Annotations)
 + [Injection of Prototype into Singleton](spring.md#Injection-of-Prototype-into-Singleton)
@@ -48,7 +46,38 @@ unchecked exceptions.
 
 [к оглавлению](#Spring-Questions)
 
-## Spring Sub-Projects
+## Spring advantages and disadvantages
+
+### Advantages of Spring
+
+- Uses POJO, don’t need an enterprise container like an application server.
+- Provides Modularity to developers.
+- Consistency of Transaction Management.
+- Well- Designed Web Framework.
+- It can effectively organize middle-tier objects
+- Spring application code is much easier to unit test.
+
+### Disadvantages of Spring
+
+- Complex and it lacks a clear focus.
+- Quite difficult to learn Spring Framework for a new developer.
+- Lots of XML in Spring.
+- No clear guidelines on several topics on spring documentation.
+- Longer Configuration
+
+## Difference between JavaEE and Spring
+
+01.	JavaEE is a Sun/Oracle standard/specification.	Spring is not a standard, strictly speaking, it is a framework.
+02.	JavaEE is used for web development.	Spring is used for a template design for an application.
+04.	JavaEE has oracle based license.	Spring has an open-source license.
+05.	It is based on three-dimensional architectural frameworks. 	It is based on layered architecture containing many modules.
+06.	It has an object-oriented language that contains a certain style and syntax.	It does not has a programming language.
+07.	JavaEE has got good speed.	Spring is slower than JavaEE.
+08.	JavaEE can be web-based or non-web-based.	Spring is based on almost 20 modules.
+09.	It is typically got a graphical user interface created from the abstract window toolkit.	This makes the same syntax independent of an IDE.
+10.	JavaEE uses JTA API with the execution.	Spring gives a certain layer to help different JTA execution merchants.
+
+##Spring Sub-Projects
 - **Core** – a key module that provides fundamental parts of the framework, such as IoC or DI
 - **JDBC** – enables a JDBC-abstraction layer that removes the need to do JDBC coding for specific vendor databases
 - **ORM integration** – provides integration layers for popular object-relational mapping APIs, such as JPA, 
@@ -68,6 +97,7 @@ This is because constructor injection allows injecting values to immutable field
 [к оглавлению](#Spring-Questions)
 
 ## Difference Between BeanFactory and ApplicationContext
+
 #### Bean Factory
 - Bean instantiation/wiring
 - Create beans when they called
@@ -105,13 +135,13 @@ This is because constructor injection allows injecting values to immutable field
 - **Data Access Object** – Spring DAO support
 - **Model View Controller** – Spring MVC
 
-## Controller in Spring MVC?
+## Controller in Spring MVC
 Simply put, all the requests processed by the DispatcherServlet are directed to classes annotated with @Controller. 
 Each controller class maps one or more requests to methods that process and execute the requests with provided inputs.
 
 [к оглавлению](#Spring-Questions)
 
-## Differance between @Component, @Service, @Repository
+## Differance between @Component, @Service and @Repository
 
 In fact they are aliases to @Component.
 1) Mark different layers of application - controller, service and data layers
@@ -125,45 +155,6 @@ The ```@RequestMapping``` annotation is used to map web requests to Spring Contr
 In addition to simple use cases, we can use it for mapping of HTTP headers, binding parts of the URI with 
 ```@PathVariable```, 
 and working with URI parameters and the ```@RequestParam``` annotation.
-
-[к оглавлению](#Spring-Questions)
-
-## Spring JdbcTemplate
-The Spring JDBC template is the primary API through which we can access database operations logic that we’re 
-interested in:
-
-- Creation and closing of connections
-- Executing statements and stored procedure calls
-- Iterating over the ResultSet and returning results
-
-[к оглавлению](#Spring-Questions)
-
-## Hibernate and JPA difference
-- **JPA** - Java Persistence API (JPA) defines the management of relational data in the Java applications.
-- **Hibernate** - Hibernate is an Object-Relational Mapping (ORM) tool which is used to save the state of Java 
-object into the database.
-It is one of the most frequently used JPA implementation.
-
-[к оглавлению](#Spring-Questions)
-
-## Требования JPA к Entity классам
-
-1) Entity класс должен быть отмечен аннотацией Entity или описан в XML файле конфигурации JPA,
-2) Entity класс должен содержать public или protected конструктор без аргументов (он также может иметь 
-конструкторы с аргументами),
-3) Entity класс должен быть классом верхнего уровня (top-level class),
-4) Entity класс не может быть enum или интерфейсом,
-5) Entity класс не может быть финальным классом (final class),
-6) Entity класс не может содержать финальные поля или методы, если они участвуют в маппинге 
-(persistent final methods or persistent final instance variables),
-7) Если объект Entity класса будет передаваться по значению как отдельный объект (detached object), 
-например через удаленный интерфейс (through a remote interface), он так же должен реализовывать Serializable 
-интерфейс,
-8) Поля Entity класс должны быть напрямую доступны только методам самого Entity класса и не должны быть 
-напрямую доступны другим классам, использующим этот Entity. Такие классы должны обращаться только к методам 
-(getter/setter методам или другим методам бизнес-логики в Entity классе),
-9) Enity класс должен содержать первичный ключ, то есть атрибут или группу атрибутов которые уникально 
-определяют запись этого Enity класса в базе данных,
 
 [к оглавлению](#Spring-Questions)
 
