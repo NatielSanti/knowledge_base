@@ -7,6 +7,7 @@
 + [Best Way of Injecting Beans](spring.md#Best-Way-of-Injecting-Beans)
 + [Difference Between BeanFactory and ApplicationContext](spring.md#Difference-Between-BeanFactory-and-ApplicationContext)
 + [Bean Life Cycle](spring.md#Bean-Life-Cycle)
++ [Bean Creation Process](spring.md#Bean-Creation-Process)
 + [Differance between @Component, @Service- @Repository](spring.md#Differance-between-@Component,-@Service-and-@Repository)
 + [Design Patterns Used in the Spring Framework](spring.md#Design-Patterns-Used-in-the-Spring-Framework)
 + [Controller in Spring MVC](spring.md#Controller-in-Spring-MVC)
@@ -17,8 +18,10 @@
 + [Требования JPA к Entity классам](spring.md#Требования-JPA-к-Entity-классам)
 + [Spring Boot Main Features](spring.md#Spring-Boot-Main-Features)
 + [Spring Boot Basic Annotations](spring.md#Spring-Boot-Basic-Annotations)
++ [Injection of Prototype into Singleton](spring.md#Injection-of-Prototype-into-Singleton)
 
 [bean-life-cycle]:img/Spring-Bean-Life-Cycle.jpg
+[spring-bean-creation]:img/spring-bean-creation.jpg
 
 [к оглавлению](#Spring-Questions)
 
@@ -80,7 +83,14 @@ This is because constructor injection allows injecting values to immutable field
 [к оглавлению](#Spring-Questions)
 
 ## Bean Life Cycle
+
 ![icon][bean-life-cycle]
+
+[к оглавлению](#Spring-Questions)
+
+## Bean Creation Process
+
+![icon][spring-bean-creation]
 
 [к оглавлению](#Spring-Questions)
 
@@ -201,6 +211,195 @@ createNamedStoredProcedureQuery, createStoredProcedureQuery
 getDelegate
 4) Работа с EntityGraph: createEntityGraph, getEntityGraph
 4) Общие операции над EntityManager или всеми Entities: close, isOpen, getProperties, setProperty, clear
+
+[к оглавлению](#Spring-Questions)
+
+## Injection of Prototype into Singleton
+
+Контекст конфиг
+```java
+@Configuration
+public class AppConfig {
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public PrototypeBean prototypeBean() {
+        return new PrototypeBean();
+    }
+
+    @Bean
+    public SingletonBean singletonBean() {
+        return new SingletonBean();
+    }
+}
+```
+SingletonBean
+```java
+public class SingletonBean {
+
+    @Autowired
+    private PrototypeBean prototypeBean;
+
+    public SingletonBean() {
+        logger.info("Singleton instance created");
+    }
+
+    public PrototypeBean getPrototypeBean() {
+        logger.info(String.valueOf(LocalTime.now()));
+        return prototypeBean;
+    }
+}
+```
+Test
+```java
+public static void main(String[] args) throws InterruptedException {
+    AnnotationConfigApplicationContext context 
+      = new AnnotationConfigApplicationContext(AppConfig.class);
+    
+    SingletonBean firstSingleton = context.getBean(SingletonBean.class);
+    PrototypeBean firstPrototype = firstSingleton.getPrototypeBean();
+    
+    // get singleton bean instance one more time
+    SingletonBean secondSingleton = context.getBean(SingletonBean.class);
+    PrototypeBean secondPrototype = secondSingleton.getPrototypeBean();
+
+    isTrue(firstPrototype.equals(secondPrototype), "The same instance should be returned");
+}
+```
+
+```log
+Singleton Bean created
+Prototype Bean created
+11:06:57.894
+// should create another prototype bean instance here
+11:06:58.895
+```
+ 
+### 1. Injecting ApplicationContext BAD WAY
+```java
+public class SingletonAppContextBean implements ApplicationContextAware {
+
+    private ApplicationContext applicationContext;
+
+    public PrototypeBean getPrototypeBean() {
+        return applicationContext.getBean(PrototypeBean.class);
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) 
+      throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+}
+```
+
+### 2. Method Injection
+Another way to solve the problem is method injection with the `@Lookup` annotation.
+Spring will override the `getPrototypeBean()` method annotated with` @Lookup`. 
+It then registers the bean into the application context. 
+Whenever we request the `getPrototypeBean()` method, it returns a new PrototypeBean instance.
+It will use CGLIB to generate the bytecode responsible for fetching the PrototypeBean from the application context.
+
+```java
+@Component
+public class SingletonLookupBean {
+
+    @Lookup
+    public PrototypeBean getPrototypeBean() {
+        return null;
+    }
+}
+```
+
+### 3. Scoped Proxy
+
+By default, Spring holds a reference to the real object to perform the injection. 
+**Here, we create a proxy object to wire the real object with the dependent one.**
+Each time the method on the proxy object is called, the proxy decides itself whether to create a new instance 
+of the real object or reuse the existing one.
+To set up this, we modify the `Appconfig` class to add a new `@Scope` annotation:
+```java
+@Scope(
+  value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, 
+  proxyMode = ScopedProxyMode.TARGET_CLASS)
+```
+By default, Spring uses CGLIB library to directly subclass the objects. 
+To avoid CGLIB usage, we can configure the proxy mode with `ScopedProxyMode.INTERFACES`, 
+to use the JDK dynamic proxy instead.
+
+### 4. ObjectFactory Interface **Favorite**
+Spring provides the `ObjectFactory<T>` interface to produce on demand objects of the given type:
+```java
+public class SingletonObjectFactoryBean {
+
+    @Autowired
+    private ObjectFactory<PrototypeBean> prototypeBeanObjectFactory;
+
+    public PrototypeBean getPrototypeInstance() {
+        return prototypeBeanObjectFactory.getObject();
+    }
+}
+```
+Let's have a look at` getPrototypeInstance()` method; `getObject()` returns a brand new instance of `PrototypeBean` 
+for each request. Here, we have more control over initialization of the prototype.
+
+Also, the `ObjectFactory` is a part of the framework; this means avoiding additional setup in order to use this option.
+
+### 5. Create a Bean at Runtime Using `java.util.Function`
+
+Another option is to create the prototype bean instances at runtime, 
+which also allows us to add parameters to the instances.
+
+To see an example of this, let's add a name field to our `PrototypeBean` class:
+```java
+public class PrototypeBean {
+    private String name;
+    
+    public PrototypeBean(String name) {
+        this.name = name;
+        logger.info("Prototype instance " + name + " created");
+    }
+
+    //...   
+}
+```
+
+Next, we'll inject a bean factory into our singleton bean by making use of the `java.util.Function` interface:
+```java
+public class SingletonFunctionBean {
+    
+    @Autowired
+    private Function<String, PrototypeBean> beanFactory;
+    
+    public PrototypeBean getPrototypeInstance(String name) {
+        PrototypeBean bean = beanFactory.apply(name);
+        return bean;
+    }
+
+}
+```
+Finally, we have to define the factory bean, prototype and singleton beans in our configuration:
+```java
+@Configuration
+public class AppConfig {
+    @Bean
+    public Function<String, PrototypeBean> beanFactory() {
+        return name -> prototypeBeanWithParam(name);
+    } 
+
+    @Bean
+    @Scope(value = "prototype")
+    public PrototypeBean prototypeBeanWithParam(String name) {
+       return new PrototypeBean(name);
+    }
+    
+    @Bean
+    public SingletonFunctionBean singletonFunctionBean() {
+        return new SingletonFunctionBean();
+    }
+    //...
+}
+```
 
 [к оглавлению](#Spring-Questions)
 
