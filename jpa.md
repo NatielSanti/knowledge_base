@@ -7,7 +7,7 @@
 + [Hibernate and JPA difference](jpa.md#Hibernate-and-JPA-difference)
 + [Требования JPA к Entity классам](jpa.md#Требования-JPA-к-Entity-классам)
 + [Difference between save() and persist() in Hibernate](jpa.md#Difference-between-save()-and-persist()-in-Hibernate)
-
++ [Advantages and disadvantages of hibernate compared to jdbc](jpa.md#Advantages-and-disadvantages-of-hibernate-compared-to-jdbc)
 
 [entity-state]:img/entity-state.png
 
@@ -80,6 +80,43 @@ interested in:
 (In EntityManager `persist()` method has been defined).
 - If the id generation type is AUTO and we pass identifier in `persist()` method, 
 it will throw detached entity passed to persist exception.
+
+[к оглавлению](#ORM-and-JPA)
+
+##Advantages and disadvantages of hibernate compared to jdbc
+#### Advantages of Hibernate over JDBC:
+
+1. Hibernate is an ORM tool
+2. Hibernate is an open source framework.
+3. Better than JBDC.
+4. Hibernate has an exception translator , 
+which converts checked exceptions of JDBC in to unchecked exceptions of hibernate. 
+So all exceptions in hibernate are unchecked exceptions and Because of this no need to handle exceptions explicitly.
+5. Hibernate supports inheritance and polymorphism.
+6. With hibernate we can manage the data stored across multiple tables, by applying relations(association)
+7. Hibernate has its own query language called Hibernate Query Language. 
+With this HQL hibernate became database independent.
+8. Hibernate supports relationships like One-To-One, One-To-Many, Many-To-One ,Many-To-Many.
+9. Hibernate has Caching mechanism. using this number of database hits will be reduced. 
+so performance of an application will be increases.
+10. Hibernate supports lot of databases.
+11. Hibernate supported databases List.
+12. Hibernate is a light weight framework because hibernate uses 
+POJO classes for data transfer between application and database.
+13. Hibernate has versioning and time stamp feature with this we can know how many number of times data is modified.
+14. Hibernate also supports annotations along with XML.
+15. Hibernate supports Lazy loading.
+16. Hibernate is easy to learn it is developers friendly.
+17. The architecture is layered to keep you isolated from having to know the underlying APIs.
+18. Hibernate maintains database connection pool.
+19. Hibernate  has Concurrency support.
+20. Using Hibernate its Easy to maintain and it will increases productivity
+    
+####Disadvantages of Hibernate Compared to JDBC:
+1. Hibernate is slow compared to JDBC because of generating many sql queries at 
+run time but this is not considered as dis advantage in my view.
+2. Below are some of the dis advantages but these are not applicable to small applications. 
+But we have given some possible scenarios.
 
 [к оглавлению](#ORM-and-JPA)
 
