@@ -244,8 +244,8 @@ public class SingletonBean {
 Test
 ```java
 public static void main(String[] args) throws InterruptedException {
-    AnnotationConfigApplicationContext context 
-      = new AnnotationConfigApplicationContext(AppConfig.class);
+    AnnotationConfigApplicationContext context = 
+        new AnnotationConfigApplicationContext(AppConfig.class);
     
     SingletonBean firstSingleton = context.getBean(SingletonBean.class);
     PrototypeBean firstPrototype = firstSingleton.getPrototypeBean();
@@ -277,8 +277,7 @@ public class SingletonAppContextBean implements ApplicationContextAware {
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) 
-      throws BeansException {
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 }
@@ -288,8 +287,8 @@ public class SingletonAppContextBean implements ApplicationContextAware {
 Another way to solve the problem is method injection with the `@Lookup` annotation.
 Spring will override the `getPrototypeBean()` method annotated with` @Lookup`. 
 It then registers the bean into the application context. 
-Whenever we request the `getPrototypeBean()` method, it returns a new PrototypeBean instance.
-It will use CGLIB to generate the bytecode responsible for fetching the PrototypeBean from the application context.
+Whenever we request the `getPrototypeBean()` method, it returns a new `PrototypeBean` instance.
+It will use CGLIB to generate the bytecode responsible for fetching the `PrototypeBean` from the application context.
 
 ```java
 @Component

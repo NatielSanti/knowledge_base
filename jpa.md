@@ -6,6 +6,8 @@
 + [Spring JdbcTemplate](jpa.md#Spring-JdbcTemplate)
 + [Hibernate and JPA difference](jpa.md#Hibernate-and-JPA-difference)
 + [Требования JPA к Entity классам](jpa.md#Требования-JPA-к-Entity-классам)
++ [Difference between save() and persist() in Hibernate](jpa.md#Difference-between-save()-and-persist()-in-Hibernate)
+
 
 [entity-state]:img/entity-state.png
 
@@ -63,6 +65,21 @@ interested in:
    определяют запись этого Enity класса в базе данных,
 
 ![icon][entity-state]
+
+[к оглавлению](#ORM-and-JPA)
+
+##Difference between save() and persist() in Hibernate
+#### `save()`	
+- The return type of `save()` method is `Serializable`, returns generated id.	
+- The `save()` method is only supported by Hibernate i.e hibernate specific.
+- If the id generation type is AUTO, using the `save()` method we can pass identifiers in the entity.
+
+#### `persist()`
+- The return type of `persit()` method is void.
+- The `persist()` method is supported by Hibernate as well as JPA `EntityManager` 
+(In EntityManager `persist()` method has been defined).
+- If the id generation type is AUTO and we pass identifier in `persist()` method, 
+it will throw detached entity passed to persist exception.
 
 [к оглавлению](#ORM-and-JPA)
 
