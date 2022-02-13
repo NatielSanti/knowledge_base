@@ -17,6 +17,7 @@
 + [Spring Boot Main Features](spring.md#Spring-Boot-Main-Features)
 + [Spring Boot Basic Annotations](spring.md#Spring-Boot-Basic-Annotations)
 + [Injection of Prototype into Singleton](spring.md#Injection-of-Prototype-into-Singleton)
++ [Что класть и не класть в контекст](spring.md#Что-класть-и-не-класть-в-контекст)
 
 [bean-life-cycle]:img/Spring-Bean-Life-Cycle.jpg
 [spring-bean-creation]:img/spring-bean-creation.jpg
@@ -93,6 +94,13 @@ and pointcuts
 ## Best Way of Injecting Beans
 The recommended approach is to use constructor arguments for mandatory dependencies and setters for optional ones. 
 This is because constructor injection allows injecting values to immutable fields and makes testing easier.
+
+```Constructor | Property```
+- DI через конструктор – рекомендован.
+- Но могут быть циклические зависимости (виноваты в этом –
+Вы).
+- Вы всегда получаете готовый к работе класс.
+- C property может быть NPE.
 
 [к оглавлению](#Spring-Questions)
 
@@ -390,6 +398,27 @@ public class AppConfig {
     //...
 }
 ```
+
+[к оглавлению](#Spring-Questions)
+
+## Что класть и не класть в контекст
+
+*Что класть в контекст*
+
+- Бизнес-сервисы (DAO, Services);
+- Подключения к внешним системам;
+- Мапперы/Маршаллеры/конвертеры;
+- Служебные бины (PersistenceContextManager…);
+- Бизнес-бины стратегий (Паттерн стратегия).
+
+*Что не нужно класть*
+
+- Бизнес-объекты (бины, пользователи*);
+- Настройки, кроме пачек/файлов настроек*;
+- Объекты, которые понадобятся только один раз в один момент
+(временные).
+- Стандартные классы (String, InputStream, Locale*)
+
 
 [к оглавлению](#Spring-Questions)
 
