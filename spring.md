@@ -2,6 +2,7 @@
 
 # Spring Questions
 + [What Is Spring Framework](spring.md#What-Is-Spring-Framework)
++ [Виды конфигураций Spring приложений](spring.md#Виды-конфигураций-Spring-приложений)
 + [Spring Benefits](spring.md#Spring-Benefits)
 + [Spring advantages and disadvantages](spring.md#Spring-advantages-and-disadvantages)
 + [Difference between JavaEE and Spring](spring.md#Difference-between-JavaEE-and-Spring)
@@ -21,6 +22,8 @@
 
 [bean-life-cycle]:img/Spring-Bean-Life-Cycle.jpg
 [spring-bean-creation]:img/spring-bean-creation.jpg
+[spel]:img/spel.PNG
+[localization]:img/localization.PNG
 
 [к оглавлению](#Spring-Questions)
 
@@ -28,6 +31,168 @@
 Spring is a powerful open-source, loosely coupled, lightweight, java framework meant for reducing the 
 complexity of developing enterprise-level applications. This framework is also called the “framework of frameworks” 
 as spring provides support to various other important frameworks like JSF, Hibernate, Structs, EJB, etc.
+
+[к оглавлению](#Spring-Questions)
+
+## Виды конфигураций Spring приложений
+
+- Groovy-based (для фанатов).
+- XML-based (классика, но
+устарела).
+- Annotation-based
+    - Java-based (`@Bean`)
+    - Annotation-based (`@Autowired`, `@Service`, `@Controller`)
+    
+- @Configuration
+- @ComponentScan
+- Annotation-based
+- @Autowired
+- Property-files
+- SpEL - Spring Expression Language
+- Локализация
+
+### XML-based (классика, но устарела).
+
+```xml
+<bean id="personDAO" class="edu.spring.PersonDAO">
+    <constructor-arg name="dbUrl" value="${db.url}" />
+</bean>
+<bean id="personService" class="edu.spring.PersonService">
+    <constructor-arg name="dao" ref="personDAO"/>
+</bean>
+```
+```java
+public class Main {
+    public static void main(String[] args) {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/context.xml");
+        PersonService s = context.getBean(PersonService.class);
+        s.getPerson();
+    }
+}
+```
+
+### Java-based
+```java
+@Configuration
+class AppConfig {
+    @Bean
+    IPersonDAO personDAO(@Value("${db.url}") String dbUrl) {
+        return new PersonDAO(dbUrl);
+    }
+    @Bean
+    PersonService personService(IPersonDAO dao) {
+        return new PersonService(dao);
+    }
+}
+```
+
+- Все бины располагаются в классах помеченных аннотацией `@Configuration`
+- Таких классов может быть много – обычно на каждый слой/технологию
+- Бины создаются в нестатических методах, помеченных аннотацией `@Bean`
+- Зависимости бинов – параметры методов
+
+### @Configuration
+
+- Класс конфигурации должен иметь конструктор без параметров (обычно его просто не пишут – он уже есть)
+- Могут содержать `@Autowired` поля, которые потом можно использовать в методах
+- Методы – нестатические, генерируют бины, помечены аннотацией `@Bean`
+
+Этой аннотацией помечены другие аннотации:
+- `@SpringBootApplication`
+- `@TestConfiguration`
+- `@EnableWebSecurity`
+
+Конфигурационный класс можетнаследоваться от специальных `Spring` конфигурационных файлов.
+
+```java
+@Configuration
+class AppConfig {
+    @Bean
+    IPersonDAO personDAO(@Value("${db.url}") String dbUrl) {
+        return new PersonDAO(dbUrl);
+    }
+    @Bean
+    PersonService personService(IPersonDAO dao) {
+        return new PersonService(dao);
+    }
+}
+```
+
+### @ComponentScan
+
+- Ищет классы конфигураций
+- Ищет классы, помеченные стереотипами `@Service`, `@Controller` и т.д.
+- Если не задан package – ищет по пакетам «вглубь», начиная с текущего.
+- Не ищет интерфейсы !!! (`Spring Data`, `Spring Integrations` имеют свои аннотации, 
+которые надо добавлять дополнительно)
+- Некоторые аннотации помечены `@ComponentScan` без параметров – например `@SpringBootApplication`
+- Обычно в корне пакетов (`ru.otus`) располагается класс помеченный аннотацией `@ComponentScan` безпараметров, 
+а все остальные конфигурации и сервисы находятся автоматически
+- Если не задан package – ищет по пакетам «вглубь», начиная с текущего.
+
+### Annotation-based
+
+- Собственно это и есть Annotation-based контекст
+- Предполагает использование аннотаций стереотипов `@Service`, `@Controller`, `@Repository`
+- Предполагает использование аннотаций `@Required`, `@Autowired`, или `JSR-250`
+- Обычно и комбинируется с `Java-based` аннотацией
+
+### @Autowired
+
+- Ставится на конструкторах, полях, сеттерах, методах
+- Рекомендуется ставить на конструкторы (так можно класс протестировать без поднятия контекста, да и просто удобнее)
+- Начиная со Spring 4.2.*, если конструктор в классе один, то подразумевается, что `@Autowired` на нём стоит
+- Связывание происходит по типу
+- Если такого бина нет, то будет `Exception`
+- Если таких бинов несколько, то тоже `Exception`
+• Чтобы выбрать нужный по ID, можно писать `Qualifier`
+
+### Property-files
+
+- Нужны для конфигурации приложения
+- Хранятся в ресурсах (как `src/main/resources/`, так и `src/test/resources/`)
+- Иногда фильтруются мейвеном
+- Пишутся ли в `UTF-8` ? (нет)
+- Но всё равно все пишут их в `UTF-8`
+- Чтобы их использовать можно воспользоваться `SpEL` – `Spring Expression Language`
+- С помощью плейсходера `${db.url}` можно получать свойство из загруженного файла.
+- Но для этого придётся настроить `PropertyPlaceholderConfigurer` (в `Spring Boot` он уже есть).
+- Одного такого бина достаточно на приложение + не смотрите примеры, где в нём прописываются файлы.
+
+### SpEL - Spring Expression Language
+
+- Крайне мощный инструмент
+- Может спасти Вам жизнь в огромном проекте со `Spring Security` + `Spring Data`
+- А может убить (`OWASP 2017:A1` – `Injections` – это не только про `SQL-инъекции`, а и про `SpEL` тоже)
+- Высший пилотаж – расширять своими выражениями
+
+![icon][spel]
+
+### Локализация
+
+- `Internationalization (i18n)` и `Localization (l10n)`
+- Имеется встроенная поддержка в `Java`
+- Поддерживается прекрасно в `Spring` на уровне контекста
+```
+// bundle.properties:
+hello.world=Hello World!
+hello.user=Hello, {0}!
+// bundle_ru_RU.properties:
+hello.world=Привет, Мир!
+hello.user=Привет, {0}!
+```
+
+```java
+@Bean
+public MessageSource messageSource() {
+    ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
+    ms.setBasename("/i18n/bundle");
+    ms.setDefaultEncoding("UTF-8");
+    return ms;
+}
+```
+
+![icon][localization]
 
 [к оглавлению](#Spring-Questions)
 
