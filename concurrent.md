@@ -14,6 +14,7 @@
 [atomic]:img/concurrent/atomic.PNG
 [happens-before]:img/jmm/happens-before.png
 [semaphore]:img/concurrent/semaphore.PNG
+[livelock]:img/concurrent/livelock.PNG
 
 ## Проблемы многопоточки
 
@@ -588,6 +589,8 @@ public class App {
 Как видно из примера, оба потока поочерёдно пытаются захватить оба лока, но им это не удаётся. 
 При этом они не в `deadlock`, то есть визуально с ними всё хорошо и они выполняют свою работу.
 
+![icon][livelock]
+
 ### Starvation
 
 Помимо блокировок (`deadlock` и `livelock`) есть ещё одна проблема при работе с многопоточностью — `Starvation`, 
@@ -713,6 +716,7 @@ public class App {
 а вот `value` будет меняться от раза к разу.
 
 ### Happens Before
+
 
 «Выполняется прежде» (англ. `happens before`) — отношение строгого частичного порядка 
 (арефлексивное, антисимметричное, транзитивное), введённое между атомарными командами 
