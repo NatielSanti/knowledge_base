@@ -2,12 +2,15 @@
 
 # Java Concurrent
 
-+ [Проблемы многопоточки](concurrent.md#Проблемы-многопоточки)
++ [Проблемы многопоточки: ABA, DCL](concurrent.md#Проблемы-многопоточки)
 + [Основные характеристики Thread](concurrent.md#Основные-характеристики-Thread)
 + [Потоки через Runnable лучше](concurrent.md#Потоки-через-Runnable-лучше)
-+ [Методы потоков](concurrent.md#Методы-потоков)
++ [Методы потоков: yield(), sleep(), interrupt(), join(), Понятие Монитор, Wait, notify и notifyAll, Жизненный цикл потока, LockSupport и парковка потоков](concurrent.md#Методы-потоков)
++ [Взаимодействие потоков и проблемы: Deadlock, Livelock, Starvation, Race Condition, Volatile, Атомарность, Happens Before](concurrent.md#Взаимодействие-потоков-и-проблемы)
 
 [markword]:img/concurrent/markword.PNG
+[semaphore]:img/concurrent/semaphore.PNG
+[atomic]:img/concurrent/atomic.PNG
 
 ## Проблемы многопоточки
 
@@ -323,7 +326,7 @@ public class HelloWorld{
 доступа нескольких потоков к общим ресурсам. Существует несколько реализаций этого механизма, 
 между которыми переключается `JVM`. Поэтому для простоты, говоря про монитор, мы говорим на самом деле про локи.
 
-### Wait и ожидание по монитору. Методы notify и notifyAll
+### Wait, notify и notifyAll
 
 У `Thread` есть ещё один метод ожидания, который при этом связан с монитором. 
 В отличие от `sleep` и `join`, его нельзя просто так вызвать. И зовут его `wait`.
@@ -408,6 +411,8 @@ public class HelloWorldApp{
 }
 ```
 
+![icon][semaphore]
+
 Данный код будет вечно ждать, потому что в семафоре сейчас 0 `permit`. 
 А когда в коде вызывается `acquire` (т.е. запросить разрешение), то поток ожидает, пока разрешение не получит.
 
@@ -471,6 +476,279 @@ public class HelloWorld{
 
 Как и в прошлых примерах, тут всё просто. `lock` ожидает, пока кто-то освободит ресурс. 
 Если посмотреть в `JVisualVM`, мы увидим, что новый поток будет запаркован, пока `main` поток не отдаст ему лок.
+
+[к оглавлению](#concurrent.md)
+
+## Взаимодействие потоков и проблемы
+
+### Deadlock
+
+Самой страшной проблемой является `Deadlock`. 
+Когда два и более потоков вечно ожидают друг друга — это называется `Deadlock`.
+
+```java
+public class Deadlock {
+    static class Friend {
+        private final String name;
+        public Friend(String name) {
+            this.name = name;
+        }
+        public String getName() {
+            return this.name;
+        }
+        public synchronized void bow(Friend bower) {
+            System.out.format("%s: %s has bowed to me!%n",
+                    this.name, bower.getName());
+            bower.bowBack(this);
+        }
+        public synchronized void bowBack(Friend bower) {
+            System.out.format("%s: %s has bowed back to me!%n",
+                    this.name, bower.getName());
+        }
+    }
+
+    public static void main(String[] args) {
+        final Friend alphonse = new Friend("Alphonse");
+        final Friend gaston = new Friend("Gaston");
+        new Thread(() -> alphonse.bow(gaston)).start();
+        new Thread(() -> gaston.bow(alphonse)).start();
+    }
+}
+```
+
+Поток 1 ждёт лока от потока 0. Почему так выходит? `Thread-1` начинает выполнение и выполняет метод `Friend#bow`. 
+Он помечен ключевым словом `synchronized`, то есть мы забираем монитор по `this`. 
+Мы на вход в метод получили ссылку на другого `Friend`. 
+Теперь, поток `Thread-1` хочет выполнить метод у другого `Friend`, 
+тем самым получив лок и у него. Но если другой поток (в данном случае `Thread-0`) успел войти в метод `bow`, 
+то лок уже занят и `Thread-1` ждёт `Thread-0`, и наоборот. Блокировка неразрешимая, поэтому она `Dead`, то есть мёртвая. 
+Как мёртвая хватка (которую не разжать), так и мёртвая блокировка, из которой не выйти.
+
+### Livelock
+
+`Livelock` заключается в том, что потоки внешне как бы живут, 
+но при этом не могут ничего сделать, т.к. условие, по которым они пытаются продолжить свою работу, 
+не могут выполниться. По сути `Livelock` похож на `deadlock`, 
+но только потоки не "зависают" на системном ожидании монитора, а что-то вечно делают. Например:
+
+```java
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class App {
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+
+    public static void log(String text) {
+        String name = Thread.currentThread().getName(); //like Thread-1 or Thread-0
+        String color = ANSI_BLUE;
+        int val = Integer.valueOf(name.substring(name.lastIndexOf("-") + 1)) + 1;
+        if (val != 0) {
+            color = ANSI_PURPLE;
+        }
+        System.out.println(color + name + ": " + text + color);
+        try {
+            System.out.println(color + name + ": wait for " + val + " sec" + color);
+            Thread.currentThread().sleep(val * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        Lock first = new ReentrantLock();
+        Lock second = new ReentrantLock();
+
+        Runnable locker = () -> {
+            boolean firstLocked = false;
+            boolean secondLocked = false;
+            try {
+                while (!firstLocked || !secondLocked) {
+                    firstLocked = first.tryLock(100, TimeUnit.MILLISECONDS);
+                    log("First Locked: " + firstLocked);
+                    secondLocked = second.tryLock(100, TimeUnit.MILLISECONDS);
+                    log("Second Locked: " + secondLocked);
+                }
+                first.unlock();
+                second.unlock();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
+
+        new Thread(locker).start();
+        new Thread(locker).start();
+    }
+}
+```
+Как видно из примера, оба потока поочерёдно пытаются захватить оба лока, но им это не удаётся. 
+При этом они не в `deadlock`, то есть визуально с ними всё хорошо и они выполняют свою работу.
+
+### Starvation
+
+Помимо блокировок (`deadlock` и `livelock`) есть ещё одна проблема при работе с многопоточностью — `Starvation`, 
+или "голодание". От блокировок это явление отличается тем, что потоки не заблокированы, 
+а им просто не хватает ресурсов на всех. Поэтому пока одни потоки на себя берут всё время выполнения, 
+другие не могут выполниться:
+
+### Race Condition
+
+При работе с многопоточностью есть такое понятие, как "состояние гонки". 
+Это явление заключается в том, что потоки делят между собой некоторый ресурс и код написан таким образом, 
+что не предусматривает корректную работу в таком случае. Взглянем на пример:
+
+```java
+public class App {
+    public static int value = 0;
+
+    public static void main(String[] args) {
+        Runnable task = () -> {
+            for (int i = 0; i < 10000; i++) {
+                int oldValue = value;
+                int newValue = ++value;
+                if (oldValue + 1 != newValue) {
+                    throw new IllegalStateException(oldValue + " + 1 = " + newValue);
+                }
+            }
+        };
+        new Thread(task).start();
+        new Thread(task).start();
+        new Thread(task).start();
+    }
+}
+```
+
+Этот код может выдать ошибку не с первого раза. И выглядеть она может вот таким вот образом:
+
+```java
+Exception in thread "Thread-1" java.lang.IllegalStateException: 7899 + 1 = 7901
+    at App.lambda$main$0(App.java:13)
+    at java.lang.Thread.run(Thread.java:745)
+```
+
+Как видно, пока присваивалось `newValue` что-то пошло не так, и `newValue` стало больше. 
+Какой-то из потоков в состоянии гонки успел изменить `value` между этими двумя командам. 
+Как мы видим, проявилась гонка между потоками. А теперь представьте, 
+как важно не совершать похожие ошибки с денежными операциями...
+
+### Volatile
+
+Говоря про взаимодействие потоков стоит особо отметить ключевое слово `volatile`.
+
+```java
+public class App {
+    public static boolean flag = false;
+
+    public static void main(String[] args) throws InterruptedException {
+        Runnable whileFlagFalse = () -> {
+            while(!flag) {
+            }
+            System.out.println("Flag is now TRUE");
+        };
+
+        new Thread(whileFlagFalse).start();
+        Thread.sleep(1000);
+        flag = true;
+    }
+}
+```
+
+Самое интересное, что он с высокой долей вероятности не отработает. 
+Новый поток не увидит изменения `flag`. Чтобы это исправить для поля `flag` нужно указать ключевое слово `volatile`. 
+
+Все действия выполняет процессор. Но результаты вычислений нужно где-то хранить. 
+Для этого есть основная память и есть аппаратный кэш у процессора. 
+Эти кэши процессора — своего рода маленький кусочек памяти для более быстрого обращения к данным, 
+чем обращения к основной памяти. Но у всего есть и минус: 
+данные в кэше могут быть не актуальны (как в примере выше, когда значение флага не обновилось). 
+Так вот, ключевое слово `volatile` указывает `JVM`, что мы не хотим кэшировать нашу переменную. 
+Это позволяет увидеть актуальный результат во всех потоках.
+
+Кроме того, важно помнить, что `volatile` — это про видимость, а не про атомарность измений. 
+Если взять код из `Race Condition`, то мы увидим в `IntelliJ Idea` подсказку:
+
+### Атомарность
+
+![icon][atomic]
+
+Атомарные операции — это операции, которые нельзя разделить.
+
+Например, операция присваивания значения переменной — атомарная.
+
+К сожалению, инкремент не является атомарной операцией, 
+т.к. для инкремента требуется аж три операции: получить старое значение, прибавить к нему единицу, сохранить значение.
+
+Почему важна атомарность? В примере с инкрементом, если появится состояние гонки, 
+в любой момент общий ресурс (т.е. общее значение) может внезапно измениться.
+
+Кроме того, важно, что 64-битные структуры тоже не атомарны, например `long` и `double`.
+
+```java
+public class App {
+    public static int value = 0;
+    public static AtomicInteger atomic = new AtomicInteger(0);
+
+    public static void main(String[] args) throws InterruptedException {
+        Runnable task = () -> {
+            for (int i = 0; i < 10000; i++) {
+                value++;
+                atomic.incrementAndGet();
+            }
+        };
+        for (int i = 0; i < 3; i++) {
+            new Thread(task).start();
+        }
+        Thread.sleep(300);
+        System.out.println(value);
+        System.out.println(atomic.get());
+    }
+}
+```
+
+Специальный класс для работы с атомарным `Integer` всегда будет выводить нам 30000, 
+а вот `value` будет меняться от раза к разу.
+
+### Happens Before
+
+«Выполняется прежде» (англ. `happens before`) — отношение строгого частичного порядка 
+(арефлексивное, антисимметричное, транзитивное), введённое между атомарными командами 
+(++ и -- не атомарны!), придуманное Лесли Лэмпортом и не означающее «физически прежде». 
+Оно значит, что вторая команда будет «в курсе» изменений, проведённых первой.
+
+Модель памяти Java
+
+В частности, одно выполняется прежде другого для таких операций (список не исчерпывающий):
+
+Синхронизация и мониторы:
+- Захват монитора (начало `synchronized`, метод `lock`) и всё, что после него в том же потоке.
+- Возврат монитора (конец `synchronized`, метод `unlock`) и всё, что перед ним в том же потоке.
+- Таким образом, оптимизатор может заносить строки в синхроблок, но не наружу.
+- Возврат монитора и последующий захват другим потоком.
+Запись и чтение:
+- Любые зависимости по данным (то есть запись в любую переменную и последующее чтение её же) в одном потоке.
+- Всё, что в том же потоке перед записью в volatile-переменную, и сама запись.
+- volatile-чтение и всё, что после него в том же потоке.
+- Запись в volatile-переменную и последующее считывание её же. Таким образом, 
+`volatile`-запись делает с памятью то же, что возврат монитора, а чтение — то же, что захват. 
+А значит: если один поток записал в `volatile`-переменную, а второй обнаружил это, всё, 
+что предшествует записи, выполняется раньше всего, что идёт после чтения; см. иллюстрацию.
+
+![icon][happens-before]
+
+- Для объектных переменных (например, `volatile List x;`) столь сильные гарантии выполняются для ссылки на объект, 
+но не для его содержимого.
+Обслуживание объекта:
+- Статическая инициализация и любые действия с любыми экземплярами объектов.
+- Запись в final-поля в конструкторе и всё, что после конструктора. 
+Как исключение из всеобщей транзитивности, это соотношение `happens-before` не соединяется транзитивно 
+с другими правилами и поэтому может вызвать межпоточную гонку.
+- Любая работа с объектом и `finalize()`.
+Обслуживание потока:
+- Запуск потока и любой код в потоке.
+- Зануление переменных, относящихся к потоку, и любой код в потоке.
+- Код в потоке и `join();` код в потоке и `isAlive() == false`.
+- `interrupt()` потока и обнаружение факта останова.
 
 [к оглавлению](#concurrent.md)
 
