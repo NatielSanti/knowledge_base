@@ -19,9 +19,9 @@
 + [PyTorch Softmax 1D](nn-pytorch-2.md#PyTorch-Softmax-1D)
 + [PyTorch Softmax Number Classification](nn-pytorch-2.md#PyTorch-Softmax-Number-Classification)
 
-[derivative_f1]:img/derivative_f1.JPG
-[derivative_f2]:img/derivative_f2.JPG
-[boot_1]:img/boot_1.JPG
+[derivative_f1]:img/nn/derivative_f1.JPG
+[derivative_f2]:img/nn/derivative_f2.JPG
+[boot_1]:img/nn/boot_1.JPG
 [pytorch_lr_1]:img/pytorch/pytorch_lr_1.JPG
 [pytorch_lr_2]:img/pytorch/pytorch_lr_2.JPG
 [pytorch_lr_3]:img/pytorch/pytorch_lr_3.JPG

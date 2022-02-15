@@ -13,9 +13,9 @@
 + [happens before](java-stream.md#happens-before)
 + [Differance IO и NIO](java-stream.md#Differance-IO-и-NIO)
 
-[semaphore]:img/semaphore.PNG
+[semaphore]:img/concurrent/semaphore.PNG
 [throwable]:img/throwable.png
-[happens-before]:img/happens-before.png
+[happens-before]:img/jmm/happens-before.png
 [io-nio-stream-in]:img/io-nio-stream-in.gif
 [io-nio-stream-out]:img/io-nio-stream-out.gif
 

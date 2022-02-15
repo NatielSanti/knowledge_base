@@ -12,10 +12,10 @@
 
 ## Commands
 
-[docker_1]:img/docker_1.JPG
-[docker_2]:img/docker_2.JPG
-[docker_3]:img/docker_3.JPG
-[docker_4]:img/docker_4.JPG
+[docker_1]:img/microservices/docker_1.JPG
+[docker_2]:img/microservices/docker_2.JPG
+[docker_3]:img/microservices/docker_3.JPG
+[docker_4]:img/microservices/docker_4.JPG
 
 [hostname][:post][/username/]<imagename>[:tag] - где хранится образ
 

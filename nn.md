@@ -54,14 +54,14 @@
 ![icon][hyper]
 ![icon][softmax]
 
-[activationfunc]:img/activationfunc.JPG
-[sigmoid]:img/sigmoid.JPG
-[hyper]:img/hyper.JPG
-[softmax]:img/softmax.JPG
-[relu]:img/relu.JPG
-[derivative_f1]:img/derivative_f1.JPG
-[derivative_f2]:img/derivative_f2.JPG
-[boot_1]:img/boot_1.JPG
+[activationfunc]:img/nn/activationfunc.JPG
+[sigmoid]:img/nn/sigmoid.JPG
+[hyper]:img/nn/hyper.JPG
+[softmax]:img/nn/softmax.JPG
+[relu]:img/nn/relu.JPG
+[derivative_f1]:img/nn/derivative_f1.JPG
+[derivative_f2]:img/nn/derivative_f2.JPG
+[boot_1]:img/nn/boot_1.JPG
 
 [к оглавлению](#Neuron-Networks)
 

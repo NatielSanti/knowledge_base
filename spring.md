@@ -20,10 +20,10 @@
 + [Injection of Prototype into Singleton](spring.md#Injection-of-Prototype-into-Singleton)
 + [Что класть и не класть в контекст](spring.md#Что-класть-и-не-класть-в-контекст)
 
-[bean-life-cycle]:img/Spring-Bean-Life-Cycle.jpg
-[spring-bean-creation]:img/spring-bean-creation.jpg
-[spel]:img/spel.PNG
-[localization]:img/localization.PNG
+[bean-life-cycle]:img/spring/Spring-Bean-Life-Cycle.jpg
+[spring-bean-creation]:img/spring/spring-bean-creation.jpg
+[spel]:img/spring/spel.PNG
+[localization]:img/spring/localization.PNG
 
 [к оглавлению](#Spring-Questions)
 
