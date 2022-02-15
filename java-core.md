@@ -1,21 +1,16 @@
 [Заглавная](README.md)
 
 # Java Core
-+ [Ранее и позднее связывание](java-stream.md#Ранее-и-позднее-связывание)
-+ [Отличие лямбды от анонимного класса](java-stream.md#Отличие-лямбды-от-анонимного-класса)
-+ [Expression lambda and Statement lambda](java-stream.md#Expression-lambda-and-Statement-lambda)
-+ [Мьютекс, монитор и семафор](java-stream.md#Мьютекс,-монитор-и-семафор)
-+ [Стирание типов (type erasure)](java-stream.md#Стирание-типов-(type-erasure))
-+ [equals and hashcode](java-stream.md#equals-and-hashcode)
-+ [fail-fast и fail-safe итераторы](java-stream.md#fail-fast-и-fail-safe-итераторы)
-+ [Throwable](java-stream.md#Throwable)
-+ [Double checked locking](java-stream.md#Double-checked-locking)
-+ [happens before](java-stream.md#happens-before)
++ [Ранее и позднее связывание](java-core.md#Ранее-и-позднее-связывание)
++ [Отличие лямбды от анонимного класса](java-core.md#Отличие-лямбды-от-анонимного-класса)
++ [Expression lambda and Statement lambda](java-core.md#Expression-lambda-and-Statement-lambda)
++ [Стирание типов (type erasure)](java-core.md#Стирание-типов-(type-erasure))
++ [equals and hashcode](java-core.md#equals-and-hashcode)
++ [fail-fast и fail-safe итераторы](java-core.md#fail-fast-и-fail-safe-итераторы)
++ [Throwable](java-core.md#Throwable)
 + [Differance IO и NIO](java-stream.md#Differance-IO-и-NIO)
 
-[semaphore]:img/concurrent/semaphore.PNG
 [throwable]:img/throwable.png
-[happens-before]:img/jmm/happens-before.png
 [io-nio-stream-in]:img/io-nio-stream-in.gif
 [io-nio-stream-out]:img/io-nio-stream-out.gif
 
@@ -76,120 +71,6 @@ public static Comparator<Integer> getComparator(){
 // Expression lambda
 (Integer o1,Integer o2) -> Integer.compare(o1,o2);
 ```
-[к оглавлению](#Java-Core)
-
-## Мьютекс, монитор и семафор
-
-- *Мьютекс* — это специальный объект для синхронизации потоков. 
-Задача мьютекса — обеспечить такой механизм, чтобы доступ к объекту в определенное время был только у одного потока
-1) Возможны только два состояния — «свободен» и «занят». 
-2) Состояниями нельзя управлять напрямую. 
-В Java нет механизмов, которые позволили бы явно взять объект, получить его мьютекс и присвоить ему нужный статус.
-
-- *Монитор* — это дополнительная «надстройка» над мьютексом, это «невидимый» для программиста кусок кода.
-
-```java
-public class Main {
-   private Object obj = new Object();
-   public void doSomething() {
-       synchronized (obj) {
-           obj.someImportantMethod();
-       }
-   }
-}
-```
-
-Преобразуется в нечто подобное (!!!Псевдокод):
-```java
-public class Main {
-
-   private Object obj = new Object();
-
-   public void doSomething() throws InterruptedException {
-       while (obj.getMutex().isBusy()) {
-           Thread.sleep(1);
-       }
-       obj.getMutex().isBusy() = true;
-       obj.someImportantMethod();
-       obj.getMutex().isBusy() = false;
-   }
-}
-```
-
-- *Семафор* — это средство для синхронизации доступа к какому-то ресурсу. 
-Его особенность заключается в том, что при создании механизма синхронизации он использует счетчик. 
-Счетчик указывает нам, сколько потоков одновременно могут получать доступ к общему ресурсу.
-
-![icon][semaphore]
-
-```java
-Semaphore(int permits);
-Semaphore(int permits, boolean fair);
-```
-
-- ```int permits``` — начальное и максимальное значение счетчика. То есть то, 
-сколько потоков одновременно могут иметь доступ к общему ресурсу;
-
-- ```boolean fair``` — для установления порядка, в котором потоки будут получать доступ. 
-Если fair = true, доступ предоставляется ожидающим потокам в том порядке, в котором они его запрашивали. 
-Если же он равен false, порядок будет определять планировщик потоков.
-
-```java
-class Philosopher extends Thread {
-
-   private Semaphore sem;
-   // поел ли философ
-   private boolean full = false;
-   private String name;
-
-   Philosopher(Semaphore sem, String name) {
-       this.sem=sem;
-       this.name=name;
-   }
-
-   public void run() {
-       try {
-           // если философ еще не ел
-           if (!full) {
-               //Запрашиваем у семафора разрешение на выполнение
-               sem.acquire();
-               System.out.println (name + " садится за стол");
-
-               // философ ест
-               sleep(300);
-               full = true;
-
-               System.out.println (name + " поел! Он выходит из-за стола");
-               sem.release();
-
-               // философ ушел, освободив место другим
-               sleep(300);
-           }
-       }
-       catch(InterruptedException e) {
-           System.out.println ("Что-то пошло не так!");
-       }
-   }
-}
-```
-
-Код запуска
-
-```java
-public class Main {
-
-   public static void main(String[] args) {
-
-       Semaphore sem = new Semaphore(2);
-       new Philosopher(sem,"Сократ").start();
-       new Philosopher(sem,"Платон").start();
-       new Philosopher(sem,"Аристотель").start();
-       new Philosopher(sem,"Фалес").start();
-       new Philosopher(sem,"Пифагор").start();
-   }
-}
-```
-
 [к оглавлению](#Java-Core)
 
 ## Стирание типов (type erasure)

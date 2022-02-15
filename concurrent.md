@@ -7,10 +7,13 @@
 + [Потоки через Runnable лучше](concurrent.md#Потоки-через-Runnable-лучше)
 + [Методы потоков: yield(), sleep(), interrupt(), join(), Понятие Монитор, Wait, notify и notifyAll, Жизненный цикл потока, LockSupport и парковка потоков](concurrent.md#Методы-потоков)
 + [Взаимодействие потоков и проблемы: Deadlock, Livelock, Starvation, Race Condition, Volatile, Атомарность, Happens Before](concurrent.md#Взаимодействие-потоков-и-проблемы)
++ [Мьютекс, монитор и семафор](concurrent.md#Мьютекс,-монитор-и-семафор)
 
 [markword]:img/concurrent/markword.PNG
 [semaphore]:img/concurrent/semaphore.PNG
 [atomic]:img/concurrent/atomic.PNG
+[happens-before]:img/jmm/happens-before.png
+[semaphore]:img/concurrent/semaphore.PNG
 
 ## Проблемы многопоточки
 
@@ -749,6 +752,120 @@ public class App {
 - Зануление переменных, относящихся к потоку, и любой код в потоке.
 - Код в потоке и `join();` код в потоке и `isAlive() == false`.
 - `interrupt()` потока и обнаружение факта останова.
+
+[к оглавлению](#concurrent.md)
+
+## Мьютекс, монитор и семафор
+
+- *Мьютекс* — это специальный объект для синхронизации потоков. 
+Задача мьютекса — обеспечить такой механизм, чтобы доступ к объекту в определенное время был только у одного потока
+1) Возможны только два состояния — «свободен» и «занят». 
+2) Состояниями нельзя управлять напрямую. 
+В Java нет механизмов, которые позволили бы явно взять объект, получить его мьютекс и присвоить ему нужный статус.
+
+- *Монитор* — это дополнительная «надстройка» над мьютексом, это «невидимый» для программиста кусок кода.
+
+```java
+public class Main {
+   private Object obj = new Object();
+   public void doSomething() {
+       synchronized (obj) {
+           obj.someImportantMethod();
+       }
+   }
+}
+```
+
+Преобразуется в нечто подобное (!!!Псевдокод):
+```java
+public class Main {
+
+   private Object obj = new Object();
+
+   public void doSomething() throws InterruptedException {
+       while (obj.getMutex().isBusy()) {
+           Thread.sleep(1);
+       }
+       obj.getMutex().isBusy() = true;
+       obj.someImportantMethod();
+       obj.getMutex().isBusy() = false;
+   }
+}
+```
+
+- *Семафор* — это средство для синхронизации доступа к какому-то ресурсу. 
+Его особенность заключается в том, что при создании механизма синхронизации он использует счетчик. 
+Счетчик указывает нам, сколько потоков одновременно могут получать доступ к общему ресурсу.
+
+![icon][semaphore]
+
+```java
+Semaphore(int permits);
+Semaphore(int permits, boolean fair);
+```
+
+- ```int permits``` — начальное и максимальное значение счетчика. То есть то, 
+сколько потоков одновременно могут иметь доступ к общему ресурсу;
+
+- ```boolean fair``` — для установления порядка, в котором потоки будут получать доступ. 
+Если fair = true, доступ предоставляется ожидающим потокам в том порядке, в котором они его запрашивали. 
+Если же он равен false, порядок будет определять планировщик потоков.
+
+```java
+class Philosopher extends Thread {
+
+   private Semaphore sem;
+   // поел ли философ
+   private boolean full = false;
+   private String name;
+
+   Philosopher(Semaphore sem, String name) {
+       this.sem=sem;
+       this.name=name;
+   }
+
+   public void run() {
+       try {
+           // если философ еще не ел
+           if (!full) {
+               //Запрашиваем у семафора разрешение на выполнение
+               sem.acquire();
+               System.out.println (name + " садится за стол");
+
+               // философ ест
+               sleep(300);
+               full = true;
+
+               System.out.println (name + " поел! Он выходит из-за стола");
+               sem.release();
+
+               // философ ушел, освободив место другим
+               sleep(300);
+           }
+       }
+       catch(InterruptedException e) {
+           System.out.println ("Что-то пошло не так!");
+       }
+   }
+}
+```
+
+Код запуска
+
+```java
+public class Main {
+
+   public static void main(String[] args) {
+
+       Semaphore sem = new Semaphore(2);
+       new Philosopher(sem,"Сократ").start();
+       new Philosopher(sem,"Платон").start();
+       new Philosopher(sem,"Аристотель").start();
+       new Philosopher(sem,"Фалес").start();
+       new Philosopher(sem,"Пифагор").start();
+   }
+}
+```
 
 [к оглавлению](#concurrent.md)
 
