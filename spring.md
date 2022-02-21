@@ -19,11 +19,13 @@
 + [Spring Boot Basic Annotations](spring.md#Spring-Boot-Basic-Annotations)
 + [Injection of Prototype into Singleton](spring.md#Injection-of-Prototype-into-Singleton)
 + [Что класть и не класть в контекст](spring.md#Что-класть-и-не-класть-в-контекст)
++ [Применение AOP](spring.md#Применение-AOP)
 
 [bean-life-cycle]:img/spring/Spring-Bean-Life-Cycle.jpg
 [spring-bean-creation]:img/spring/spring-bean-creation.jpg
 [spel]:img/spring/spel.PNG
 [localization]:img/spring/localization.PNG
+[cross-cutting]:img/spring/cross-cutting.PNG
 
 [к оглавлению](#Spring-Questions)
 
@@ -584,6 +586,11 @@ public class AppConfig {
 (временные).
 - Стандартные классы (String, InputStream, Locale*)
 
+[к оглавлению](#Spring-Questions)
+
+## Применение AOP
+
+![icon][cross-cutting]
 
 [к оглавлению](#Spring-Questions)
 
