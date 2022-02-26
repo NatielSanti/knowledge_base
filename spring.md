@@ -29,14 +29,14 @@
 
 [к оглавлению](#Spring-Questions)
 
-##What Is Spring Framework
+## What Is Spring Framework
 Spring is a powerful open-source, loosely coupled, lightweight, java framework meant for reducing the 
 complexity of developing enterprise-level applications. This framework is also called the “framework of frameworks” 
 as spring provides support to various other important frameworks like JSF, Hibernate, Structs, EJB, etc.
 
 [к оглавлению](#Spring-Questions)
 
-##Виды конфигураций Spring приложений
+## Виды конфигураций Spring приложений
 
 - Groovy-based (для фанатов).
 - XML-based (классика, но
@@ -53,7 +53,7 @@ as spring provides support to various other important frameworks like JSF, Hiber
 - SpEL - Spring Expression Language
 - Локализация
 
-###XML-based (классика, но устарела).
+### XML-based (классика, но устарела).
 
 ```xml
 <bean id="personDAO" class="edu.spring.PersonDAO">
@@ -73,7 +73,7 @@ public class Main {
 }
 ```
 
-###Java-based
+### Java-based
 ```java
 @Configuration
 class AppConfig {
@@ -93,7 +93,7 @@ class AppConfig {
 - Бины создаются в нестатических методах, помеченных аннотацией `@Bean`
 - Зависимости бинов – параметры методов
 
-###@Configuration
+### @Configuration
 
 - Класс конфигурации должен иметь конструктор без параметров (обычно его просто не пишут – он уже есть)
 - Могут содержать `@Autowired` поля, которые потом можно использовать в методах
@@ -120,7 +120,7 @@ class AppConfig {
 }
 ```
 
-###@ComponentScan
+### @ComponentScan
 
 - Ищет классы конфигураций
 - Ищет классы, помеченные стереотипами `@Service`, `@Controller` и т.д.
@@ -132,14 +132,14 @@ class AppConfig {
 а все остальные конфигурации и сервисы находятся автоматически
 - Если не задан package – ищет по пакетам «вглубь», начиная с текущего.
 
-###Annotation-based
+### Annotation-based
 
 - Собственно это и есть Annotation-based контекст
 - Предполагает использование аннотаций стереотипов `@Service`, `@Controller`, `@Repository`
 - Предполагает использование аннотаций `@Required`, `@Autowired`, или `JSR-250`
 - Обычно и комбинируется с `Java-based` аннотацией
 
-###@Autowired
+### @Autowired
 
 - Ставится на конструкторах, полях, сеттерах, методах
 - Рекомендуется ставить на конструкторы (так можно класс протестировать без поднятия контекста, да и просто удобнее)
@@ -149,7 +149,7 @@ class AppConfig {
 - Если таких бинов несколько, то тоже `Exception`
 • Чтобы выбрать нужный по ID, можно писать `Qualifier`
 
-###Property-files
+### Property-files
 
 - Нужны для конфигурации приложения
 - Хранятся в ресурсах (как `src/main/resources/`, так и `src/test/resources/`)
@@ -161,7 +161,7 @@ class AppConfig {
 - Но для этого придётся настроить `PropertyPlaceholderConfigurer` (в `Spring Boot` он уже есть).
 - Одного такого бина достаточно на приложение + не смотрите примеры, где в нём прописываются файлы.
 
-###SpEL - Spring Expression Language
+### SpEL - Spring Expression Language
 
 - Крайне мощный инструмент
 - Может спасти Вам жизнь в огромном проекте со `Spring Security` + `Spring Data`
@@ -170,7 +170,7 @@ class AppConfig {
 
 ![icon][spel]
 
-###Локализация
+### Локализация
 
 - `Internationalization (i18n)` и `Localization (l10n)`
 - Имеется встроенная поддержка в `Java`
@@ -198,7 +198,7 @@ public MessageSource messageSource() {
 
 [к оглавлению](#Spring-Questions)
 
-##Spring Benefits
+## Spring Benefits
 Spring targets to make Jakarta EE development easier, so let's look at the advantages:
 
 - **Lightweight** – There is a slight overhead of using the framework in development.
@@ -214,9 +214,9 @@ unchecked exceptions.
 
 [к оглавлению](#Spring-Questions)
 
-##Spring advantages and disadvantages
+## Spring advantages and disadvantages
 
-###Advantages of Spring
+### Advantages of Spring
 
 - Uses POJO, don’t need an enterprise container like an application server.
 - Provides Modularity to developers.
@@ -225,7 +225,7 @@ unchecked exceptions.
 - It can effectively organize middle-tier objects
 - Spring application code is much easier to unit test.
 
-###Disadvantages of Spring
+### Disadvantages of Spring
 
 - Complex and it lacks a clear focus.
 - Quite difficult to learn Spring Framework for a new developer.
@@ -233,7 +233,7 @@ unchecked exceptions.
 - No clear guidelines on several topics on spring documentation.
 - Longer Configuration
 
-##Difference between JavaEE and Spring
+## Difference between JavaEE and Spring
 
 01.	JavaEE is a Sun/Oracle standard/specification.	Spring is not a standard, strictly speaking, it is a framework.
 02.	JavaEE is used for web development.	Spring is used for a template design for an application.
@@ -258,7 +258,7 @@ and pointcuts
 
 [к оглавлению](#Spring-Questions)
 
-##Best Way of Injecting Beans
+## Best Way of Injecting Beans
 The recommended approach is to use constructor arguments for mandatory dependencies and setters for optional ones. 
 This is because constructor injection allows injecting values to immutable fields and makes testing easier.
 
@@ -271,12 +271,12 @@ This is because constructor injection allows injecting values to immutable field
 
 [к оглавлению](#Spring-Questions)
 
-##Difference Between BeanFactory and ApplicationContext
+## Difference Between BeanFactory and ApplicationContext
 
-####Bean Factory
+#### Bean Factory
 - Bean instantiation/wiring
 - Create beans when they called
-####Application Context
+#### Application Context
 - Bean instantiation/wiring
 - Create beans even if they don't called
 - Implements Bean Factory
@@ -287,19 +287,19 @@ This is because constructor injection allows injecting values to immutable field
 
 [к оглавлению](#Spring-Questions)
 
-##Bean Life Cycle
+## Bean Life Cycle
 
 ![icon][bean-life-cycle]
 
 [к оглавлению](#Spring-Questions)
 
-##Bean Creation Process
+## Bean Creation Process
 
 ![icon][spring-bean-creation]
 
 [к оглавлению](#Spring-Questions)
 
-##Design Patterns Used in the Spring Framework
+## Design Patterns Used in the Spring Framework
 - **Singleton Pattern** – singleton-scoped beans
 - **Factory Pattern** – Bean Factory classes
 - **Prototype Pattern** – prototype-scoped beans
@@ -310,13 +310,13 @@ This is because constructor injection allows injecting values to immutable field
 - **Data Access Object** – Spring DAO support
 - **Model View Controller** – Spring MVC
 
-##Controller in Spring MVC
+## Controller in Spring MVC
 Simply put, all the requests processed by the DispatcherServlet are directed to classes annotated with @Controller. 
 Each controller class maps one or more requests to methods that process and execute the requests with provided inputs.
 
 [к оглавлению](#Spring-Questions)
 
-##Differance between @Component, @Service and @Repository
+## Differance between @Component, @Service and @Repository
 
 In fact they are aliases to @Component.
 1) Mark different layers of application - controller, service and data layers
@@ -325,7 +325,7 @@ In fact they are aliases to @Component.
 
 [к оглавлению](#Spring-Questions)
 
-##@RequestMapping Annotation
+## @RequestMapping Annotation
 The ```@RequestMapping``` annotation is used to map web requests to Spring Controller methods. 
 In addition to simple use cases, we can use it for mapping of HTTP headers, binding parts of the URI with 
 ```@PathVariable```, 
@@ -333,7 +333,7 @@ and working with URI parameters and the ```@RequestParam``` annotation.
 
 [к оглавлению](#Spring-Questions)
 
-##Spring Boot Main Features
+## Spring Boot Main Features
 
 Spring Boot is essentially a framework for rapid application development built on top of the Spring Framework. 
 With its auto-configuration and embedded application server support, combined with the extensive documentation 
@@ -359,7 +359,7 @@ and services in the the `com.example.testingweb` package, letting it find the `H
 
 [к оглавлению](#Spring-Questions)
 
-##Spring Boot Basic Annotations
+## Spring Boot Basic Annotations
 The primary annotations that Spring Boot offers reside in its ```org.springframework.boot.autoconfigure``` 
 and its sub-packages.
 
@@ -373,7 +373,7 @@ attributes.
 
 [к оглавлению](#Spring-Questions)
 
-##EntityManager и основные его функции
+## EntityManager и основные его функции
 
 EntityManager это интерфейс, который описывает API для всех основных операций над Enitity, получение данных и 
 других сущностей JPA. По сути главный API для работы с JPA. Основные операции:
@@ -389,7 +389,7 @@ getDelegate
 
 [к оглавлению](#Spring-Questions)
 
-##Injection of Prototype into Singleton
+## Injection of Prototype into Singleton
 
 Контекст конфиг
 ```java
@@ -450,7 +450,7 @@ Prototype Bean created
 11:06:58.895
 ```
  
-###1. Injecting ApplicationContext BAD WAY
+### 1. Injecting ApplicationContext BAD WAY
 ```java
 public class SingletonAppContextBean implements ApplicationContextAware {
 
@@ -467,7 +467,7 @@ public class SingletonAppContextBean implements ApplicationContextAware {
 }
 ```
 
-###2. Method Injection
+### 2. Method Injection
 Another way to solve the problem is method injection with the `@Lookup` annotation.
 Spring will override the `getPrototypeBean()` method annotated with` @Lookup`. 
 It then registers the bean into the application context. 
@@ -485,7 +485,7 @@ public class SingletonLookupBean {
 }
 ```
 
-###3. Scoped Proxy
+### 3. Scoped Proxy
 
 By default, Spring holds a reference to the real object to perform the injection. 
 **Here, we create a proxy object to wire the real object with the dependent one.**
@@ -501,7 +501,7 @@ By default, Spring uses CGLIB library to directly subclass the objects.
 To avoid CGLIB usage, we can configure the proxy mode with `ScopedProxyMode.INTERFACES`, 
 to use the JDK dynamic proxy instead.
 
-###4. ObjectFactory Interface **Favorite**
+### 4. ObjectFactory Interface **Favorite**
 Spring provides the `ObjectFactory<T>` interface to produce on demand objects of the given type:
 ```java
 public class SingletonObjectFactoryBean {
@@ -519,7 +519,7 @@ for each request. Here, we have more control over initialization of the prototyp
 
 Also, the `ObjectFactory` is a part of the framework; this means avoiding additional setup in order to use this option.
 
-###5. Create a Bean at Runtime Using `java.util.Function`
+### 5. Create a Bean at Runtime Using `java.util.Function`
 
 Another option is to create the prototype bean instances at runtime, 
 which also allows us to add parameters to the instances.
@@ -577,7 +577,7 @@ public class AppConfig {
 
 [к оглавлению](#Spring-Questions)
 
-##Что класть и не класть в контекст
+## Что класть и не класть в контекст
 
 *Что класть в контекст*
 
@@ -597,7 +597,7 @@ public class AppConfig {
 
 [к оглавлению](#Spring-Questions)
 
-##Применение AOP
+## Применение AOP
 
 ![icon][cross-cutting]
 

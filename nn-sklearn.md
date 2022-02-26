@@ -19,7 +19,7 @@
 
 [к оглавлению](#Sklearn)
 
-##Simple Linear Regression
+## Simple Linear Regression
 
 ```python
 import matplotlib.pyplot as plt
@@ -76,7 +76,7 @@ if __name__ == '__main__':
 
 [к оглавлению](#Sklearn)
 
-##Nonlinear Regression
+## Nonlinear Regression
 
 ```python
 import matplotlib.pyplot as plt
@@ -147,7 +147,7 @@ if __name__ == '__main__':
 
 [к оглавлению](#Sklearn)
 
-##Multiple Linear Regression
+## Multiple Linear Regression
 
 ```python
 import matplotlib.pyplot as plt
@@ -201,7 +201,7 @@ if __name__ == '__main__':
 
 [к оглавлению](#Sklearn)
 
-##Polynomial Linear Regression
+## Polynomial Linear Regression
 
 ```python
 import matplotlib.pyplot as plt
@@ -271,7 +271,7 @@ if __name__ == '__main__':
 
 [к оглавлению](#Sklearn)
 
-##Decision Tree Classification
+## Decision Tree Classification
 
 ```python
 import pandas as pd
@@ -325,7 +325,7 @@ if __name__ == '__main__':
 
 [к оглавлению](#Sklearn)
 
-##KNearest Classification
+## KNearest Classification
 
 ```python
 import matplotlib.pyplot as plt
@@ -383,7 +383,7 @@ if __name__ == '__main__':
 
 [к оглавлению](#Sklearn)
 
-##Logistic Regression Classification
+## Logistic Regression Classification
 
 ```python
 import numpy as np
@@ -437,7 +437,7 @@ if __name__ == '__main__':
 
 [к оглавлению](#Sklearn)
 
-##SVM Classification
+## SVM Classification
 
 ```python
 import matplotlib.pyplot as plt
@@ -492,7 +492,7 @@ if __name__ == '__main__':
 
 [к оглавлению](#Sklearn)
 
-##DBScan Clustering
+## DBScan Clustering
 
 ```python
 import matplotlib.pyplot as plt
@@ -567,7 +567,7 @@ if __name__ == '__main__':
 
 [к оглавлению](#Sklearn)
 
-##Hierarchical Clustering
+## Hierarchical Clustering
 
 ```python
 import pandas as pd
@@ -641,7 +641,7 @@ if __name__ == '__main__':
 
 [к оглавлению](#Sklearn)
 
-##KMeans Clustering
+## KMeans Clustering
 
 ```python
 import pandas as pd
@@ -690,7 +690,7 @@ if __name__ == '__main__':
 
 [к оглавлению](#Sklearn)
 
-##Collaborative Recomendation System
+## Collaborative Recomendation System
 
 ```python
 import pandas as pd
@@ -789,7 +789,7 @@ if __name__ == '__main__':
 
 [к оглавлению](#Sklearn)
 
-##Content Based Recommendation System
+## Content Based Recommendation System
 
 ```python
 import pandas as pd
@@ -857,7 +857,7 @@ if __name__ == '__main__':
 
 [к оглавлению](#Sklearn)
 
-##Sklearn Final Project
+## Sklearn Final Project
 
 ```python
 import matplotlib.pyplot as plt

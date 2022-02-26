@@ -32,7 +32,7 @@
 
 [к оглавлению](#NN-Pytorch)
 
-##PyTorch Multiple Linear Regression
+## PyTorch Multiple Linear Regression
 
 Preparation
 ```python
@@ -89,7 +89,7 @@ print("The result: ", yhat) # The result:  tensor([[ 0.0903],[-0.5754],[-1.2411]
 ```
 [к оглавлению](#NN-Pytorch)
 
-##PyTorch Multiple Linear Regression Outputs
+## PyTorch Multiple Linear Regression Outputs
 
 Preparation
 ```python
@@ -217,7 +217,7 @@ plt.ylabel("Cost/total loss ")
 
 [к оглавлению](#NN-Pytorch)
 
-##PyTorch Logistic Regression
+## PyTorch Logistic Regression
 
 Preparation
 ```python
@@ -318,7 +318,7 @@ print("The prediction result: \n", yhat) # The prediction result: tensor([[7.752
 
 [к оглавлению](#NN-Pytorch)
 
-##PyTorch Softmax 1D
+## PyTorch Softmax 1D
 
 Preparation
 ```python
@@ -439,7 +439,7 @@ for i in range(3):
 
 [к оглавлению](#NN-Pytorch)
 
-##PyTorch Softmax Number Classification
+## PyTorch Softmax Number Classification
 
 Preparation
 ```python

@@ -23,13 +23,13 @@ jpa.md#Advantages-and-disadvantages-of-hibernate-compared-to-jdbc)
 [transaction-propagation]:img/db/transaction_propagation.PNG
 [cap]:img/db/cap.PNG
 
-##Типы БД
+## Типы БД
 
 ![icon][sql-nosql]
 
 [к оглавлению](#ORM-and-JPA)
 
-##EntityManager и основные его функции
+## EntityManager и основные его функции
 
 EntityManager это интерфейс, который описывает API для всех основных операций над Enitity, получение данных и
 других сущностей JPA. По сути главный API для работы с JPA. Основные операции:
@@ -45,7 +45,7 @@ EntityManager это интерфейс, который описывает API �
 
 [к оглавлению](#ORM-and-JPA)
 
-##Spring JdbcTemplate
+## Spring JdbcTemplate
 The Spring JDBC template is the primary API through which we can access database operations logic that we’re
 interested in:
 
@@ -55,7 +55,7 @@ interested in:
 
 [к оглавлению](#ORM-and-JPA)
 
-##Hibernate and JPA difference
+## Hibernate and JPA difference
 - **JPA** - Java Persistence API (JPA) defines the management of relational data in the Java applications.
 - **Hibernate** - Hibernate is an Object-Relational Mapping (ORM) tool which is used to save the state of Java
   object into the database.
@@ -63,7 +63,7 @@ interested in:
 
 [к оглавлению](#ORM-and-JPA)
 
-##Требования JPA к Entity классам
+## Требования JPA к Entity классам
 
 1) Entity класс должен быть отмечен аннотацией Entity или описан в XML файле конфигурации JPA,
 2) Entity класс должен содержать public или protected конструктор без аргументов (он также может иметь
@@ -88,12 +88,12 @@ interested in:
 [к оглавлению](#ORM-and-JPA)
 
 ##Difference between save() and persist() in Hibernate
-####`save()`	
+#### `save()`	
 - The return type of `save()` method is `Serializable`, returns generated id.	
 - The `save()` method is only supported by Hibernate i.e hibernate specific.
 - If the id generation type is AUTO, using the `save()` method we can pass identifiers in the entity.
 
-####`persist()`
+#### `persist()`
 - The return type of `persit()` method is void.
 - The `persist()` method is supported by Hibernate as well as JPA `EntityManager` 
 (In EntityManager `persist()` method has been defined).
@@ -103,7 +103,7 @@ it will throw detached entity passed to persist exception.
 [к оглавлению](#ORM-and-JPA)
 
 ##Advantages and disadvantages of hibernate compared to jdbc
-####Advantages of Hibernate over JDBC:
+#### Advantages of Hibernate over JDBC:
 
 1. Hibernate is an ORM tool
 2. Hibernate is an open source framework.
@@ -139,9 +139,9 @@ But we have given some possible scenarios.
 
 [к оглавлению](#ORM-and-JPA)
 
-##Database Transactions
+## Database Transactions
 
-###ACID
+### ACID
 
 **Атомарность (atomicity)** гарантирует, что никакая транзакция не будет зафиксирована в системе частично. 
 Будут либо выполнены все её подоперации, либо не выполнено ни одной.
@@ -156,7 +156,7 @@ But we have given some possible scenarios.
 сбои в оборудовании) изменения, сделанные успешно завершённой транзакцией, должны остаться сохранёнными после 
 возвращения системы в работу.
 
-###Transactions isolation levels
+### Transactions isolation levels
 
 В порядке увеличения изолированности транзакций и, соответственно, надёжности работы с данными:
 
@@ -177,7 +177,7 @@ But we have given some possible scenarios.
 
 ![icon][transaction-isolation-level]
 
-###Problems
+### Problems
 
 При параллельном выполнении транзакций возможны следующие проблемы:
 
@@ -194,19 +194,19 @@ But we have given some possible scenarios.
 записей. Предположим, имеется две транзакции, открытые различными приложениями, в которых выполнены следующие 
 SQL-операторы:
 
-###Transaction Propagation
+### Transaction Propagation
 
 ![icon][transaction-propagation]
 
 [к оглавлению](#ORM-and-JPA)
 
-##Языки структуры БД
+## Языки структуры БД
 
 ![icon][sql-type]
 
 [к оглавлению](#ORM-and-JPA)
 
-##CAP theory
+## CAP theory
 
 Базы данных могут выполнять только 2 из трёх условий:
 - *CA* (`Availability + Consistency – Parition tolerance`), 

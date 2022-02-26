@@ -6,7 +6,7 @@
 
 [к оглавлению](#Python)
 
-##Plot
+## Plot
 
 ```python
 import matplotlib.pyplot as plt

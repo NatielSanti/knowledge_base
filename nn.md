@@ -3,17 +3,17 @@
 # Neuron Networks
 + [Функции активации](#Функции-активации)
 
-##Keras
+## Keras
 + [Keras regression](#Keras-regression)
 + [Keras classification](#Keras-classification)
 + [Keras Convolutional NN](#Keras-Convolutional-NN)
 
-##Spark
+## Spark
 + [Spark Parquet](nn-spark.md#Parquet)
 + [Spark Metrics](nn-spark.md#Metrics)
 + [Spark Multiple File](nn-spark.md#Multiple-File)
 
-##Sklearn
+## Sklearn
 + [Sklearn Simple Linear Regression](nn-sklearn.md#Simple-Linear-Regression)
 + [Sklearn Nonlinear Regression](nn-sklearn.md#Nonlinear-Regression)
 + [Sklearn Multiple Linear Regression](nn-sklearn.md#Multiple-Linear-Regression)
@@ -29,7 +29,7 @@
 + [Sklearn Content Based Recommendation System](nn-sklearn.md#Content-Based-Recommendation-System)
 + [Sklearn Final Project](nn-sklearn.md#Sklearn-Final-Project)
 
-##PyTorch
+## PyTorch
 + [Neuron Networks](nn.md#Neuron-Networks)
 + [PyTorch 1D Tensors Operations](nn-pytorch-1.md#PyTorch-1D-Tensors-Operations)
 + [PyTorch Differentiation](nn-pytorch-1.md#PyTorch-Differentiation)
@@ -47,7 +47,7 @@
 + [PyTorch Softmax 1D](nn-pytorch-2.md#PyTorch-Softmax-1D)
 + [PyTorch Softmax Number Classification](nn-pytorch-2.md#PyTorch-Softmax-Number-Classification)
 
-##Функции активации
+## Функции активации
 ![icon][activationfunc]
 ![icon][sigmoid]
 ![icon][relu]
@@ -65,7 +65,7 @@
 
 [к оглавлению](#Neuron-Networks)
 
-##Keras regression
+## Keras regression
 
 Проверка данных
 ```python
@@ -118,7 +118,7 @@ model.fit(predictors_norm, target, validation_split=0.3, epochs=100, verbose=2)
 
 [к оглавлению](#Neuron-Networks)
 
-##Keras classification
+## Keras classification
 
 Импорт пакетов и тестовых данных из библиотеку Keras. Это числа
 ```python
@@ -188,7 +188,7 @@ pretrained_model = load_model('classification_model.h5')
 
 [к оглавлению](#Neuron-Networks)
 
-##Keras Convolutional NN
+## Keras Convolutional NN
 
 Проверка данных и импорт библиотек
 ```python

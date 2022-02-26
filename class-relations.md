@@ -7,7 +7,7 @@
 
 [к оглавлению](#Class-relations)
 
-##Inheritance
+## Inheritance
 
 Прямое наследование. Автомобиль это вид транспорта.
 ```python
@@ -24,7 +24,7 @@ class Car : Vehicle
 ```
 [к оглавлению](#Class-relations)
 
-##Association-Composition
+## Association-Composition
 
 Ассоциация. Композиция - вид ассоциации. Одна сущность является полем в другой. 
 Двигатель создаётся в конструкторе Автомобиля.
@@ -52,7 +52,7 @@ class Car
 
 [к оглавлению](#Class-relations)
 
-##Association-Aggregation
+## Association-Aggregation
 
 Ассоциация. Агрегация - вид ассоциации. Одна сущность является полем в другой.
 Двигатель создаётся в другом месте, а потом передаётся в качестве параметра.

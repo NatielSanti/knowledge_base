@@ -38,7 +38,7 @@
 
 [к оглавлению](#NN-Pytorch)
 
-##PyTorch 1D Tensors Operations
+## PyTorch 1D Tensors Operations
 
 Импорт и объявление функции для начертания графиков.
 ```python
@@ -187,7 +187,7 @@ pi_tensor = torch.linspace(0, 2*np.pi, 100)
 
 [к оглавлению](#NN-Pytorch)
 
-##PyTorch Differentiation
+## PyTorch Differentiation
 
 ```python
 import torch 
@@ -298,7 +298,7 @@ plt.show()
 
 [к оглавлению](#NN-Pytorch)
 
-##PyTorch Simple Dataset
+## PyTorch Simple Dataset
 
 ```python
 import torch
@@ -420,7 +420,7 @@ for i in range(3):
 
 [к оглавлению](#NN-Pytorch)
 
-##PyTorch Получение данных из архива и предобработка изображений
+## PyTorch Получение данных из архива и предобработка изображений
 
 ```python
 import torch 
@@ -535,7 +535,7 @@ show_data(dataset[1])
 
 [к оглавлению](#NN-Pytorch)
 
-##PyTorch Linear 1D Regression
+## PyTorch Linear 1D Regression
 
 ```python
 import torch
@@ -582,7 +582,7 @@ print(yhat) # tensor([[ 0.3030],[ 0.0973],[-0.1084]], grad_fn=<AddmmBackward>)
 
 [к оглавлению](#NN-Pytorch)
 
-##PyTorch Train 1 param Regression
+## PyTorch Train 1 param Regression
 
 Plot class
 ```python
@@ -693,7 +693,7 @@ plt.ylabel("Cost")
 
 [к оглавлению](#NN-Pytorch)
 
-##PyTorch Train 2 param Regression
+## PyTorch Train 2 param Regression
 
 Plot class
 ```python
@@ -857,7 +857,7 @@ plt.ylabel("Cost")
 
 [к оглавлению](#NN-Pytorch)
 
-##PyTorch Stochastic Gradient Descent
+## PyTorch Stochastic Gradient Descent
 
 Preparation
 + [PyTorch Train 2 param Regression](#PyTorch-Train-2-param-Regression)
@@ -1065,7 +1065,7 @@ plt.show()
 
 [к оглавлению](#NN-Pytorch)
 
-##PyTorch Mini Batch Gradient Descent
+## PyTorch Mini Batch Gradient Descent
 
 Preparation
 + [PyTorch Train 2 param Regression](#PyTorch-Train-2-param-Regression)
@@ -1121,7 +1121,7 @@ plt.legend()
 
 [к оглавлению](#NN-Pytorch)
 
-##PyTorch Way 2 param Mini Batch GD
+## PyTorch Way 2 param Mini Batch GD
 
 Preparation
 + [PyTorch Train 2 param Regression](#PyTorch-Train-2-param-Regression)
@@ -1189,7 +1189,7 @@ model.state_dict() # OrderedDict([('linear.weight', tensor([[0.9932]])), ('linea
 
 [к оглавлению](#NN-Pytorch)
 
-##PyTorch Choose learning rate and using validation data set
+## PyTorch Choose learning rate and using validation data set
 
 Preparation
 ```python
