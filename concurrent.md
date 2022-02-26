@@ -8,6 +8,9 @@
 + [Методы потоков: yield(), sleep(), interrupt(), join(), Понятие Монитор, Wait, notify и notifyAll, Жизненный цикл потока, LockSupport и парковка потоков](concurrent.md#Методы-потоков)
 + [Взаимодействие потоков и проблемы: Deadlock, Livelock, Starvation, Race Condition, Volatile, Атомарность, Happens Before](concurrent.md#Взаимодействие-потоков-и-проблемы)
 + [Мьютекс, монитор и семафор](concurrent.md#Мьютекс-монитор-и-семафор)
++ [CompletableFuture](concurrent.md#CompletableFuture)
++ [Executor и ThreadPool](concurrent.md#Executor-и-ThreadPool)
++ [Locks](concurrent.md#Locks)
 
 [markword]:img/concurrent/markword.PNG
 [semaphore]:img/concurrent/semaphore.PNG
@@ -870,6 +873,383 @@ public class Main {
    }
 }
 ```
+
+[к оглавлению](#concurrent.md)
+
+## CompletableFuture
+
+Шло время, и в `Java 1.8` появился новый класс, который зовётся `CompletableFuture`. 
+Он реализует интерфейс `Future`, то есть наши `task` будут выполнены в будущем, 
+и мы сможем выполнить get и получить результат. Но ещё он реализует некоторый `CompletionStage`. 
+Из перевода уже понятно его назначение: это некий этап (`Stage`) каких-то вычислений.
+
+```java
+import java.util.concurrent.CompletableFuture;
+public class App {
+    public static void main(String []args) throws Exception {
+        // CompletableFuture уже содержащий результат
+        CompletableFuture<String> completed;
+        completed = CompletableFuture.completedFuture("Просто значение");
+        // CompletableFuture, запускающий (run) новый поток с Runnable, поэтому он Void
+        CompletableFuture<Void> voidCompletableFuture;
+        voidCompletableFuture = CompletableFuture.runAsync(() -> {
+            System.out.println("run " + Thread.currentThread().getName());
+        });
+        // CompletableFuture, запускающий новый поток, результат которого возьмём у Supplier
+        CompletableFuture<String> supplier;
+        supplier = CompletableFuture.supplyAsync(() -> {
+            System.out.println("supply " + Thread.currentThread().getName());
+            return "Значение";
+        });
+    }
+}
+```
+
+Если мы выполним этот код, то увидим, что создание `CompletableFuture` подразумевает запуск и всей цепочки. 
+Поэтому при некоторой схожести со `SteamAPI` из `Java8` в этом отличие этих подходов. Например:
+
+```java
+List<String> array = Arrays.asList("one", "two");
+Stream<String> stringStream = array.stream().map(value -> {
+	System.out.println("Executed");
+	return value.toUpperCase();
+});
+```
+
+Это пример `Java 8 Stream Api` (подробнее можно с ним ознакомиться здесь "Руководство по Java 8 Stream API 
+в картинках и примерах"). Если запустить этот код, то Executed не отобразится. 
+То есть при создании стрима в Java стрим не запускается сразу, а ждёт, когда из него захотят значение. 
+А вот `CompletableFuture` запускает цепочку на выполнение сразу, не дожидаясь того, 
+что у него попросят посчитанное значение
+
+Второе, что надо помнить, что `CompletalbeFuture` в своей работе использует `Runnable`, 
+потребителей и функции. Учитывая это, вы всегда сможете вспомнить, что с `CompletableFuture` можно делать так:
+
+```java
+public static void main(String []args) throws Exception {
+        AtomicLong longValue = new AtomicLong(0);
+        Runnable task = () -> longValue.set(new Date().getTime());
+        Function<Long, Date> dateConverter = (longvalue) -> new Date(longvalue);
+        Consumer<Date> printer = date -> {
+            System.out.println(date);
+            System.out.flush();
+        };
+        // CompletableFuture computation
+        CompletableFuture.runAsync(task)
+                         .thenApply((v) -> longValue.get())
+                         .thenApply(dateConverter)
+                         .thenAccept(printer);
+}
+```
+
+#### Мы можем объединять результат `CompletableFuture` с результатом другого `CompletableFuture`
+
+```java
+Supplier newsSupplier = () -> {
+        try {
+			Thread.currentThread().sleep(3000);
+			return "Message";
+		} catch (InterruptedException e) {
+			throw new IllegalStateException(e);
+		}};
+
+CompletableFuture<String> reader = CompletableFuture.supplyAsync(newsSupplier);
+CompletableFuture.completedFuture("!!")
+				 .thenCombine(reader, (a, b) -> b + a)
+				 .thenAccept(result -> System.out.println(result))
+				 .get();
+```
+
+#### А ещё мы можем не только объединить (combine), но и возвращать `CompletableFuture`
+
+Тут хочется отметить, что для краткости использован метод `CompletableFuture.completedFuture`. 
+Данный метод не создаёт новый поток, поэтому остальная цепочка будет выполнена в том же потоке, 
+в котором был вызван `completedFuture`.
+
+Также есть метод `thenAcceptBoth`. Он очень похож на accept, но если `thenAccept` принимает `consumer`, 
+то `thenAcceptBoth` принимает на вход ещё один `CompletableStage` + `BiConsumer`, то есть `consumer`, 
+который на вход принимает 2 источника, а не один.
+
+Есть ещё интересная возможность со словом `Either`.
+
+```java
+CompletableFuture.completedFuture(2L)
+				.thenCompose((val) -> CompletableFuture.completedFuture(val + 2))
+                               .thenAccept(result -> System.out.println(result));
+```
+
+#### `CompletableFuture` — обработкой ошибок
+
+Данный код ничего не сделает, т.к. упадёт исключение и ничего не будет. 
+Но если мы раскомментируем `exceptionally`, то мы определим поведение.
+
+```java
+CompletableFuture.completedFuture(2L)
+				 .thenApply((a) -> {
+					throw new IllegalStateException("error");
+				 }).thenApply((a) -> 3L)
+				 //.exceptionally(ex -> 0L)
+				 .thenAccept(val -> System.out.println(val));
+```
+[к оглавлению](#concurrent.md)
+
+## Executor и ThreadPool
+
+```java
+public static void main(String []args) throws Exception {
+	Runnable task = () -> System.out.println("Task executed");
+	Executor executor = (runnable) -> {
+		new Thread(runnable).start();
+	};
+	executor.execute(task);
+}
+```
+
+У нас есть `Executor` для `execute` (т.е. выполнения) некой задачи в потоке, 
+когда реализация создания потока скрыта от нас. У нас есть `ExecutorService` — особый `Executor`, 
+который имеет набор возможностей по управлению ходом выполнения. И у нас есть фабрика `Executors`, 
+которая позволяет создавать `ExecutorService`. Давайте теперь это проделаем сами:
+
+```java
+public static void main(String[] args) throws ExecutionException, InterruptedException {
+	Callable<String> task = () -> Thread.currentThread().getName();
+	ExecutorService service = Executors.newFixedThreadPool(2);
+	for (int i = 0; i < 5; i++) {
+		Future result = service.submit(task);
+		System.out.println(result.get());
+	}
+	service.shutdown();
+}
+```
+
+ак мы видим, мы указали фиксированный пул потоков (`Fixed Thread Pool`) размером 2. 
+После чего мы поочередно отправляем в пул задачи. Каждая задача возвращает строку (`String`), 
+содержащую имя потока (`currentThread().getName()`). Важно в самом конце выполнить `shutdown` для `ExecutorService`, 
+потому что в противном случае наша программа не завершится.
+
+В фабрике Executors есть и другие фабричные методы. Например, мы можем создать пул всего из одного потока — 
+`newSingleThreadExecutor` или пул с кэшированием `newCachedThreadPool`, когда потоки будут убираться из пула, 
+если они простаивают 1 минуту. 
+
+На самом деле, за этими `ExecutorService` прячется блокирующая очередь, 
+в которую помещаются задачи и из которой эти задачи выполняются.
+
+#### ThreadPoolExecutor
+
+Как мы ранее увидели, внутри фабричных методов в основном создаётся `ThreadPoolExecutor`. 
+На функциональность влияет то, какие значения переданы в качестве максимума и минимума потоков, 
+а также какая очередь используется. А использоваться может любая реализация интерфейса 
+`java.util.concurrent.BlockingQueue`.
+
+Говоря о `ThreadPoolExecutor`'ах, стоит отметить интересные особенности при работе. Например, 
+нельзя посылать задачи в `ThreadPoolExecutor`, если там нет места:
+
+```java
+public static void main(String[] args) throws ExecutionException, InterruptedException {
+	int threadBound = 2;
+	ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(0, threadBound,
+            0L, TimeUnit.SECONDS, new SynchronousQueue<>());
+	Callable<String> task = () -> {
+		Thread.sleep(1000);
+		return Thread.currentThread().getName();
+	};
+	for (int i = 0; i < threadBound + 1; i++) {
+		threadPoolExecutor.submit(task);
+	}
+	threadPoolExecutor.shutdown();
+}
+```
+
+Данный код упадёт с ошибкой вида:
+
+
+```java
+Task java.util.concurrent.FutureTask@7cca494b rejected from java.util.concurrent.ThreadPoolExecutor@7ba4f24f[
+Running, pool size = 2, active threads = 2, queued tasks = 0, completed tasks = 0]
+```
+[к оглавлению](#concurrent.md)
+
+## Locks
+
+#### Семафоры
+Самое простое средство контроля за тем, сколько потоков могут одновременно работать — семафор. 
+Как на железной дороге. Горит зелёный — можно. Горит красный — ждём. 
+Что мы ждём от семафора? Разрешения. Разрешение на английском — `permit`. 
+Чтобы получить разрешение — его нужно получить, что на английском будет `acquire`. 
+А когда разрешение больше не нужно мы его должны отдать, то есть освободить его или избавится от него, 
+что на английском будет release. Посмотрим, как это работает.
+
+Нам потребуется импорт класса `java.util.concurrent.Semaphore`.
+
+```java
+public static void main(String[] args) throws InterruptedException {
+	Semaphore semaphore = new Semaphore(0);
+	Runnable task = () -> {
+		try {
+			semaphore.acquire();
+			System.out.println("Finished");
+			semaphore.release();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	};
+	new Thread(task).start();
+	Thread.sleep(5000);
+	semaphore.release(1);
+}
+```
+
+Как видим, запомнив английские слова, мы понимаем, как работает семафор. 
+Интересно, что главное условие — на "счету" семафора должен быть положительное количество `permit`'ов. 
+Поэтому, инициировать его можно и с минусом. И запрашивать (`acquire`) можно больше, чем 1.
+
+#### CountDownLatch
+Следующий механизм — `CountDownLatch`. `CountDown` на английском — это отсчёт, а `Latch` — задвижка или защёлка. 
+То есть если переводить, то это защёлка с отсчётом.
+
+Тут нам понадобится соответствующий импорт класса `java.util.concurrent.CountDownLatch`.
+
+Это похоже на бега или гонки, когда все собираются у стартовой линии и когда все готовы — дают разрешение, 
+и все одновременно стартуют. 
+
+```java
+public static void main(String[] args) {
+	CountDownLatch countDownLatch = new CountDownLatch(3);
+	Runnable task = () -> {
+		try {
+			countDownLatch.countDown();
+			System.out.println("Countdown: " + countDownLatch.getCount());
+			countDownLatch.await();
+			System.out.println("Finished");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	};
+	for (int i = 0; i < 3; i++) {
+		new Thread(task).start();
+ 	}
+}
+```
+
+`await` на английском — ожидать. То есть мы сначала говорим `countDown`. Как говорит гугл переводчик, 
+count down — "an act of counting numerals in reverse order to zero", 
+то есть выполнить действие по обратному отсчёту, цель которого — досчитать до нуля. 
+А дальше говорим await — то есть ожидать, пока значение счётчика не станет ноль.
+
+Интересно, что такой счётчик — одноразовый. Как сказано в JavaDoc — 
+"When threads must repeatedly count down in this way, instead use a CyclicBarrier", 
+то есть если нужен многоразовый счёт — надо использовать другой вариант, который называется `CyclicBarrier`.
+
+#### CyclicBarrier
+Как и следует из названия, `CyclicBarrier` — это циклический барьер.
+Нам понадобится импорт класса `java.util.concurrent.CyclicBarrier`.
+
+```java
+public static void main(String[] args) throws InterruptedException {
+	Runnable action = () -> System.out.println("На старт!");
+	CyclicBarrier berrier = new CyclicBarrier(3, action);
+	Runnable task = () -> {
+		try {
+			berrier.await();
+			System.out.println("Finished");
+		} catch (BrokenBarrierException | InterruptedException e) {
+			e.printStackTrace();
+		}
+	};
+	System.out.println("Limit: " + berrier.getParties());
+	for (int i = 0; i < 3; i++) {
+		new Thread(task).start();
+	}
+}
+```
+
+Как видим, поток выполняет `await`, то есть ожидает. При этом уменьшается значение барьера. 
+Барьер считается сломанным (`berrier.isBroken()`), когда отсчёт дошёл до нуля.
+
+Чтобы сбросить барьер, нужно вызвать `berrier.reset()`, чего не хватало в `CountDownLatch`.
+
+`Exchanger`
+Следующее средство — `Exchanger`. Exchange с английского переводится как обмен или обмениваться. 
+А `Exchanger` — обменник, то есть то, через что обмениваются.
+
+```java
+public static void main(String[] args) {
+	Exchanger<String> exchanger = new Exchanger<>();
+	Runnable task = () -> {
+		try {
+			Thread thread = Thread.currentThread();
+			String withThreadName = exchanger.exchange(thread.getName());
+			System.out.println(thread.getName() + " обменялся с " + withThreadName);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	};
+	new Thread(task).start();
+	new Thread(task).start();
+}
+```
+
+Тут мы запускаем два потока. Каждый из них выполняет метод exchange и ожидает, 
+когда другой поток так жевыполнит метод exchange. Таким образом, 
+потоки обменяются между собой переданными аргументами.
+
+Интересная штука. Ничего ли она вам не напоминает?
+
+А напоминает он `SynchronousQueue`, которая лежит в основе `cachedThreadPool`'а.
+
+```java
+public static void main(String[] args) throws InterruptedException {
+	SynchronousQueue<String> queue = new SynchronousQueue<>();
+	Runnable task = () -> {
+		try {
+			System.out.println(queue.take());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	};
+	new Thread(task).start();
+	queue.put("Message");
+}
+```
+
+В примере видно, что запустив новый поток, данный поток уйдёт в ожидание, т.к. в очереди будет пусто. 
+А дальше `main` поток положит в очередь текст "Message". При этом он сам остановится на время, 
+которой нужно, пока не получат из очереди этот текстовый элемент.
+
+#### Phaser
+И напоследок самое сладкое — `Phaser`.
+
+Нам понадобится импорт класса `java.util.concurrent.Phaser`.
+
+```java
+public static void main(String[] args) throws InterruptedException {
+        Phaser phaser = new Phaser();
+        // Вызывая метод register, мы регистрируем текущий поток (main) как участника
+        phaser.register();
+        System.out.println("Phasecount is " + phaser.getPhase());
+        testPhaser(phaser);
+        testPhaser(phaser);
+        testPhaser(phaser);
+        // Через 3 секунды прибываем к барьеру и снимаемся регистрацию. Кол-во прибывших = кол-во регистраций = пуск
+        Thread.sleep(3000);
+        phaser.arriveAndDeregister();
+        System.out.println("Phasecount is " + phaser.getPhase());
+    }
+
+    private static void testPhaser(final Phaser phaser) {
+        // Говорим, что будет +1 участник на Phaser
+        phaser.register();
+        // Запускаем новый поток
+        new Thread(() -> {
+            String name = Thread.currentThread().getName();
+            System.out.println(name + " arrived");
+            phaser.arriveAndAwaitAdvance(); //threads register arrival to the phaser.
+            System.out.println(name + " after passing barrier");
+        }).start();
+    }
+```
+Из примера видно, что барьер при использовании `Phaser`'а прорывается, 
+когда количество регистраций совпадает с количеством прибывших к барьеру.
 
 [к оглавлению](#concurrent.md)
 
