@@ -1,39 +1,39 @@
 # Моя база знаний
 
-## Machine learning
+##Machine learning
 + [Функции активации](nn.md#Функции-активации)
 + [Keras](nn.md#Keras-regression)
 + [Spark](nn-spark.md)
 + [Sklearn](nn-sklearn.md)
 + [PyTorch](nn-pytorch.md)
 
-## Linux
+##Linux
 + [Linux](linux.md)
 
-## Python
+##Python
 + [Начертание простых графиков](python.md#Plot)
 
-## Java
+##Java
 + [Java Core](java-core.md)
 + [Java Collection](java-collection.md)
 + [Java Stream Api](java-stream.md)
 + [Java Version Features](java-version-features.md)
 + [Java Test](java-test.md)
 
-## Spring
+##Spring
 + [Spring](spring.md)
 
-## ORM and JPA
+##ORM and JPA
 + [ORM and JPA](jpa.md)
 
-## Concurrent
+##Concurrent
 + [Concurrent](concurrent.md)
 
-## Microservices
+##Microservices
 + [Docker](docker.md)
 + [Microservices](microservices.md)
 
-## Best Practices
+##Best Practices
 + [Class relations (Inheritance, Composition, Aggregation)](class-relations.md)
 + [Design patterns](design-patterns.md)
 + [Antipattern](antipattern.md)

@@ -12,13 +12,13 @@
 
 [к оглавлению](#Microservices)
 
-## Patterns for distributed transactions
+##Patterns for distributed transactions
 
 In a monolithic system, we have a database system to ensure ACIDity. We now need to clarify the following key problems.
 
 ![icon][example-1]
 
-#### Two-phase commit (2pc) pattern
+####Two-phase commit (2pc) pattern
 
 2pc is widely used in database systems. For some situations, you can use 2pc for microservices. Just be careful; 
 not all situations suit 2pc and, in fact, 2pc is considered impractical within a microservice architecture 
@@ -85,7 +85,7 @@ The lock could become a system performance bottleneck. Also,
 it is possible to have two transactions mutually lock each other (deadlock) 
 when each transaction requests a lock on a resource the other requires.
 
-#### Saga pattern
+####Saga pattern
 
 The Saga pattern is another widely used pattern for distributed transactions. 
 It is different from 2pc, which is synchronous. The Saga pattern is asynchronous and reactive. 
