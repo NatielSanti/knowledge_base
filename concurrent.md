@@ -141,7 +141,7 @@ class Foo {
     // и остальные члены класса…
 }
 ```
-[к оглавлению](#concurrent.md)
+[к оглавлению](concurrent.md#Java-Concurrent)
 
 ## Основные характеристики Thread
 
@@ -171,7 +171,7 @@ public static void main(String []args) {
 }
 ```
 
-[к оглавлению](#concurrent.md)
+[к оглавлению](concurrent.md#Java-Concurrent)
 
 ## Потоки через Runnable лучше
 
@@ -182,7 +182,7 @@ public static void main(String []args) {
 - А ещё Runnable является функциональным интерфейсом начиная с Java 1.8. 
 Это позволяет писать код задач для потоков ещё красивее:
 
-[к оглавлению](#concurrent.md)
+[к оглавлению](concurrent.md#Java-Concurrent)
 
 ## Методы потоков
 
@@ -484,7 +484,7 @@ public class HelloWorld{
 Как и в прошлых примерах, тут всё просто. `lock` ожидает, пока кто-то освободит ресурс. 
 Если посмотреть в `JVisualVM`, мы увидим, что новый поток будет запаркован, пока `main` поток не отдаст ему лок.
 
-[к оглавлению](#concurrent.md)
+[к оглавлению](concurrent.md#Java-Concurrent)
 
 ## Взаимодействие потоков и проблемы
 
@@ -760,7 +760,7 @@ public class App {
 - Код в потоке и `join();` код в потоке и `isAlive() == false`.
 - `interrupt()` потока и обнаружение факта останова.
 
-[к оглавлению](#concurrent.md)
+[к оглавлению](concurrent.md#Java-Concurrent)
 
 ## Мьютекс монитор и семафор
 
@@ -874,7 +874,7 @@ public class Main {
 }
 ```
 
-[к оглавлению](#concurrent.md)
+[к оглавлению](concurrent.md#Java-Concurrent)
 
 ## CompletableFuture
 
@@ -991,7 +991,7 @@ CompletableFuture.completedFuture(2L)
 				 //.exceptionally(ex -> 0L)
 				 .thenAccept(val -> System.out.println(val));
 ```
-[к оглавлению](#concurrent.md)
+[к оглавлению](concurrent.md#Java-Concurrent)
 
 ## Executor и ThreadPool
 
@@ -1067,7 +1067,7 @@ public static void main(String[] args) throws ExecutionException, InterruptedExc
 Task java.util.concurrent.FutureTask@7cca494b rejected from java.util.concurrent.ThreadPoolExecutor@7ba4f24f[
 Running, pool size = 2, active threads = 2, queued tasks = 0, completed tasks = 0]
 ```
-[к оглавлению](#concurrent.md)
+[к оглавлению](concurrent.md#Java-Concurrent)
 
 ## Locks
 
