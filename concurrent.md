@@ -1251,6 +1251,6 @@ public static void main(String[] args) throws InterruptedException {
 Из примера видно, что барьер при использовании `Phaser`'а прорывается, 
 когда количество регистраций совпадает с количеством прибывших к барьеру.
 
-[к оглавлению](#concurrent.md)
+[к оглавлению](concurrent.md#Java-Concurrent)
 
 [Заглавная](README.md)
