@@ -7,7 +7,7 @@
 + [Потоки через Runnable лучше](concurrent.md#Потоки-через-Runnable-лучше)
 + [Методы потоков: yield(), sleep(), interrupt(), join(), Понятие Монитор, Wait, notify и notifyAll, Жизненный цикл потока, LockSupport и парковка потоков](concurrent.md#Методы-потоков)
 + [Взаимодействие потоков и проблемы: Deadlock, Livelock, Starvation, Race Condition, Volatile, Атомарность, Happens Before](concurrent.md#Взаимодействие-потоков-и-проблемы)
-+ [Мьютекс, монитор и семафор](concurrent.md#Мьютекс,-монитор-и-семафор)
++ [Мьютекс, монитор и семафор](concurrent.md#Мьютекс-монитор-и-семафор)
 
 [markword]:img/concurrent/markword.PNG
 [semaphore]:img/concurrent/semaphore.PNG
@@ -759,7 +759,7 @@ public class App {
 
 [к оглавлению](#concurrent.md)
 
-## Мьютекс, монитор и семафор
+## Мьютекс монитор и семафор
 
 - *Мьютекс* — это специальный объект для синхронизации потоков. 
 Задача мьютекса — обеспечить такой механизм, чтобы доступ к объекту в определенное время был только у одного потока
