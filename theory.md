@@ -5,12 +5,14 @@
 + [SOLID](theory.md#SOLID)
 + [Database Transactions](theory.md#Database-Transactions)
 + [Code Review Google Principces](theory.md#Code-Review-Google-Principces)
++ [AUTH](theory.md#AUTH)
 
 [solid-s]:img/solid/solid1.png
 [solid-o]:img/solid/solid2.png
 [solid-l]:img/solid/solid3.png
 [solid-i]:img/solid/solid4.png
 [solid-d]:img/solid/solid5.png
+[auth]:img/auth.png
 
 [к оглавлению](#Theory)
 
@@ -149,6 +151,12 @@
 - Комментарии к коду понятны и необходимы. Они должны объяснять, почему так сделано, а не как это сделано.
 - Добавлена документация.
 - Код соответствует стайл гайдам.
+
+[к оглавлению](#Theory)
+
+## AUTH 
+
+![icon][auth]
 
 [к оглавлению](#Theory)
 

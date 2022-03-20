@@ -41,5 +41,6 @@
 + [SOLID](theory.md#SOLID)
 + [Database Transactions](theory.md#Database-Transactions)
 + [Code Review Google Principces](theory.md#Code-Review-Google-Principces)
++ [AUTH](theory.md#AUTH)
 
 [к оглавлению](#Моя-база-знаний)

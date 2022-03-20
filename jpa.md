@@ -14,7 +14,7 @@ jpa.md#Advantages-and-disadvantages-of-hibernate-compared-to-jdbc)
 + [Языки структуры БД](jpa.md#Языки-структуры-БД)
 + [Типы БД](jpa.md#Типы-БД)
 + [CAP theory](jpa.md#CAP-theory)
-+ [Пессимистическая и оптимистическая блокировка](jpa.md#Пессимистическая-и-оптимистическая блокировка)
++ [Пессимистическая и оптимистическая блокировка](jpa.md#Пессимистическая-и-оптимистическая-блокировка)
 
 [entity-state]:img/db/entity-state.png
 [sql-type]:img/db/sql_type.PNG
