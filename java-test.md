@@ -10,6 +10,7 @@
 + [MockMvc](java-test.md#MockMvc)
 + [Признаки плохого юнит-теста](java-test.md#Признаки-плохого-юнит-теста)
 + [FIRST](java-test.md#FIRST)
++ [Spring boot test features](java-test.md#Spring-boot-test-features)
 
 [unit-test-1]:img/unit-test/unit-test-bad-1.jpeg
 [unit-test-2]:img/unit-test/unit-test-bad-2.jpeg
@@ -19,6 +20,7 @@
 [unit-test-6]:img/unit-test/unit-test-bad-6.jpeg
 [unit-test-7]:img/unit-test/unit-test-bad-7.jpeg
 [test-pyramid]:img/unit-test/test-pyramid.PNG
+[spring-boot-test-features]:img/unit-test/spring-boot-test-features.PNG
 
 [к оглавлению](#Java-Test)
 
@@ -426,5 +428,9 @@ public class WebConfig {
 что они откладываются на потом, а это “потом” так никогда и не наступает. 
 Даже если вы и не будете писать тесты перед кодом (
 хотя этот вариант уже доказал свою жизнеспособность) их нужно писать как минимум параллельно с кодом.
+
+##Spring boot test features
+
+![icon][spring-boot-test-features]
 
 [Заглавная](README.md)
