@@ -3,12 +3,14 @@
 # Microservices
 
 + [Patterns for distributed transactions](#Patterns-for-distributed-transactions)
++ [SOA vs MSA](#SOA-vs-MSA)
 
 [example-1]:img/microservices/example-1.png
 [2pc-ok]:img/microservices/2pc-ok.png
 [2pc-fail]:img/microservices/2pc-fail.png
 [saga-ok]:img/microservices/saga-ok.png
 [saga-fail]:img/microservices/saga-fail.png
+[soa-vs-msa]:img/microservices/soa-vs-msa.png
 
 [к оглавлению](#Microservices)
 
@@ -135,5 +137,10 @@ The process manager is responsible for listening to events and triggering endpoi
 
 [к оглавлению](#Microservices)
 
+##SOA vs MSA
+
+![icon][soa-vs-msa]
+
+[к оглавлению](#Microservices)
 
 [Заглавная](README.md)
