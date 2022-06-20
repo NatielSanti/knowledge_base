@@ -29,18 +29,20 @@
 ## Concurrent
 + [Concurrent](concurrent.md)
 
-## Microservices
+## Architecture
 + [Docker](docker.md)
 + [Microservices](microservices.md)
++ [Managering](managering.md)
+
+## Android
++ [Android](android.md)
 
 ## Best Practices
 + [Class relations (Inheritance, Composition, Aggregation)](class-relations.md)
 + [Design patterns](design-patterns.md)
 + [Antipattern](antipattern.md)
-+ [IoC, DI, IoC-контейнер](theory.md#IoC,-DI,-IoC-контейнер)
++ [IoC,DI,IoC-контейнер](theory.md#IoC,DI,IoC)
 + [SOLID](theory.md#SOLID)
-+ [Database Transactions](theory.md#Database-Transactions)
-+ [Code Review Google Principces](theory.md#Code-Review-Google-Principces)
 + [AUTH](theory.md#AUTH)
 
 [к оглавлению](#Моя-база-знаний)

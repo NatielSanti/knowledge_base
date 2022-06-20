@@ -1,9 +1,8 @@
 [Заглавная](README.md)
 
 # Theory
-+ [IoC, DI, IoC-контейнер](theory.md#IoC,-DI,-IoC-контейнер)
++ [IoC,DI,IoC-контейнер](theory.md#IoC,DI,IoC)
 + [SOLID](theory.md#SOLID)
-+ [Database Transactions](theory.md#Database-Transactions)
 + [Code Review Google Principces](theory.md#Code-Review-Google-Principces)
 + [AUTH](theory.md#AUTH)
 + [REST](theory.md#REST)
@@ -17,7 +16,7 @@
 
 [к оглавлению](#Theory)
 
-## IoC, DI, IoC-контейнер
+## IoC,DI,IoC
 
 Взаимосвязь между IoC и DI такая же как между Agile и Scrum, т.е.
 - **Inversion of Control (инверсия управления)** — это некий абстрактный принцип, 
