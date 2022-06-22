@@ -8,9 +8,11 @@
 + [equals and hashcode](java-core.md#equals-and-hashcode)
 + [fail-fast и fail-safe итераторы](java-core.md#fail-fast-и-fail-safe-итераторы)
 + [Throwable](java-core.md#Throwable)
-+ [Differance IO и NIO](java-stream.md#Differance-IO-и-NIO)
++ [Differance IO и NIO](java-core.md#Differance-IO-и-NIO)
++ [PECS](java-core.md#PECS)
 
 [throwable]:img/throwable.png
+[PECS]:img/PECS.png
 [io-nio-stream-in]:img/io-nio-stream-in.gif
 [io-nio-stream-out]:img/io-nio-stream-out.gif
 
@@ -307,6 +309,12 @@ public class Main2 {
 нескольких задач вместо пустого прожигания времени на ожидание в заблокированном состояний. 
 Наиболее частой практикой является использование сэкономленного времени работы потока выполнения 
 на обслуживание операций ввода/вывода в другом или других каналах.
+
+[к оглавлению](#Java-Core)
+
+## PECS
+
+![icon][PECS]
 
 [к оглавлению](#Java-Core)
 
