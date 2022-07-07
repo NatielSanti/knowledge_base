@@ -33,6 +33,7 @@
 + [Docker](docker.md)
 + [Microservices](microservices.md)
 + [Managering](managering.md)
++ [DEVOPS](ops.md)
 
 ## Android
 + [Android](android.md)
