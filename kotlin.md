@@ -8,11 +8,17 @@
 + [ООП](#ООП)
 + [Обобщения-Generics](#Обобщения-Generics)
 + [Дополнительные возможности ООП](#Дополнительные-возможности-ООП)
++ [Коллекции](#Коллекции)
++ [Последовательности](#Последовательности)
++ [Корутины](#Корутины)
+
+[Источник](https://metanit.com/kotlin/)
 
 [к оглавлению](#Kotlin)
 
 [//]: # ([docker_1]:img/microservices/docker_1.JPG)
 [//]: # (![icon][docker_1])
+[collections]:img/kotlin/collections.png
 
 ## Core
 
@@ -939,6 +945,895 @@ fun checkCompany(person: Person){
 open class Person(val name: String)
 open class Employee(name: String, var company: String): Person(name)
 ```
+
+#### Функции расширения
+
+Функции расширения (extension function) позволяют добавить функционал к уже определенным типам. 
+При этом типы могут быть определены где-то в другом месте, например, в стандартной библиотеке.
+```kotlin
+fun main() {
+
+    val hello: String = "hello world"
+    println(hello.wordCount('l'))   // 3
+    println(hello.wordCount('o'))   // 2
+    println(4.square())                 // 16
+    println(6.square())                 // 36
+}
+
+fun String.wordCount(c: Char) : Int{
+    var count = 0
+    for(n in this){
+        if(n == c) count++
+    }
+    return count
+}
+fun Int.square(): Int{
+    return this * this
+}
+```
+
+#### Перегрузка операторов
+
+Простейшие операции преобразуются в функции:
+- +a -> a.unaryPlus()
+- -a -> a.unaryMinus()
+- !a -> a.not()
+- ++a / a++ -> a.inc()
+- --a / a-- -> a.dec()
+- a + b -> a.plus(b)
+- a - b -> a.minus(b)
+- a * b -> a.times(b)
+- a / b -> a.div(b)
+- a % b -> a.rem(b)
+- a..b -> a.rangeTo(b)
+- a == b -> a?.equals(b) ?: (b === null)
+- a != b -> !(a?.equals(b) ?: (b === null))
+- a > b -> a.compareTo(b) > 0
+- a < b -> a.compareTo(b) < 0
+- a >= b -> a.compareTo(b) >= 0
+- a <= b -> a.compareTo(b) <= 0
+- a += b -> a.plusAssign(b)
+- a -= b -> a.minusAssign(b)
+- a *= b -> a.timesAssign(b)
+- a /= b -> a.divAssign(b)
+- a %= b -> a.remAssign(b)
+- a in b -> b.contains(a)
+- a !in b -> !b.contains(a)
+- a[i] -> a.get(i)
+- a[i, j] -> a.get(i, j)
+- a[i_1, ..., i_n] -> a.get(i_1, ..., i_n)
+- a[i] = b -> a.set(i, b)
+- a[i, j] = b -> a.set(i, j, b)
+- a[i_1, ..., i_n] = b -> a.set(i_1, ..., i_n, b)
+- a() -> a.invoke()
+- a(i) -> a.invoke(i)
+- a(i, j) -> a.invoke(i, j)
+- a(i_1, ..., i_n) -> a.invoke(i_1, ..., i_n)
+- 
+```kotlin
+fun main(){
+    val counter1 = Counter(5)
+    val counter2 = Counter(7)
+ 
+    val counter1IsGreater = counter1 > counter2
+    val counter3: Counter = counter1 + counter2
+     
+    println(counter1IsGreater)  // false
+    println(counter3.value)     // 12
+}
+ 
+class Counter(var value: Int){
+ 
+    operator fun compareTo(counter: Counter) : Int{
+        return this.value - counter.value
+    }
+    operator fun plus(counter: Counter): Counter {
+        return Counter(this.value + counter.value)
+    }
+}
+```
+
+#### Делегированные свойства
+
+```kotlin
+import kotlin.reflect.KProperty
+fun main() {
+    val tom = Person("Tom")
+    println(tom.name)
+
+    val bob = Person("Bob")
+    println(bob.name)
+}
+class Person(_name: String){
+    val name: String by LoggerDelegate(_name)
+}
+class LoggerDelegate(val personName: String) {
+    operator fun getValue(thisRef: Person, property: KProperty<*>): String {
+        println("Запрошено свойство ${property.name}")
+        println("Устанавливаемое значение: $personName")
+        return personName
+    }
+}
+```
+```kotlin
+import kotlin.reflect.KProperty
+ 
+fun main() {
+ 
+    val tom = Person("Tom", 37)
+    println(tom.age)    //37
+    tom.age = 38
+    println(tom.age)    //38
+    tom.age = -139
+    println(tom.age)    //38
+ 
+}
+class Person(val name: String, _age: Int){
+    var age: Int by LoggerDelegate(_age)
+}
+class LoggerDelegate(private var personAge: Int) {
+    operator fun getValue(thisRef: Person, property: KProperty<*>): Int{
+        return personAge
+    }
+    operator fun setValue(thisRef: Person, property: KProperty<*>, value: Int){
+        println("Устанавливаемое значение: $value")
+        if(value > 0 && value < 110) personAge = value
+    }
+}
+```
+
+#### Scope функции
+
+- `let`
+Лямбда-выражение в функции `let` в качестве параметра it получает объект, 
+для которого вызывается функция. 
+Возвращаемый результат функции `let` представляет результат данного лямбда-выражения.
+```kotlin
+inline fun <T, R> T.let(block: (T) -> R): R
+```
+Распространенным сценарием, где применяется данная функция, представляет проверка на null:
+```kotlin
+fun main() {
+
+    val sam = Person("Sam", "sam@gmail.com")
+    sam.email?.let{ println("Email: $it") }     // Email: sam@gmail.com
+    // аналог без функции let
+    //if(sam.email!=null) println("Email:${sam.email}")
+ 
+    val tom = Person("Tom", null)
+    tom.email?.let{ println("Email: $it") } // функция let не будет выполняться
+
+}
+data class Person(val name: String, val email: String?)
+```
+- `with`
+Лямбда-выражение в функции with в качестве параметра this получает объект, 
+для которого вызывается функция. 
+Возвращаемый результат функции `with` представляет результат данного лямбда-выражения.
+
+```kotlin
+inline fun <T, R> with(receiver: T, block: T.() -> R): R
+```
+Функция `with` принимает объект, для которого надо выполнить блок кода, в качестве параметра. 
+Далее в самом блоке кода мы можем обращаться к общедоступным свойствам и методам объекта 
+без его имени.
+Обычно функция `with()` применяется, 
+когда надо выполнить над объектом набор операций как единое целое:
+```kotlin
+fun main() {
+
+    val tom = Person("Tom", null)
+    val emailOfTom = with(tom) {
+        if(email==null)
+            email = "${name.lowercase()}@gmail.com"
+        email
+    }
+    println(emailOfTom) // tom@gmail.com
+}
+data class Person(val name: String, var email: String?)
+```
+В данном случае функция `with` получает объект tom, 
+поверяет его свойство email - если оно равно null, то устанавливает его на основе его имени. 
+В качестве результата функции возвращается значение свойства email.
+
+- `run`
+Лямбда-выражение в функции run в качестве параметра this получает объект, 
+для которого вызывается функция. 
+Возвращаемый результат функции run представляет результат данного лямбда-выражения.
+
+```kotlin
+inline fun <T, R> T.run(block: T.() -> R): R
+```
+Функция run похожа на функцию `with` за тем исключением, что run реализована как функция расширения. 
+Функция run также принимает объект, для которого надо выполнить блок кода, 
+в качестве параметра. 
+Далее в самом блоке кода мы можем обращаться к общедоступным свойствам и методам объекта 
+без его имени.
+```kotlin
+fun main() {
+
+    val tom = Person("Tom", null)
+    val emailOfTom = tom.run {
+        if(email==null)
+            email = "${name.lowercase()}@gmail.com"
+        email
+    }
+    println(emailOfTom) // tom@gmail.com
+}
+data class Person(val name: String, var email: String?)
+```
+
+- `apply`
+Лямбда-выражение в функции `apply` в качестве параметра this получает объект, 
+для которого вызывается функция. 
+Возвращаемым результатом функции фактически является передаваемый в функцию объект 
+для которого выполняется функция.
+
+```kotlin
+inline fun T.apply(block: T.() -> Unit): T
+```
+Например:
+```kotlin
+fun main() {
+
+    val tom = Person("Tom", null)
+    tom.apply {
+        if(email==null)
+            email = "${name.lowercase()}@gmail.com"
+    }
+    println(tom.email) // tom@gmail.com
+}
+data class Person(val name: String, var email: String?)
+```
+В данном случае, как и в примерах с функциями `with` и `run`, 
+проверяем значение свойства email, и если оно равно null, устанавливаем его, 
+используя свойство name.
+
+Распространенным сценарием применения функции `apply()` 
+является построение объекта в виде реализации вариации паттерна "Строитель":
+
+```kotlin
+fun main() {
+
+    val bob = Employee()
+    bob.name("Bob")
+    bob.age(26)
+    bob.company("JetBrains")
+    println("${bob.name} (${bob.age}) - ${bob.company}") // Bob (26) - JetBrains
+}
+
+data class Employee(var name: String = "", var age: Int = 0, var company: String = "") {
+fun age(_age: Int): Employee = apply { age = _age }
+fun name(_name: String): Employee = apply { name = _name }
+fun company(_company: String): Employee = apply { company = _company }
+}
+```
+В данном случае класс Employee содержит три метода, 
+которые устанавливают каждое из свойств класса. 
+Причем каждый подобный метод вызывает функцию `apply()`, 
+которое передает значение соответствующему свойству и возвращает текущий объект Employee.
+
+- `also`
+Лямбда-выражение в функции also в качестве параметра it получает объект, 
+для которого вызывается функция. 
+Возвращаемым результатом функции фактически является передаваемый в функцию 
+объект для которого выполняется функция.
+
+```kotlin
+inline fun T.also(block: (T) -> Unit): T
+```
+Эта функция аналогична функции `apply` за тем исключением, что внутри `also` объект, 
+над которым выполняется блок кода, доступен через параметр it:
+```kotlin
+fun main() {
+
+    val tom = Person("Tom", null)
+    tom.also {
+        if(it.email==null)
+            it.email = "${it.name.lowercase()}@gmail.com"
+    }
+    println(tom.email) // tom@gmail.com
+}
+data class Person(val name: String, var email: String?)
+```
+[к оглавлению](#Kotlin)
+
+## Коллекции
+
+![icon][collections]
+## Последовательности
+```kotlin
+val people = sequenceOf("Tom", "Sam", "Bob")    //тип Sequence<String>
+println(people.joinToString())  // Tom, Sam, Bob
+```
+```kotlin
+val employees = listOf("Tom", "Sam", "Bob") // объект List<String>
+val people = employees.asSequence()         //тип Sequence<String>
+println(people.joinToString())    // Tom, Sam, Bob
+```
+```kotlin
+var number = 0
+val numbers = generateSequence{ number += 2; number}
+println(numbers.take(5).joinToString())    // получаем первые 5 элементов последовательности - 2, 4, 6, 8, 10
+
+var number = 0
+val numbers = generateSequence{ number += 2; if(number > 8) null else number}
+println(numbers.joinToString())    // 2, 4, 6, 8
+```
+```kotlin
+val numbers = sequence {
+    yield(1)
+    yield(4)
+    yield(7)
+}
+println(numbers.joinToString())    // 1, 4, 7
+
+val personal = sequence {
+    val data = listOf("Alice", "Kate", "Ann")
+    yieldAll(data)
+}
+println(personal.joinToString())    // Alice, Kate, Ann
+```
+Функция `yield()` фактически возвращает во вне некоторое значение, 
+которое ей передается через параметр. 
+То есть при первом обращении к функции sequence сработает вызов yield(1), 
+который возвратит значение 1. При втором обращении сработает вызов yield(4), 
+который возвратит 4. И при третьем обращении сработает вызов yield(7). 
+Таким образом, последовательность будет содержать 3 элемента: 1, 4, 7.
+
+#### Операции с коллекциями
+
+- `all(predicate: (T) -> Boolean): Boolean`
+возвращает true, если все элементы соответствуют предикату, 
+который передается в функцию в качестве параметра
+- `any(): Boolean`
+возвращает true, если коллекция содержит хотя бы один элемент
+Дополнительная версия возвращает true, если хотя бы один элемент соответствуют предикату, 
+который передается в функцию в качестве параметра
+`any(predicate: (T) -> Boolean): Boolean`
+- `asSequence(): Sequence<T>`
+создает из коллекции последовательность
+- `average(): Double`
+возвращает среднее значение для числовой коллекции типов Byte, Int, Short, Long, Float, Double
+- `chunked(size: Int): List<List<T>>`
+расщепляет коллекцию на список, который состоит из объектов List, 
+параметр size устанавливает максимальное количество элементов в каждом из списков
+Дополнительная версия в качестве второго параметра получает функцию преобразования, 
+которая преобразует каждый список в элемент новой коллекции
+`chunked(size: Int,transform: (List<T>) -> R): List<R>`
+- `contains(element: T): Boolean`
+возвращает true, если коллекция содержит элемент element
+- `count(): Int`
+возвращает количество элементов в коллекции
+Дополнительная версия возвращает количество элементов, которые соответствуют предикату
+`count(predicate: (T) -> Boolean): Int`
+- `distinct(): List<T>`
+возвращает новую коллекцию, которая содержит только уникальные элементы
+- `distinctBy(selector: (T) -> K): List<T>`
+возвращает новую коллекцию, которая содержит только 
+уникальные элементы с учетом функции селектора, 
+которая передается в качестве параметра
+- `drop(n: Int): List<T>`
+возвращает новую коллекцию, которая содержит все элементы за исключением первых n элементов
+- `dropWhile(predicate: (T) -> Boolean): List<T>`
+возвращает новую коллекцию, которая содержит все элементы за исключением первых элементов, 
+которые соответствуют предикату
+- `elementAt(index: Int): T`
+возвращает элемент по индексу index. Если индекс выходит за пределы коллекции, 
+то генерируется исключение типа IndexOutOfBoundsException
+- `elementAtOrElse(index: Int, defaultValue: (Int) -> T): T`
+возвращает элемент по индексу index. Если индекс выходит за пределы коллекции, 
+то возвращается значение, устанавливаемое функцией из параметра defaultValue
+- `elementAtOrNull(index: Int): T?`
+возвращает элемент по индексу index. Если индекс выходит за пределы коллекции, 
+то возвращается null
+- `filter(predicate: (T) -> Boolean): List<T>`
+возвращает новую коллекцию из элементов, которые соответствуют предикату
+- `filterNot(predicate: (T) -> Boolean): List<T>`
+возвращает новую коллекцию из элементов, которые НЕ соответствуют предикату
+- `filterNotNull(): List<T>`
+возвращает новую коллекцию из элементов, которые не равны null
+- `find(predicate: (T) -> Boolean): T?`
+возвращает первый элемент, который соответствует предикату. 
+Если элемент не найден, то возвращается null
+- `findLast(predicate: (T) -> Boolean): T?`
+возвращает последний элемент, который соответствует предикату. 
+Если элемент не найден, то возвращается null
+- `first(): T`
+возвращает первый элемент коллекции
+Дополнительная версия возвращает первый элемент, которые соответствует предикату
+- `first(predicate: (T) -> Boolean): T`
+Если элемент не найден, то генерируется исключение типа NoSuchElementException
+- `firstOrNull(): T?`
+возвращает первый элемент коллекции
+Дополнительная версия возвращает первый элемент, которые соответствует предикату
+- `firstOrNull(predicate: (T) -> Boolean): T?`
+Если элемент не найден, то возвращается null
+- `flatMap(transform: (T) -> List<R>): List<R>`
+преобразует коллекцию элементов типа T в коллекцию элементов типа R,
+используя функцию преобразования, которая передается в качестве параметра
+- `fold(initial: R, operation: (acc: R, T) -> R): R`
+Возвращает значение, которое является результатом действия функции 
+operation над каждым элементом коллекции. Первый параметр функции operation - 
+результат работы функции над предыдущим элементом коллекции (при первом вызове - 
+значение из параметра initial), в второй параметр - текущий элемент коллекции.
+- `forEach(action: (T) -> Unit)`
+Выполняет для каждого элемента коллекции действие action.
+- `groupBy(keySelector: (T) -> K): Map<K, List<T>>`
+Группирует элементы по ключу, который возвращается функцией keySelector. 
+Результат функции карта Map, где ключ - собственно ключ элементов, 
+а значение - список List из элементов, которые соответствуют этому ключу
+Дополнительная версия принимает функцию преобразования элементов:
+`groupBy(keySelector: (T) -> K, valueTransform: (T) -> V): Map<K, List<V>>`
+- `indexOf(element: T): Int`
+Возвращает индекс первого вхождения элемента element. Если элемент не найден, возвращается -1
+- `indexOfFirst(predicate: (T) -> Boolean): Int`
+Возвращает индекс первого элемента, который соответствует предикату. 
+Если элемент не найден, возвращается -1
+- `indexOfLast(predicate: (T) -> Boolean): Int`
+Возвращает индекс последнего элемента, который соответствует предикату. 
+Если элемент не найден, возвращается -1
+- `intersect(other: Iterable): Set`
+Возвращает все элементы текущей коллекции, которые есть в коллекции other
+- `joinToString(): String`
+Генерирует из коллекции строку
+- `last(): T`
+возвращает последний элемент коллекции
+Дополнительная версия возвращает последний элемент, которые соответствует предикату
+- `last(predicate: (T) -> Boolean): T`
+Если элемент не найден, то генерируется исключение типа NoSuchElementException
+- `lastOrNull(): T?`
+возвращает последний элемент коллекции
+Дополнительная версия возвращает последний элемент, которые соответствует предикату
+- `lastOrNull(predicate: (T) -> Boolean): T?`
+Если элемент не найден, то возвращается null
+- `lastIndexOf(element: T): Int`
+Возвращает последний индекс элемента element. Если элемент не найден, возвращается -1
+- `map(transform: (T) -> R): List<R>`
+Применяет к элементам коллекции функцию трансформации и 
+возвращает новую коллекцию из новых элементов
+- `mapIndexed(transform: (index: Int, T) -> R): List<R>`
+Применяет к элементам коллекции и их индексам функцию трансформации и 
+возвращает новую коллекцию из новых элементов
+- `mapNotNull(transform: (T) -> R?): List<R>`
+Применяет к элементам коллекции функцию трансформации и возвращает 
+новую коллекцию из новых элементов, которые не равны null
+- `maxOf(selector: (T) -> Double): Double`
+Возвращает максимальное значение на основе селектора
+- `maxOfOrNull(selector: (T) -> Double): Double?`
+Возвращает максимальное значение на основе селектора. Если коллекцию пуста, возвращается null
+- `maxOrNull(): Double?`
+Возвращает максимальное значение. Если коллекцию пуста, возвращается null
+- `minOf(selector: (T) -> Double): Double`
+Возвращает минимальное значение на основе селектора
+- `minOfOrNull(selector: (T) -> Double): Double?`
+Возвращает минимальное значение на основе селектора. Если коллекцию пуста, возвращается null
+- `minOrNull(): Double?`
+Возвращает минимальное значение. Если коллекцию пуста, возвращается null
+- `minus(element: T): List<T>`
+Возвращает новую коллекцию, которая содержит все элементы текущей за исключением элемента element.
+Имеет разновидности, которую позволяют исключить из коллекции наборы элементов:
+```kotlin
+minus(elements: Array<T>): List<T>
+minus(elements: Iterable<T>): List<T>
+minus(elements: Sequence<T>): List<T>
+plus(element: T): List<T>
+```
+Возвращает новую коллекцию, которая содержит все элементы текущей за 
+исключением плюс элемент element.
+Имеет разновидности, которую позволяют включить в коллекцию наборы элементов:
+```kotlin
+plus(elements: Array<T>): List<T>
+plus(elements: Iterable<T>): List<T>
+plus(elements: Sequence<T>): List<T>
+reduce(operation: (acc: S, T) -> S): S
+```
+Возвращает значение, которое является результатом действия функции operation 
+над каждым элементом коллекции. Первый параметр функции operation - 
+результат работы функции над предыдущим элементом коллекции, 
+в второй параметр - текущий элемент коллекции.
+- `shuffled(): List<T>`
+Условно перемешивает коллекцию
+- `sorted(): List<T>`
+Сортирует коллекцию по возрастанию
+- `sortedBy(selector: (T) -> R?): List<T>`
+Сортирует коллекцию по возрастанию на основе селектора
+- `sortedByDescending(selector: (T) -> R?): List<T>`
+Сортирует коллекцию по убыванию на основе функции-селектора
+- `sortedDescending(): List<T>`
+Сортирует коллекцию по убыванию
+- `sum(): Int`
+Возвращает сумму элементов коллекции.
+- `subtract(other: Iterable): Set`
+Возвращает набор элементов, которые есть в текущей коллекции и отсутствуют в коллекции other.
+- `sum(): Int`
+Возвращает сумму элементов коллекции
+- `sumOf(selector: (T) -> Int): Int`
+Возвращает сумму элементов коллекции на основе функции-селектора
+- `take(n: Int): List<T>`
+Возвращает новую коллекцию, которая содержит n первых элементов текущей коллекции
+- `takeWhile(predicate: (T) -> Boolean): List<T>`
+Возвращает новую коллекцию, которая содержит n первых элементов текущей коллекции, 
+соответствующих функции-предикату
+- `toHashSet(): HashSet<T>`
+Создает из коллекции объект HashSet
+- `toList(): List<T>`
+Создает из коллекции объект List
+- `toMap(): Map<K, V>`
+Создает из коллекции объект Map
+- `toSet(): Set<T>`
+Создает из коллекции объект Set
+- `union(other: Iterable): Set`
+Возвращает набор уникальных элементов, которые есть в текущей коллекции и коллекции other
+
+[к оглавлению](#Kotlin)
+
+## Последовательности
+
+[к оглавлению](#Kotlin)
+
+## Корутины
+
+Неблокируемый скоуп
+```kotlin
+import kotlinx.coroutines.*
+
+suspend fun main() = coroutineScope{
+
+    launch{
+        for(i in 1..5){
+            println(i)
+            delay(400L)
+        }
+    }
+
+    println("Start")
+    println("End")
+}
+//Start
+//End
+//1
+//2
+//3
+//4
+//5
+```
+Блокируемый скоуп
+```kotlin
+import kotlinx.coroutines.*
+ 
+fun main() = runBlocking{
+    launch{
+        for(i in 0..5){
+            delay(400L)
+            println(i)
+        }
+    }
+ 
+    println("Hello Coroutines")
+}
+```
+#### Ожидание завершения корутины
+```kotlin
+import kotlinx.coroutines.*
+ 
+suspend fun main() = coroutineScope{
+ 
+    val job = launch{
+        for(i in 1..5){
+            println(i)
+            delay(400L)
+        }
+    }
+ 
+    println("Start")
+    job.join() // ожидаем завершения корутины
+    println("End")
+}
+//Start
+//1
+//2
+//3
+//4
+//5
+//End
+```
+
+#### Отложенное выполнение launch
+```kotlin
+import kotlinx.coroutines.*
+ 
+suspend fun main() = coroutineScope{
+ 
+    // корутина создана, но не запущена
+    val job = launch(start = CoroutineStart.LAZY) {
+        delay(200L)
+        println("Coroutine has started")
+    }
+ 
+    delay(1000L)
+    job.start() // запускаем корутину
+    println("Other actions in main method")
+}
+//Program has finished
+//Hello work!
+```
+
+#### Async
+Наряду с `launch` в пакете `kotlinx.coroutines` есть еще один построитель корутин - 
+функция `async`. Эта функция применяется, когда надо получить из корутины некоторый результат.
+`async` запускает отдельную корутину, которая выполняется параллельно с остальными корутинами.
+
+```kotlin
+import kotlinx.coroutines.*
+ 
+suspend fun main() = coroutineScope{
+ 
+    async{ printHello()}
+    println("Program has finished")
+}
+suspend fun printHello(){
+    delay(500L)  // имитация продолжительной работы
+    println("Hello work!")
+}
+
+//Program has finished
+//Hello work!
+```
+```kotlin
+import kotlinx.coroutines.*
+ 
+suspend fun main() = coroutineScope{
+ 
+    val message: Deferred<String> = async{ getMessage()}
+    println("message: ${message.await()}")
+    println("Program has finished")
+}
+suspend fun getMessage() : String{
+    delay(500L)  // имитация продолжительной работы
+    return "Hello"
+}
+
+//message: Hello
+//Program has finished
+```
+#### Отложенный запуск async
+```kotlin
+import kotlinx.coroutines.*
+ 
+suspend fun main() = coroutineScope{
+ 
+    // корутина создана, но не запущена
+    val sum = async(start = CoroutineStart.LAZY){ sum(1, 2)}
+ 
+    delay(1000L)
+    println("Actions after the coroutine creation")
+    println("sum: ${sum.await()}")   // запуск и выполнение корутины
+}
+fun sum(a: Int, b: Int) : Int{
+    println("Coroutine has started")
+    return a + b
+}
+//Actions after the coroutine creation
+//Coroutine has started
+//sum: 3
+```
+Если необходимо, чтобы корутина еще до метода `await()` начала выполняться, 
+то можно вызвать метод `start()`:
+```kotlin
+import kotlinx.coroutines.*
+ 
+suspend fun main() = coroutineScope{
+ 
+    // корутина создана, но не запущена
+    val sum = async(start = CoroutineStart.LAZY){ sum(1, 2)}
+ 
+    delay(1000L)
+    println("Actions after the coroutine creation")
+    sum.start()                      // запуск корутины
+    println("sum: ${sum.await()}")   // получаем результат
+}
+fun sum(a: Int, b: Int) : Int{
+    println("Coroutine has started")
+    return a + b
+}
+```
+
+#### Диспетчеры корутин
+
+- `Dispatchers.Default`: применяется по умолчанию, если тип диспетчера не указан явным образом. 
+Этот тип использует общий пул разделяемых фоновых потоков и подходит для вычислений, 
+которые не работают с операциями ввода-вывода (операциями с файлами, базами данных, сетью) 
+и которые требуют интенсивного потребления ресурсов центрального процессора.
+
+- `Dispatchers.IO`: использует общий пул потоков, создаваемых по мере необходимости, 
+и предназначен для выполнения операций ввода-вывода (например, 
+операции с файлами или сетевыми запросами).
+
+- `Dispatchers.Main`: применяется в графических приложениях, например, 
+в приложениях Android или JavaFX.
+
+- `Dispatchers.Unconfined`: корутина не закреплена четко за определенным потоком или пулом потоков. 
+Она запускается в текущем потоке до первой приостановки. 
+После возобновления работы корутина продолжает работу в одном из потоков, 
+который сторого не фиксирован. 
+Разработчики языка Kotlin в обычной ситуации не рекомендуют использовать данный тип.
+
+- `newSingleThreadContext` и `newFixedThreadPoolContext`: 
+позволяют вручную задать поток/пул для выполнения корутины
+```kotlin
+import kotlinx.coroutines.*
+
+suspend fun main() = coroutineScope{
+
+    launch(Dispatchers.Default) {   // явным образом определяем диспетчер Dispatcher.Default
+        println("Корутина выполняется на потоке: ${Thread.currentThread().name}")
+    }
+    println("Функция main выполняется на потоке: ${Thread.currentThread().name}")
+} 
+```
+
+#### Отмена выполнения корутин
+
+Для отмены выполнения корутины у объекта Job может применяться метод `cancel()`:
+```kotlin
+import kotlinx.coroutines.*
+ 
+suspend fun main() = coroutineScope{
+ 
+    val downloader: Job = launch{
+        println("Начинаем загрузку файлов")
+        for(i in 1..5){
+            println("Загружен файл $i")
+            delay(500L)
+        }
+    }
+    delay(800L)     // установим задержку, чтобы несколько файлов загрузились
+    println("Надоело ждать, пока все файлы загрузятся. Прерву-ка я загрузку...")
+    downloader.cancel()    // отменяем корутину
+    downloader.join()      // ожидаем завершения корутины
+    println("Работа программы завершена")
+}
+//Начинаем загрузку файлов
+//Загружен файл 1
+//Загружен файл 2
+//Надоело ждать, пока все файлы загрузятся. Прерву-ка я загрузку...
+//Работа программы завершена
+```
+```kotlin
+import kotlinx.coroutines.*
+ 
+suspend fun main() = coroutineScope{
+ 
+    val downloader: Job = launch{
+        println("Начинаем загрузку файлов")
+        for(i in 1..5){
+            println("Загружен файл $i")
+            delay(500L)
+        }
+    }
+    delay(800L)
+    println("Надоело ждать, пока все файлы загрузятся. Прерву-ка я загрузку...")
+    downloader.cancelAndJoin()    // отменяем корутину и ожидаем ее завершения
+    println("Работа программы завершена")
+}
+```
+#### Обработка исключения CancellationException
+```kotlin
+import kotlinx.coroutines.*
+ 
+suspend fun main() = coroutineScope{
+ 
+    val downloader: Job = launch{
+        try {
+            println("Начинаем загрузку файлов")
+            for(i in 1..5){
+                println("Загружен файл $i")
+                delay(500L)
+            }
+        }
+        catch (e: CancellationException ){
+            println("Загрузка файлов прервана")
+        }
+        finally{
+            println("Загрузка завершена")
+        }
+    }
+    delay(800L)
+    println("Надоело ждать. Прерву-ка я загрузку...")
+    downloader.cancelAndJoin()    // отменяем корутину и ожидаем ее завершения
+    println("Работа программы завершена")
+}
+//Начинаем загрузку файлов
+//Загружен файл 1
+//Загружен файл 2
+//Надоело ждать. Прерву-ка я загрузку...
+//Загрузка файлов прервана
+//Загрузка завершена
+//Работа программы завершена
+```
+#### Каналы
+
+Каналы позволяют передавать потоки данных. В Kotlin каналы представлены интерфейсом `Channel`, 
+у которого следует выделить два основных метода:
+
+`abstract suspend fun send(element: E): Unit`
+
+Отправляет объект element в канал
+
+`abstract suspend fun receive(): E`
+
+Получает данные из канала
+
+Определим простейший канал, через который будем передавать числа типа Int:
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+ 
+suspend fun main() = coroutineScope{
+ 
+    val channel = Channel<Int>()
+    launch {
+        for (n in 1..5) {
+            // отправляем данные через канал
+            channel.send(n)
+        }
+        channel.close()  // Закрытие канала. Необязательно, 
+                        // тогда канал будет открыт для дальнейшего использования
+    }
+     
+    // получаем данные из канала
+    repeat(5) {
+        val number = channel.receive()
+        println(number)
+    }
+    println("End")
+}
+//1
+//2
+//3
+//4
+//5
+//End
+```
+#### Паттерн producer-consumer
+Рассмотренный выше пример по сути является распростаненным способом передачи 
+данных от одной корутины к другой. И чтобы упростить написание подобного кода, 
+Kotlin предоставляет ряд дополнительных функций. 
+Так, функция `produce()` представляет построитель корутины, который создает корутину, 
+в которой передаются данные в канал. Например, с помощью функции `produce()` 
+мы можем определить новую функцию-корутину, 
+которая будет отправлять определенные данные:
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+ 
+suspend fun main() = coroutineScope{
+ 
+    val users = getUsers()
+    users.consumeEach { user -> println(user) }
+    println("End")
+}
+ 
+fun CoroutineScope.getUsers(): ReceiveChannel<String> = produce{
+    val users = listOf("Tom", "Bob", "Sam")
+    for (user in users) {
+        send(user)
+    }
+}
+//Tom
+//Bob
+//Sam
+//End
+```
+Здесь определяется функция `getUsers()`. 
+Причем она определяется как функция интерфейса `CoroutineScope`. 
+Функция должна возвращать объект `ReceiveChannel`, 
+типизированный типом передаваемых данных (в данном случае передаем значения типа String).
+Функция `getUsers()` представляет корутину, создаваемую построителем корутин produce. 
+В корутине опять же проходим по списку строк и с помощью функции send передаем в канал данные.
+Для потребления данных из канала может применяться метод `consumeEach()` объекта ReceiveChannel,
+который по сути заменяет цикл for.
 [к оглавлению](#Kotlin)
 
 [Заглавная](README.md)
