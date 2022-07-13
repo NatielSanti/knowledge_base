@@ -4,6 +4,7 @@
 
 + [Patterns for distributed transactions](#Patterns-for-distributed-transactions)
 + [SOA vs MSA](#SOA-vs-MSA)
++ [Kubernates](#Kubernates)
 
 [example-1]:img/microservices/example-1.png
 [2pc-ok]:img/microservices/2pc-ok.png
@@ -11,6 +12,12 @@
 [saga-ok]:img/microservices/saga-ok.png
 [saga-fail]:img/microservices/saga-fail.png
 [soa-vs-msa]:img/microservices/soa-vs-msa.png
+
+[kube1]:img/microservices/kubernates/node-pod.png
+[kube2]:img/microservices/kubernates/pod-types.png
+[kube3]:img/microservices/kubernates/selector.png
+[kube4]:img/microservices/kubernates/selector2.png
+[kube5]:img/microservices/kubernates/service.png
 
 [к оглавлению](#Microservices)
 
@@ -140,6 +147,16 @@ The process manager is responsible for listening to events and triggering endpoi
 ##SOA vs MSA
 
 ![icon][soa-vs-msa]
+
+[к оглавлению](#Microservices)
+
+##Kubernates
+
+![icon][kube1]
+![icon][kube2]
+![icon][kube3]
+![icon][kube4]
+![icon][kube5]
 
 [к оглавлению](#Microservices)
 
