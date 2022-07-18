@@ -20,6 +20,7 @@
 + [Injection of Prototype into Singleton](spring.md#Injection-of-Prototype-into-Singleton)
 + [Что класть и не класть в контекст](spring.md#Что-класть-и-не-класть-в-контекст)
 + [Применение AOP](spring.md#Применение-AOP)
++ [Различия Spring и Java EE](documents/Сравнение%20использования%20Sping%20и%20Java%20EE.pptx)
 
 [bean-life-cycle]:img/spring/Spring-Bean-Life-Cycle.jpg
 [spring-bean-creation]:img/spring/spring-bean-creation.jpg
