@@ -7,15 +7,18 @@
 + [Registry](#Registry)
 + [docker-machine](#docker-machine)
 + [Examples](#Examples)
++ [Docker vs MV](#Docker-vs-VM)
 
 [к оглавлению](#Docker)
-
-## Commands
 
 [docker_1]:img/microservices/docker_1.JPG
 [docker_2]:img/microservices/docker_2.JPG
 [docker_3]:img/microservices/docker_3.JPG
 [docker_4]:img/microservices/docker_4.JPG
+[docker_vs_vm]:img/microservices/docker-vs-vm.png
+
+## Commands
+
 
 [hostname][:post][/username/]<imagename>[:tag] - где хранится образ
 
@@ -215,5 +218,10 @@ docker run -it --volumes-from dind ubuntu // И в убунте у нас ест
 
 [к оглавлению](#Docker)
 
+## Docker vs VM
+
+![icon][docker_vs_vm]
+
+[к оглавлению](#Docker)
 
 [Заглавная](README.md)
