@@ -13,6 +13,7 @@
 [solid-i]:img/solid/solid4.png
 [solid-d]:img/solid/solid5.png
 [auth]:img/auth.png
+[auth2]:img/auth2.png
 
 [к оглавлению](#Theory)
 
@@ -157,12 +158,13 @@
 ## AUTH 
 
 ![icon][auth]
+![icon][auth2]
 
 [к оглавлению](#Theory)
 
 ## REST 
 
-это акроним от *REpresentational State Transfer*. 
+это акроним от *Representational State Transfer*. 
 Это архитектурный стиль для распределенных систем, 
 впервые введенный Роем Филдингом в 2000 году в его знаменитой диссертации.
 

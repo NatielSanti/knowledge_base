@@ -429,7 +429,6 @@ public class WebConfig {
 Даже если вы и не будете писать тесты перед кодом (
 хотя этот вариант уже доказал свою жизнеспособность) их нужно писать как минимум параллельно с кодом.
 
-##Spring boot test features
 ## Spring boot test features
 
 ![icon][spring-boot-test-features]
