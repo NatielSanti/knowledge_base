@@ -5,10 +5,13 @@
 + [SDLC](managering.md#SDLC)
 + [Техники оценки задач](managering.md#Техники-оценки-задач)
 + [NFR and FR](managering.md#NRF-and-FR)
++ [Extreme Programming](managering.md#Extreme-programming)
++ [OWASP top 10](#OWASP-top-10)
 
 [к оглавлению](#Managering)
 
 [sdlc]:img/manage/sdlc.png
+[xp]:img/manage/xp.png
 
 ## SDLC
 
@@ -140,5 +143,28 @@
 (например, ремонтопригодность, расширяемость, документация и т.д.).
 
 [к оглавлению](#Managering)
+
+## Extreme programming
+
+![icon][xp]
+
+[к оглавлению](#Managering)
+
+## OWASP top 10
+
+В последнем отчете OWASP перечислены 10 основных уязвимостей:
+
+- Инъекции (Injections).
+- Нарушенная аутентификация (Broken Authentication).
+- Раскрытие критически важных данных (Sensitive Data Exposure).
+- Внешние объекты XML (XXE) (XML External Entities (XXE)).
+- Нарушенный контроль доступа (Broken Access control).
+- Неправильная конфигурация безопасности (Security misconfigurations).
+- Межсайтовый скриптинг (XSS) (Cross Site Scripting (XSS)).
+- Небезопасная десериализация (Insecure Deserialization).
+- Использование компонентов с известными уязвимостями (Using Components with known vulnerabilities).
+- Недостаточно подробные журналы и слабый мониторинг (Insufficient logging and monitoring).
+
+[ссылка](https://proglib.io/p/chto-takoe-top-10-owasp-i-kakie-uyazvimosti-veb-prilozheniy-naibolee-opasny-2021-09-09)
 
 [Заглавная](README.md)
