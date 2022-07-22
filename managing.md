@@ -2,10 +2,10 @@
 
 # Managering
 
-+ [SDLC](managering.md#SDLC)
-+ [Техники оценки задач](managering.md#Техники-оценки-задач)
-+ [NFR and FR](managering.md#NRF-and-FR)
-+ [Extreme Programming](managering.md#Extreme-programming)
++ [SDLC](managing.md#SDLC)
++ [Техники оценки задач](managing.md#Техники-оценки-задач)
++ [NFR and FR](managing.md#NRF-and-FR)
++ [Extreme Programming](managing.md#Extreme-programming)
 + [OWASP top 10](#OWASP-top-10)
 
 [к оглавлению](#Managering)

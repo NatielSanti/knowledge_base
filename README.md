@@ -23,15 +23,16 @@
 ## Spring
 + [Spring](spring.md)
 
-## ORM and JPA
+## DB
 + [ORM and JPA](jpa.md)
++ [DB](db.md)
 
 ## Concurrent
 + [Concurrent](concurrent.md)
 
 ## Architecture
 + [Docker](docker.md)
-+ [Managering](managering.md)
++ [Managing](managing.md)
 + [DEVOPS](ops.md)
 
 ## Android
