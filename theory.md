@@ -8,7 +8,8 @@
 + [REST](theory.md#REST)
 + [Richardson Maturity Model](theory.md#Richardson-Maturity-Model)
 + [HATEOAS](theory.md#HATEOAS)
-+ [Стратегии ветвения GIT](theory.md#Стратегии-ветвения-GIT)
++ [Стратегии ветвления GIT](theory.md#Стратегии-ветвления-GIT)
++ [Web App Performance 7 Common Problems](theory.md#Web-App-Performance-7-Common-Problems)
 
 [solid-s]:img/solid/solid1.png
 [solid-o]:img/solid/solid2.png
@@ -222,7 +223,7 @@ PATCH -- partial update/modify
 ![icon][hateoas]
 [к оглавлению](#Theory)
 
-## Стратегии ветвения GIT
+## Стратегии ветвления GIT
 #### Три подхода
 
 Вы можете использовать одну из этих популярных методик или же взять их как основу для создания своей.
@@ -265,6 +266,20 @@ PATCH -- partial update/modify
 При этом большая часть рабочего процесса в части ветвления копирует GitFlow. 
 Feature-ветки здесь будут мерджиться с локальными репозиториями разработчиков. 
 Таким образом, разработка становится гибкой даже для очень больших команд с подрядчиками.
+
+[к оглавлению](#Theory)
+
+## Web App Performance 7 Common Problems
+
+1) DNS issues and network connectivity
+2) Slow servers and loading time
+3) Poorly written code
+4) Lack of load balancing
+5) Traffic spikes
+6) Specific HTML title tags
+7) Failing to optimize bandwidth Usage
+
+[Ссылка на полную статью](https://stackify.com/web-application-problems/)
 
 [к оглавлению](#Theory)
 
