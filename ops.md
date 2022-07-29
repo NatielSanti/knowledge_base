@@ -7,19 +7,19 @@
 + [Kubernetes](#Kubernetes)
 + [IaaS, SaaS, PaaS](#IaaS,-SaaS,-PaaS)
 
-[example-1]:img/microservices/example-1.png
-[2pc-ok]:img/microservices/2pc-ok.png
-[2pc-fail]:img/microservices/2pc-fail.png
-[saga-ok]:img/microservices/saga-ok.png
-[saga-fail]:img/microservices/saga-fail.png
-[soa-vs-msa]:img/microservices/soa-vs-msa.png
+[example-1]:img/dist_systems/example-1.png
+[2pc-ok]:img/dist_systems/2pc-ok.png
+[2pc-fail]:img/dist_systems/2pc-fail.png
+[saga-ok]:img/dist_systems/saga-ok.png
+[saga-fail]:img/dist_systems/saga-fail.png
+[soa-vs-msa]:img/dist_systems/soa-vs-msa.png
 
-[kube1]:img/microservices/kubernates/node-pod.png
-[kube2]:img/microservices/kubernates/pod-types.png
-[kube3]:img/microservices/kubernates/selector.png
-[kube4]:img/microservices/kubernates/selector2.png
-[kube5]:img/microservices/kubernates/service.png
-[kube6]:img/microservices/kubernates/K8scheatsheet.jpg
+[kube1]:img/dist_systems/kubernates/node-pod.png
+[kube2]:img/dist_systems/kubernates/pod-types.png
+[kube3]:img/dist_systems/kubernates/selector.png
+[kube4]:img/dist_systems/kubernates/selector2.png
+[kube5]:img/dist_systems/kubernates/service.png
+[kube6]:img/dist_systems/kubernates/K8scheatsheet.jpg
 
 [iaassaaspaas]:img/ops/iaassaaspaas.png
 [//]: # ([docker_1]:img/microservices/docker_1.JPG)
@@ -87,7 +87,8 @@
 
 ## Patterns for distributed transactions
 
-In a monolithic system, we have a database system to ensure ACIDity. We now need to clarify the following key problems.
+In a monolithic system, we have a database system to ensure ACIDity. 
+We now need to clarify the following key problems.
 
 ![icon][example-1]
 
@@ -271,6 +272,29 @@ SaaS-сервисы могут предоставлять место для хр
 и в таком случае модели PaaS и IaaS — незаменимы.
 
 [ссылка](https://gigacloud.ua/ru/blog/navchannja/hmarna-piramida-iaas-paas-i-saas#:~:text=IaaS%2C%20PaaS%20или%20SaaS%20—%20это,или%20сервиса%20с%20удобным%20интерфейсом.)
+
+[к оглавлению](#DEVOPS)
+
+## MS vs Monolith
+
+#### MS Advantages:
+1) The microservice architecture is easier to reason about/design for a complicated system.
+2) They allow new members to train for shorter periods and have less context before touching a system.
+3) Deployments are fluid and continuous for each service.
+4) They allow decoupling service logic on the basis of business responsibility
+5) They are more available as a single service having a bug does not bring down the entire system. 
+This is called a single point of failure.
+6) Individual services can be written in different languages.
+7) The developer teams can talk to each other through API sheets instead of working on the same repository,
+which requires conflict resolution.
+8) New services can be tested easily and individually. 
+The testing structure is close to unit testing compared to a monolith.
+
+#### Microservices are at a disadvantage to Monoliths in some cases. Monoliths are favorable when:
+1) The technical/developer team is very small
+2) The service is simple to think of as a whole.
+3) The service requires very high efficiency, where network calls are avoided as much as possible.
+4) All developers must have context of all services.
 
 [к оглавлению](#DEVOPS)
 

@@ -11,11 +11,11 @@
 
 [к оглавлению](#Docker)
 
-[docker_1]:img/microservices/docker_1.JPG
-[docker_2]:img/microservices/docker_2.JPG
-[docker_3]:img/microservices/docker_3.JPG
-[docker_4]:img/microservices/docker_4.JPG
-[docker_vs_vm]:img/microservices/docker-vs-vm.png
+[docker_1]:img/dist_systems/docker_1.JPG
+[docker_2]:img/dist_systems/docker_2.JPG
+[docker_3]:img/dist_systems/docker_3.JPG
+[docker_4]:img/dist_systems/docker_4.JPG
+[docker_vs_vm]:img/dist_systems/docker-vs-vm.png
 
 ## Commands
 
