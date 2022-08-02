@@ -21,7 +21,9 @@
 [kube5]:img/dist_systems/kubernates/service.png
 [kube6]:img/dist_systems/kubernates/K8scheatsheet.jpg
 
+[saaspaas]:img/dist_systems/saaspaas.png
 [iaassaaspaas]:img/ops/iaassaaspaas.png
+
 [//]: # ([docker_1]:img/microservices/docker_1.JPG)
 [//]: # (![icon][docker_1])
 [Continuous-integration-vs-delivery-vs-deployment.png]:img/ops/Continuous-integration-vs-delivery-vs-deployment.png
@@ -238,6 +240,8 @@ IaaS, PaaS или SaaS — это модели предоставления об
 накопители и каналы связи.
 
 ![icon][iaassaaspaas]
+
+![icon][saaspaas]
 
 #### SaaS (Software-as-a-Service). 
 Эта облачная модель — самая распространенная. Программы и сервисы разрабатывает и обслуживает провайдер, 

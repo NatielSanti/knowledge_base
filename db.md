@@ -7,6 +7,7 @@
 + [CAP theory](db.md#CAP-theory)
 + [Пессимистическая и оптимистическая блокировка](db.md#Пессимистическая-и-оптимистическая-блокировка)
 + [Типы индексов](db.md#Indexes)
++ [Optimizing queries](db.md#Optimizing-queries)
 
 [sql-type]:img/db/sql_type.PNG
 [sql-nosql]:img/db/sql-nosql.PNG
@@ -167,6 +168,177 @@ Bitmap index – метод битовых индексов заключаетс
 
 Партиционирование, репликация и шардинг — три основных подхода к масштабированию баз данных. 
 Они позволяют обеспечить повышение быстродействия приложения и повысить устойчивость к высоким нагрузкам.
+
+[к оглавлению](#DB)
+
+## Optimizing queries
+
+12 Query optimization tips for better performance
+- Tip 1: Add missing indexes
+- Tip 2: Check for unused indexes
+```roomsql
+SELECT
+  *
+FROM TestTable
+WHERE IntColumn = '1';
+```
+When executing this query, SQL Server will perform implicit data type conversion, 
+i.e. convert int data to varchar and run the comparison only after that. 
+In this case, indexes won’t be used. 
+How can you avoid this? We recommend using the CAST() 
+function that converts a value of any type into a specified datatype. 
+Look at the query below.
+```roomsql
+SELECT
+  *
+FROM TestTable
+WHERE IntColumn = CAST(@char AS INT);
+```
+```roomsql
+SELECT
+  *
+FROM TestTable
+WHERE DATEPART(YEAR, SomeMyDate) = '2021';
+```
+In this case, implicit data type conversion will take place too, 
+and the indexes won’t be used. 
+To avoid this, we can optimize the query in the following way:
+```roomsql
+SELECT
+  *
+FROM TestTable
+WHERE SomeDate >= '20210101'
+AND SomeDate < '20220101'
+```
+- Tip 3: Avoid using multiple OR in the FILTER predicate
+```roomsql
+SELECT
+  *
+FROM USER
+WHERE Name = @P
+OR login = @P;
+```
+If we split this query into two SELECT 
+queries and combine them by using the UNION operator, 
+SQL Server will be able to make use of the indexes, and the query will be optimized.
+```roomsql
+SELECT * FROM USER
+WHERE Name = @P
+UNION
+SELECT * FROM USER
+WHERE login = @P;
+```
+- Tip 4: Use wildcards at the end of a phrase only
+  Wildcards serve as a placeholder for words and phrases and can be 
+added at the beginning/end of them. To make data retrieval faster and more efficient, 
+you can use wildcards in the SELECT statement at the end of a phrase. For example:
+```roomsql
+SELECT
+  p.BusinessEntityID
+ ,p.FirstName
+ ,p.LastName
+ ,p.Title
+FROM Person.Person p
+WHERE p.FirstName LIKE 'And%';
+```
+However, you might encounter situations where you regularly need 
+to search by the last symbols of a word, number, or phrase—for example, 
+by the last digits of a telephone number. 
+In this case, we recommend creating a persisted computed column and running the 
+REVERSE() function on it for easier back-searching.
+```roomsql
+CREATE TABLE dbo.Customer (
+  id INT IDENTITY PRIMARY KEY
+ ,CardNo VARCHAR(128)
+ ,ReversedCardNo AS REVERSE(CardNo) PERSISTED
+)
+GO
+
+CREATE INDEX ByReversedCardNo ON dbo.Customer (ReversedCardNo)
+GO
+CREATE INDEX ByCardNo ON dbo.Customer (CardNo)
+GO
+
+INSERT INTO dbo.Customer (CardNo)
+  SELECT
+    NEWID()
+  FROM master.dbo.spt_values sv
+
+SELECT TOP 100
+  *
+FROM Customer c
+
+--searching for CardNo that end in 510c
+SELECT
+  *
+FROM dbo.Customer
+WHERE CardNo LIKE '%510c'
+
+SELECT
+  *
+FROM dbo.Customer
+WHERE ReversedCardNo LIKE REVERSE('%510c')
+```
+- Tip 5: Avoid too many JOINs
+  
+When you add multiple tables to a query and join them, you may overload it.
+In addition, a large number of tables to retrieve data from may result 
+in an inefficient execution plan. When generating a plan, 
+the SQL query optimizer needs to identify how the tables are joined, in which order, 
+how and when to apply filters and aggregation.
+
+JOIN elimination is one of the many techniques to achieve efficient query plans. 
+You can split a single query into several separate queries which can later be joined, 
+and thus remove unnecessary joins, subqueries, tables, etc.
+- Tip 6: Avoid using SELECT DISTINCT
+  However, this may require the tool to process large volumes of data and as a result, 
+make the query run slowly. Generally, it is recommended to avoid using 
+SELECT DISTINCT and simply execute the SELECT statement but specify columns.
+- Tip 7: Use SELECT fields instead of SELECT *
+- Tip 8: Use TOP to sample query results
+```roomsql
+SELECT TOP 5
+  p.BusinessEntityID
+ ,p.FirstName
+ ,p.LastName
+ ,p.Title
+FROM Person.Person p
+WHERE p.FirstName LIKE 'And%';
+```
+- Tip 9: Run the query during off-peak hours
+- Tip 10: Minimize the usage of any query hint
+- Tip 11: Minimize large write operations
+- Tip 12: Create joins with INNER JOIN (not WHERE)
+```roomsql
+SELECT
+  d.DepartmentID
+ ,d.Name
+ ,d.GroupName
+FROM HumanResources.Department d
+INNER JOIN HumanResources.EmployeeDepartmentHistory edh
+  ON d.DepartmentID = edh.DepartmentID
+```
+The INNER JOIN statement returns all matching rows from joined tables, 
+while the WHERE clause filters the resulting rows based on the specified condition. 
+Retrieving data from multiple tables based on the WHERE keyword condition 
+is called NON-ANSI JOINs while INNER JOIN belongs to ANSI JOINs.
+
+There is no difference for SQL Server how you write the query – 
+using ANSI or NON-ANSI joins – it’s just much easier to understand and analyze 
+queries written using ANSI joins. You can clearly see where the JOIN conditions 
+and the WHERE filters are, whether you missed any JOIN or filter predicates, 
+whether you joined the required tables, etc.
+```roomsql
+SELECT
+  d.Name
+ ,d.GroupName
+ ,d.DepartmentID
+FROM HumanResources.Department d
+    ,HumanResources.EmployeeDepartmentHistory edh
+WHERE d.DepartmentID = edh.DepartmentID
+```
+
+[ссылка](https://blog.devart.com/how-to-optimize-sql-query.html)
 
 [к оглавлению](#DB)
 
