@@ -19,6 +19,7 @@
 + [Java Stream Api](java-stream.md)
 + [Java Version Features](java-version-features.md)
 + [Java Test](java-test.md)
++ [Конспект по Java Core Video](abstract.md)
 
 ## Spring
 + [Spring](spring.md)
