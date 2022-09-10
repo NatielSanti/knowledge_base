@@ -5,6 +5,7 @@
 + [EntityManager и основные его функции](jpa.md#EntityManager-и-основные-его-функции)
 + [Spring JdbcTemplate](jpa.md#Spring-JdbcTemplate)
 + [Hibernate and JPA difference](jpa.md#Hibernate-and-JPA-difference)
++ [JDBC, JPA, Hibernate, Spring Data JPA](#JDBC,-JPA,-Hibernate,-Spring-Data-JPA)
 + [Требования JPA к Entity классам](jpa.md#Требования-JPA-к-Entity-классам)
 + [Difference between save() and persist() in Hibernate](
 jpa.md#Difference-between-save()-and-persist()-in-Hibernate)
@@ -189,5 +190,26 @@ SQL-операторы:
 ![icon][transaction-propagation]
 
 [к оглавлению](#ORM-and-JPA)
+
+## JDBC, JPA, Hibernate, Spring Data JPA
+
+#### JDBC 
+– это мост между миром Java и миром баз данных.
+
+#### JPA (Java Persistence API)
+– это технология, которая позволяет удобно мапить объект Java и таблицу базы данных
+- аннотации энтити класса( `@Column`, `@Id`, `@GeneratedValue`, `@ManyToMany`, `@Entity`, `@Table`)
+- JPA – это просто спецификация, Вам нужен инструмент для ее реализации. 
+Этим инструментом может быть Hibernate, TopLink, iBatis
+
+#### Hibernate
+- Одна из реализаций JPA
+- EntityManager
+
+#### Spring Data JPA
+- По умолчанию Spring Data JPA использует Hibernate, в качестве ORM провайдера (чтобы выполнять запросы)
+- Единственное, что нужно указать – это хост для Вашей базы данных, имя пользователя и пароль для доступа к ней. 
+Spring Boot обеспечивает автоматическую настройку для всего подключения к базе. В том числе и пул соединений.
+  [к оглавлению](#ORM-and-JPA)
 
 [Заглавная](README.md)

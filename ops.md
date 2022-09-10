@@ -6,6 +6,10 @@
 + [SOA vs MSA](#SOA-vs-MSA)
 + [Kubernetes](#Kubernetes)
 + [IaaS, SaaS, PaaS](#IaaS,-SaaS,-PaaS)
++ [Fault tolerant microservice](#Fault-tolerant-microservice)
++ [Event Sourcing](#Event-Sourcing)
++ [DDD](#DDD)
++ [CQRS](#CQRS)
 
 [example-1]:img/dist_systems/example-1.png
 [2pc-ok]:img/dist_systems/2pc-ok.png
@@ -23,6 +27,11 @@
 
 [saaspaas]:img/dist_systems/saaspaas.png
 [iaassaaspaas]:img/ops/iaassaaspaas.png
+[aggregate]:img/ops/aggregate.png
+[cqrs]:img/ops/cqrs.png
+[eventsourcing_cqrs]:img/ops/eventsourcing_cqrs.png
+[domain]:img/ops/domain.png
+
 
 [//]: # ([docker_1]:img/microservices/docker_1.JPG)
 [//]: # (![icon][docker_1])
@@ -302,4 +311,44 @@ The testing structure is close to unit testing compared to a monolith.
 
 [к оглавлению](#DEVOPS)
 
-[Заглавная](README.md)
+## Fault tolerant microservice
+- Timeouts (сделай за 3 секунды. Может отправить запрос дальше в цепочку сервисов и ошибка будет только на обратнмо пути)
+- Retries (3 раза и всё)
+- Circuit Breaker (много ошибок - подняли новый)
+- Deadlines (сделай до 15-00, не успел - верни ошибку сразу)
+- Rate limiters (1000 запросов в секунду)
+
+[к оглавлению](#DEVOPS)
+
+
+## DDD
+
+![icon][domain]
+![icon][aggregate]
+
+[к оглавлению](#DEVOPS)
+
+## CQRS
+
+- лучше использовать когда много сложных запросов, большая нагрузка на чтение
+![icon][cqrs]
+
+[к оглавлению](#DEVOPS)
+
+## Event Sourcing
+
+- События не изменяются, не удаляются
+- Изредка делается snapshot (для увеличения производительности, например)
+- в событии хранится только дельта изменений, а так же тип изменения (например, nameChanged, jobRemoved)
+- лучше использовать когда много мелких событий и конечное состояние не так важно
+- историчность, отчетность, быстрота чтения и записи
+- лучше не использовать когда событий мало, важно финальное состояние, много сложных запросов
+- С большим монолитом доменом лучше не использовать
+
+![icon][eventsourcing_cqrs]
+
+[к оглавлению](#DEVOPS)
+
+
+
+  [Заглавная](README.md)
