@@ -19,7 +19,6 @@
 + [Java Stream Api](java-stream.md)
 + [Java Version Features](java-version-features.md)
 + [Java Test](java-test.md)
-+ [Конспект по Java Core Video](abstract.md)
 
 ## Spring
 + [Spring](spring.md)
@@ -49,5 +48,9 @@
 + [IoC,DI,IoC-контейнер](theory.md#IoC,DI,IoC)
 + [SOLID](theory.md#SOLID)
 + [AUTH](theory.md#AUTH)
+
+## Конспекты
++ [Конспект по Java Core Video](abstract.md)
++ [Крис Ричардсон - Микросервисы](chris-richardson-microservoces.md)
 
 [к оглавлению](#Моя-база-знаний)
