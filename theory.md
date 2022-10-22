@@ -12,6 +12,7 @@
 + [Web App Performance 7 Common Problems](theory.md#Web-App-Performance-7-Common-Problems)
 + [TCP / IP, UDP, Http, Socket, разница XMPP](theory.md#TCP-/-IP,-UDP,-Http,-Socket,-разница-XMPP)
 + [GRASP](theory.md#GRASP)
++ [Best practices](theory.md#Best-practices)
 
 [solid-s]:img/solid/solid1.png
 [solid-o]:img/solid/solid2.png
@@ -366,6 +367,7 @@ socket похож на внешний API для TCP и UDP. Существуе�
 Процесс от установления соединения до его закрытия называется «соединением».
 
 #### Преимущество:
+
 1. Простота использования на основе интерфейса на уровне приложений.
 2. Требуемый уровень разработки невысок, а отказоустойчивость сильная.
 
@@ -422,6 +424,70 @@ GRASP (General Responsibility Assignment Software Patterns) —
 Класс должен создавать экземпляры тех классов.
 
 [ссылка](https://habr.com/ru/post/92570/)
+
+[к оглавлению](#Theory)
+
+## Best practices
+
+1. The Single Responsibility Principle: Every class should have only one responsibility.
+2. The Open-Closed Principle: Classes should be open for extension but closed for 
+modification.
+3. The Liskov Substitution Principle: Objects of a superclass should be replaceable 
+with objects of its subclasses.
+4. The Interface Segregation Principle: Many specific interfaces are better than one 
+general-purpose interface.
+5. The Dependency Inversion Principle: High-level modules should not depend on low-level 
+modules; both should depend on abstractions.
+6. The Law of Demeter Principle: A module should not know the inner details of the 
+objects it manipulates.
+7. The Tell, Don't Ask Principle: Keep data encapsulated inside objects that manipulate 
+that data.
+8. I analyze the existing codebase to compose classes/types that would align with 
+already implemented functionality.
+9. I analyze features planned in the backlog to compose reusable classes/types.
+10. I ensure my composition of classes/types is flexible to implement potential changes 
+on demand.
+11. I ensure each class has a unique responsibility.
+12. I describe the behavior of my class in one short sentence without 
+"if," "or," and "but."
+13. Before adding changes to a class or an interface, I ensure its responsibility 
+matches the functionality I want to add.
+14. I write highly cohesive classes where almost every method uses almost every field.
+15. I ensure my class has only one reason to change.
+16. When my class is not highly cohesive, I split it into several classes.
+17. When adding a new functionality to the existing one, I ensure the classes I edit 
+still have a unique responsibility.
+18. To add new functionality, I extend the existing classes instead of modifying them.
+19. My composition of classes/types is flexible enough to be extended and simple enough 
+to understand it easily.
+20. I prefer non-static rather than static classes.
+21. My variable types are of the most abstract type possible (e.g., I use <List> 
+instead of <ArrayList> for Java, <IEnumerable> instead of <List> for C#).
+22. I minimize the number of singletons in my application.
+23. I ensure my code calls interfaces instead of concrete classes unless the classes 
+are data objects with no behavior.
+24. I avoid casting from superclasses to subclasses.
+25. I create small interfaces that are easy to reuse and maintain.
+26. If a class implements an interface, I ensure all parts of the interface are 
+meaningful for the class.
+27. I split large interfaces that lack cohesion into small and internally cohesive ones.
+28. When designing interfaces, I combine logically cohesive methods for one use case only.
+29. I avoid instantiating concrete classes inside methods with logic.
+30. I use the dependency inversion technique to avoid a source code dependency from 
+the business logic to the database.
+31. I use the dependency injection technique to separate the creation of an object from 
+its usage.
+32. I avoid chaining function calls that navigate through internal objects that the 
+initial object shouldn't know about (e.g., <ctx.getDirectory().getAbsolutePath().getDrive()>).
+33. I hide implementation details by delegating calls to objects 
+(e.g., <driver.payFine(amount)> instead of <driver.getWallet().payFine(amount)>).
+34. I ensure classes do not expose their internal structure through accessors.
+35. I make methods private when they are used in other private methods only.
+36. I ensure a class that encapsulates data is responsible for processing it and avoids 
+delegating this responsibility to another class.
+37. I try to avoid data exposure for modification.
+38. I check to ensure my business logic code has no signs of the anemic domain model.
+39. When having a sequence of calls on the same object, I replace them with a single call.
 
 [к оглавлению](#Theory)
 
