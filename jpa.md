@@ -5,6 +5,7 @@
 + [EntityManager и основные его функции](jpa.md#EntityManager-и-основные-его-функции)
 + [Spring JdbcTemplate](jpa.md#Spring-JdbcTemplate)
 + [Hibernate and JPA difference](jpa.md#Hibernate-and-JPA-difference)
++ [Hibernate cache](jpa.md#Hibernate-cache)
 + [JDBC, JPA, Hibernate, Spring Data JPA](#JDBC,-JPA,-Hibernate,-Spring-Data-JPA)
 + [Требования JPA к Entity классам](jpa.md#Требования-JPA-к-Entity-классам)
 + [Difference between save() and persist() in Hibernate](
@@ -17,6 +18,7 @@ jpa.md#Advantages-and-disadvantages-of-hibernate-compared-to-jdbc)
 [state-entity]:img/db/state_entity.PNG
 [transaction-isolation-level]:img/db/transaction_isolation_level.PNG
 [transaction-propagation]:img/db/transaction_propagation.PNG
+[hybernate_cache]:img/db/hybernate_cache.png
 
 [к оглавлению](#ORM-and-JPA)
 
@@ -54,6 +56,132 @@ interested in:
 
 [к оглавлению](#ORM-and-JPA)
 
+## Hibernate cache
+ - Методы `persist`, `merge` и `remove` `JPA EntityManager`
+изменяют состояние данной сущности. Однако состояние сущности не
+синхронизируется каждый раз, когда вызывается метод `EntityManager`.
+На самом деле, изменения состояния синхронизируются только при выполнении метода
+`flush` `EntityManager`.
+Эта стратегия синхронизации кэша называется `write-behind` (отложенная запись).
+Это нужно чтобы пакетно обрабатывать запросы в БД
+
+#### Кеш первого уровня
+
+Кеш первого уровня всегда привязан к объекту сессии. 
+Hibernate всегда по умолчанию использует этот кеш и его нельзя отключить.
+```java
+SharedDoc persistedDoc = (SharedDoc) session.load(SharedDoc.class, docId);
+System.out.println(persistedDoc.getName());
+user1.setDoc(persistedDoc);
+
+persistedDoc = (SharedDoc) session.load(SharedDoc.class, docId);
+System.out.println(persistedDoc.getName());
+user2.setDoc(persistedDoc);
+```
+Один важный момент — при использовании метода `load()` Hibernate не выгружает из 
+БД данные до тех пор пока они не потребуются. Иными словами — в момент, 
+когда осуществляется первый вызов load, мы получаем прокси объект или сами данные 
+в случае, если данные уже были в кеше сессии. 
+Поэтому в коде присутствует `getName()` чтобы 100% вытянуть данные из БД.
+   Тут также открывается прекрасная возможность для потенциальной оптимизации. 
+В случае прокси объекта мы можем связать два объекта не делая запрос в базу, 
+в отличии от метода `get()`. При использовании методов `save()`, `update()`, 
+`saveOrUpdate()`, `load()`, `get()`, `list()`, `iterate()`, `scroll()` всегда 
+будет задействован кеш первого уровня.
+
+#### Кеш второго уровня
+
+Если кеш первого уровня привязан к объекту сессии, то кеш второго уровня привязан 
+к объекту-фабрике сессий (Session Factory object). 
+Что как бы подразумевает, что видимость этого кеша гораздо шире кеша первого уровня.
+По-умолчанию отключен.
+
+```xml
+<property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.SingletonEhCacheProvider"/>
+//или  в более старых версиях
+//<property name="hibernate.cache.provider_class" value="org.hibernate.cache.EhCacheProvider"/>
+<property name="hibernate.cache.use_second_level_cache" value="true"/>
+```
+
+На самом деле, хибернейт сам не реализует кеширование как таковое. 
+А лишь предоставляет структуру для его реализации, поэтому подключить можно 
+любую реализацию, которая соответствует спецификации нашего ORM фреймворка. 
+Из популярных реализаций можна выделить следующие:
+- EHCache
+- OSCache
+- SwarmCache
+- JBoss TreeCache
+
+чтение из кеша второго уровня происходит только в том случае, 
+если нужный объект не был найден в кеше первого уровня.
+
+
+#### Кеш запросов
+
+```java
+Query query = session.createQuery("from SharedDoc doc where doc.name = :name");
+
+SharedDoc persistedDoc = (SharedDoc) query.setParameter("name", "first").uniqueResult();
+System.out.println(persistedDoc.getName());
+user1.setDoc(persistedDoc);
+
+persistedDoc = (SharedDoc) query.setParameter("name", "first").uniqueResult();
+System.out.println(persistedDoc.getName());
+user2.setDoc(persistedDoc);
+```
+
+езультаты такого рода запросов не сохраняются ни кешом первого, ни второго уровня. 
+Это как раз то место, где можно использовать кеш запросов. 
+Он тоже по умолчанию отключен. Для включения нужно добавить следующую строку в 
+конфигурационный файл:
+```xml
+<property name="hibernate.cache.use_query_cache" value="true"/>
+```
+```java
+Query query = session.createQuery("from SharedDoc doc where doc.name = :name");
+query.setCacheable(true);
+```
+Кеш запросов похож на кеш второго уровня. Но в отличии от него — 
+ключом к данным кеша выступает не идентификатор объекта, 
+а совокупность параметров запроса. А сами данные — 
+это идентификаторы объектов соответствующих критериям запроса. 
+Таким образом, этот кеш рационально использовать с кешем второго уровня.
+
+![icon][hibernate-cache]
+
+#### Cтратегии кеширования
+
+Стратегии кеширования определяют поведения кеша в определенных ситуациях. 
+Выделяют четыре группы:
+- Read-only
+- Read-write
+- Nonstrict-read-write
+- Transactional
+
+#### Cache region
+
+Регион или область — это логический разделитель памяти вашего кеша. 
+Для каждого региона можна настроить свою политику кеширования 
+(для EhCache в том же ehcache.xml). Если регион не указан, 
+то используется регион по умолчанию, который имеет полное имя вашего класса для 
+которого применяется кеширование. В коде выглядит так:
+
+```java
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "STATIC_DATA")
+```
+
+А для кеша запросов так:
+
+```java
+query.setCacheRegion("STATIC_DATA");
+//или в случае критерии
+criteria.setCacheRegion("STATIC_DATA");
+```
+
+[ссылка](https://habr.com/ru/post/135176/)
+
+[к оглавлению](#ORM-and-JPA)
+
 ## Требования JPA к Entity классам
 
 1) Entity класс должен быть отмечен аннотацией Entity или описан в XML файле конфигурации JPA,
@@ -71,7 +199,7 @@ interested in:
    напрямую доступны другим классам, использующим этот Entity. Такие классы должны обращаться только к методам
    (getter/setter методам или другим методам бизнес-логики в Entity классе),
 9) Enity класс должен содержать первичный ключ, то есть атрибут или группу атрибутов которые уникально
-   определяют запись этого Enity класса в базе данных,
+   определяют запись этого Enity класса в базе данных
 
 ![icon][entity-state]
 ![icon][state-entity]
