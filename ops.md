@@ -5,11 +5,6 @@
 + [Patterns for distributed transactions](#Patterns-for-distributed-transactions)
 + [SOA vs MSA](#SOA-vs-MSA)
 + [Kubernetes](#Kubernetes)
-+ [IaaS, SaaS, PaaS](#IaaS,-SaaS,-PaaS)
-+ [Fault tolerant microservice](#Fault-tolerant-microservice)
-+ [Event Sourcing](#Event-Sourcing)
-+ [DDD](#DDD)
-+ [CQRS](#CQRS)
 
 [example-1]:img/dist_systems/example-1.png
 [2pc-ok]:img/dist_systems/2pc-ok.png

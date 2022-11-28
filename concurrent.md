@@ -269,6 +269,7 @@ public static void main(String []args) {
 Самым простым типом ожидания является ожидание завершения другого потока.
 В данном примере новый поток будет спать 5 секунд. В то же время, главный поток `main` будет ждать, 
 пока спящий поток не проснётся и не завершит свою работу.
+Бросает `InterruptedException`
 
 ```java
 public static void main(String []args) throws InterruptedException {
