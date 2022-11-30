@@ -5,8 +5,9 @@
 + [Виды тестирования](java-test.md#Виды-тестирования)
 + [Пирамида тестирования](java-test.md#Пирамида-тестирования)
 + [Зачем нужно юнит тестирование?](java-test.md#Зачем-нужно-юнит-тестирование?)
-+ [Unit tests](#Unit-tests)
-+ [Unit vs Integration tests](#Unit-vs-Integration-tests)
++ [Unit tests](java-test.md#Unit-tests)
++ [Mocks](java-test.md#Mocks)
++ [Unit vs Integration tests](java-test.md#Unit-vs-Integration-tests)
 + [TDD](java-test.md#TDD)
 + [Mockito](java-test.md#Mockito)
 + [MockMvc](java-test.md#MockMvc)
@@ -108,6 +109,30 @@ understand, and test an application easily.
 3) Intentionally Unit-Untestable
    - Interactions with external dependencies: network, database, file system, etc.
    - Boilerplate and trivial code: getter/setter, setup wiring, annotations, etc.
+
+### Best practices
+- Write unit tests when you work on a development task or user story development.
+- Ensure that unit tests follow the FIRST principles.
+- Include the execution of unit tests in the Continuous Integration build and break 
+the build if unit tests fail.
+- Measure code coverage during Continuous Integration to determine if there is 
+a lack of unit tests
+
+[к оглавлению](#Java-Test)
+
+##Mocks
+
+- **Dummy** objects are passed around but never actually used. 
+Usually they are just used to fill parameter lists.
+- **Fake** objects actually have working implementations, 
+but usually take some shortcut which makes them not suitable for production 
+(an in memory database is a good example).
+- **Stubs** provide canned answers to calls made during the test, 
+usually not responding at all to anything outside what's programmed in for the test.
+- **Spies** are stubs that also record some information based on how they were called. 
+One form of this might be an email service that records how many messages it was sent.
+- **Mocks** are what we are talking about here: objects pre-programmed 
+with expectations which form a specification of the calls they are expected to receive.
 
 [к оглавлению](#Java-Test)
 

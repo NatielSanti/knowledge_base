@@ -1,12 +1,18 @@
 [Заглавная](README.md)
 
 # Architect
-+ [IaaS, SaaS, PaaS](#IaaS,-SaaS,-PaaS)
-+ [Fault tolerant microservice](#Fault-tolerant-microservice)
-+ [Event Sourcing](#Event-Sourcing)
-+ [DDD](#DDD)
-+ [CQRS](#CQRS)
-+ [Enterprise integration patterns](#Enterprise-integration-patterns)
+
++ [IaaS, SaaS, PaaS](architect.md#IaaS,-SaaS,-PaaS)
++ [Fault tolerant microservice](architect.md#Fault-tolerant-microservice)
++ [Event Sourcing](architect.md#Event-Sourcing)
++ [DDD](architect.md#DDD)
++ [CQRS](architect.md#CQRS)
++ [Enterprise integration patterns](architect.md#Enterprise-integration-patterns)
++ [Fault tolerant microservice](architect.md#Fault-tolerant-microservice)
++ [MS vs Monolith](architect.md#MS-vs-Monolith)
++ [SOA vs MSA](architect.md#SOA-vs-MSA)
++ [Patterns for distributed transactions](architect.md#Patterns-for-distributed-transactions)
++ [Kafka](architect.md#Kafka)
 
 [example-1]:img/dist_systems/example-1.png
 [2pc-ok]:img/dist_systems/2pc-ok.png
@@ -29,6 +35,8 @@
 [eventsourcing_cqrs]:img/ops/eventsourcing_cqrs.png
 [domain]:img/ops/domain.png
 
+[kafka-storage-1]:img/architect/kafka-storage-1.png
+[kafka-storage-2]:img/architect/kafka-storage-2.png
 
 [//]: # ([docker_1]:img/microservices/docker_1.JPG)
 [//]: # (![icon][docker_1])
@@ -187,6 +195,293 @@ Message Endpoint
 </ul>
 
 [ссылка](#https://www.enterpriseintegrationpatterns.com/patterns/messaging/toc.html)
+
+[к оглавлению](#Architect)
+
+## Fault tolerant microservice
+- Timeouts (сделай за 3 секунды. Может отправить запрос дальше в цепочку сервисов и ошибка будет только на обратнмо пути)
+- Retries (3 раза и всё)
+- Circuit Breaker (много ошибок - подняли новый)
+- Deadlines (сделай до 15-00, не успел - верни ошибку сразу)
+- Rate limiters (1000 запросов в секунду)
+
+[к оглавлению](#Architect)
+
+## MS vs Monolith
+
+#### MS Advantages:
+1) The microservice architecture is easier to reason about/design for a complicated system.
+2) They allow new members to train for shorter periods and have less context before touching a system.
+3) Deployments are fluid and continuous for each service.
+4) They allow decoupling service logic on the basis of business responsibility
+5) They are more available as a single service having a bug does not bring down the entire system.
+   This is called a single point of failure.
+6) Individual services can be written in different languages.
+7) The developer teams can talk to each other through API sheets instead of working on the same repository,
+   which requires conflict resolution.
+8) New services can be tested easily and individually.
+   The testing structure is close to unit testing compared to a monolith.
+
+#### Microservices are at a disadvantage to Monoliths in some cases. Monoliths are favorable when:
+1) The technical/developer team is very small
+2) The service is simple to think of as a whole.
+3) The service requires very high efficiency, where network calls are avoided as much as possible.
+4) All developers must have context of all services.
+
+[к оглавлению](#Architect)
+
+##SOA vs MSA
+
+![icon][soa-vs-msa]
+
+[к оглавлению](#Architect)
+
+## Patterns for distributed transactions
+
+In a monolithic system, we have a database system to ensure ACIDity.
+We now need to clarify the following key problems.
+
+![icon][example-1]
+
+#### Two-phase commit (2pc) pattern
+
+2pc is widely used in database systems. For some situations, you can use 2pc for microservices. Just be careful;
+not all situations suit 2pc and, in fact, 2pc is considered impractical within a microservice architecture
+(explained below).
+
+**So what is a two-phase commit?**
+
+As its name hints, 2pc has two phases: A prepare phase and a commit phase. In the prepare phase,
+all microservices will be asked to prepare for some data change that could be done atomically.
+Once all microservices are prepared, the commit phase will ask all the microservices to make the actual changes.
+
+Normally, there needs to be a global coordinator to maintain the lifecycle of the transaction,
+and the coordinator will need to call the microservices in the prepare and commit phases.
+
+Here is a 2pc implementation for the customer order example:
+
+![icon][2pc-ok]
+
+In the example above, when a user sends a put order request,
+the `Coordinator` will first create a global transaction with all the context information.
+It will then tell CustomerMicroservice to prepare for updating a customer fund with the created transaction.
+The `CustomerMicroservice` will then check, for example,
+if the customer has enough funds to proceed with the transaction.
+Once `CustomerMicroservice` is OK to perform the change,
+it will lock down the object from further changes and tell the `Coordinator` that it is prepared.
+The same thing happens while creating the order in the `OrderMicroservice`.
+Once the `Coordinator` has confirmed all microservices are ready to apply their changes,
+it will then ask them to apply their changes by requesting a commit with the transaction.
+At this point, all objects will be unlocked.
+
+If at any point a single microservice fails to prepare,
+the `Coordinator` will abort the transaction and begin the rollback process.
+Here is a diagram of a 2pc rollback for the customer order example:
+
+![icon][2pc-fail]
+
+In the above example, the `CustomerMicroservice` failed to prepare for some reason,
+but the `OrderMicroservice` has replied that it is prepared to create the order.
+The `Coordinator` will request an abort on the `OrderMicroservice` with the transaction and the
+`OrderMicroservice` will then roll back any changes made and unlock the database objects.
+
+**Benefits of using 2pc**
+
+2pc is a very strong consistency protocol. First,
+the prepare and commit phases guarantee that the transaction is atomic.
+The transaction will end with either all microservices returning successfully or all microservices have nothing changed.  
+Secondly, 2pc allows read-write isolation.
+This means the changes on a field are not visible until the coordinator commits the changes.
+
+**Disadvantages of using 2pc**
+
+While 2pc has solved the problem,
+it is not really recommended for many microservice-based systems because 2pc is synchronous (blocking).
+The protocol will need to lock the object that will be changed before the transaction completes.
+In the example above, if a customer places an order, the "fund" field will be locked for the customer.
+This prevents the customer from applying new orders.
+This makes sense because if a "prepared" object changed after it claims it is "prepared,"
+then the commit phase could possibly not work.
+
+This is not good. In a database system, transactions tend to be fast—normally within 50 ms.
+However, microservices have long delays with RPC calls,
+especially when integrating with external services such as a payment service.
+The lock could become a system performance bottleneck. Also,
+it is possible to have two transactions mutually lock each other (deadlock)
+when each transaction requests a lock on a resource the other requires.
+
+#### Saga pattern
+
+The Saga pattern is another widely used pattern for distributed transactions.
+It is different from 2pc, which is synchronous. The Saga pattern is asynchronous and reactive.
+In a Saga pattern, the distributed transaction is fulfilled by asynchronous local
+transactions on all related microservices. The microservices communicate with each other through an event bus.
+
+Here is a diagram of the Saga pattern for the customer order example:
+
+![icon][saga-ok]
+
+In the example above, the `OrderMicroservice` receives a request to place an order.
+It first starts a local transaction to create an order and then emits an `OrderCreated` event.
+The `CustomerMicroservice` listens for this event and updates a customer fund once the event is received.
+If a deduction is successfully made from a fund, a `CustomerFundUpdated` event will then be emitted,
+which in this example means the end of the transaction.
+If any microservice fails to complete its local transaction,
+the other microservices will run compensation transactions to rollback the changes.
+Here is a diagram of the Saga pattern for a compensation transaction:
+
+![icon][saga-fail]
+
+In the above example, the UpdateCustomerFund failed for some reason and it then emitted a
+`CustomerFundUpdateFailed` event.
+The `OrderMicroservice` listens for the event and start its compensation
+transaction to revert the order that was created.
+
+**Advantages of the Saga pattern**
+
+One big advantage of the Saga pattern is its support for long-lived transactions.
+Because each microservice focuses only on its own local atomic transaction,
+other microservices are not blocked if a microservice is running for a long time.
+This also allows transactions to continue waiting for user input.
+Also, because all local transactions are happening in parallel, there is no lock on any object.
+
+**Disadvantages of the Saga pattern**
+
+The Saga pattern is difficult to debug, especially when many microservices are involved.
+Also, the event messages could become difficult to maintain if the system gets complex.
+Another disadvantage of the Saga pattern is it does not have read isolation.
+For example, the customer could see the order being created, but in the next second,
+the order is removed due to a compensation transaction.
+
+**Adding a process manager**
+
+To address the complexity issue of the Saga pattern, it is quite normal to add a process manager as an orchestrator.
+The process manager is responsible for listening to events and triggering endpoints.
+
+[к оглавлению](#Architect)
+
+## Kafka
+
+- Распределённая
+- Отказоустойчивая
+- Высокая доступность (партиция упала, но данные всё равно доступны в других партициях)
+- Согласованность и надёжность данных (CA из CAP теоремы)
+- Высокая производительность (1000000 сообщенйи в секунду)
+- Горизонтальная масштабируемость
+- Интегрируемость (много систем имеют интеграцию с кафкой)
+
+### Решаемая задача
+
+Решает задачу передачи данных от продюсеров к потребителям и 
+распределению их между потребителями по какому-либо признаку.
+Но тут возникают сложности:
+
+- Надёжность и гарантия доставки данных
+- Подключение новых потребителей
+- Отправители знают потребителей, это не всегда нужно
+- Интеграция разных технических стеков (потребитель на джава, продюсер на питоне)
+
+### Сущности Кафки
+
+- **Broker** (Кафка сервис, Кафка нод)
+    - Приём, хранение и выдача сообщений
+    - Брокеры объединяются в Кафка Кластер
+- **Zookeeper**
+    - `Конфигурация`, `состояние кластера Кафка` и `адресная книга`. Координатор
+    - Быстрое чтение и медленная запись
+    - Один из брокеров становится `Контроллером` в мастер-слейв системе. 
+  Обеспечивает консистентность данных
+- **Message** (Record)
+    - Key/Value pair + Заголовок + Временной штапм
+- **Topic/Partition**
+    - Data Stream
+    - `FIFO` на уровне партиций. Считывание происходит в том же порядке, 
+    в котором происходила запись 
+    (Например, RabbitMQ очередность не гарантирует из-за наличия приоритетности)
+    - Топик делится на Партиции
+    - Топик распределяется по брокерам в клстере
+    - Кафка не гарантирует, что партиции будут равномерно распределены по брокерам
+    - Иногда балансировку приходится производить вручную, 
+  так как топики распределяются только по объёму
+- **Producer**
+    - Гарантия доставки `Acks` 
+      - 0 (подтверждения не нужно)
+      - 1 (нужно только от лидера)
+      - -1(all) подтверждение требуется от всех insync реплик и от лидера
+    - Семантика доставки
+      - Сообщение отправилось НЕ БОЛЕЕ 1 РАЗА
+      - Сообщение отправилось НЕ МЕНЕЕ 1 РАЗА
+      - Сообщение отправилось 1 РАЗ (идемпотентность)
+- **Consumer**
+    - команда `poll` позволяет получить пачку сообщений из партиции. не по одному
+    - Consumer group либо один потребитель подключаются к брокерам.
+      Потребителей в группе столько же сколько партиций (лидеров) для чтения, либо меньше
+      (тогда один потребитель будет считывать данные из двух партиций, например)
+    - `Kafka Consumer Offset` - последнее считаннео группой сообщение. `__consumer_offset` - 
+  отдельный топик для хранения оффсетов групп на стороне брокера.
+  
+      ![icon][kafka-storage-2]
+
+    - Типы коммитов 
+        - **auto commit** (at most once) может терять коммиты
+        - **manual commit** (at least once) может дублировать коммиты
+        - **custom offset management** (ровно 1 раз)
+    - `offset.retention.minutes` (7 дней по умолчанию), если группа не считывала сообщения с топика 7 дней 
+  оффсет сбрасывается
+    - `auto.offset.reset` либо earliest/latest - при сброке консьюмер группа начинает либо с 
+  самого раннего сообщения в топике, либо с самого последнего
+
+      
+### Хранение данных
+
+- Хранятся в папке .logs/A-0 (где А - название топика, а 0 - партиция)
+- В папке A-0 лежит три файла:
+  - 00.log - сами данные хранятся как записи из 4 полей - 
+  `offset`, `position`, `timestamp`, `message`
+  
+  ![icon][kafka-storage-1]
+
+  - 00.index - маппинг offset на position
+  - 00.timeindex - маппинг timestamp на offset
+- По-умолчанию лимит на объём одного файла - 1 Гб. Сегментация. 
+Timestamp сегмента это максимальный timestamp сообщений в этом файле
+- Операция удаления данных из топика не поддерживается! Но можно использовать TTL 
+(Time to Live) и старые сегменты партиций могут удаляться. Если мы замечаем, 
+что сегменты не удаляются, значит там есть события с высоким timestamp/
+
+### Репликация данных
+
+- Параметр `replication-factor` указывает сколько минимум копий 
+партиций топика должно быть в разных брокерах.
+- Главная реплика может быть впереди по данным от копий-реплик. Если брокер с партицией где 
+находится главная реплика упадёт - есть риск потерять данные
+- Назначением реплики-лидера занимается Контроллер
+- Операции чтения-записи производятся только с Главной репликой. Может произойти ситуация, 
+когда все репликилидеры находятся в одном брокере, 
+тогда происходит неравномерное распределение нагрузки
+- В случае падения лидера, новым лидером становится самая полная реплика - ISR (insync replica). 
+В ISR реплики данные записываются сразу, а не периодически.
+- `min.insync.replica` обычно ставят на 1 меньше чем `replication-factor`
+
+### Алгоритм отправки от продюсера
+
+1) Получение метаданных от Zookeeper (состояние кластера, где брокеры, 
+где топики, какие реплики являются лидерами)
+2) Сериализация сообщения
+3) Определение партиции
+    - Точная партиция (explict partition)
+    - По-очереди (round-robin)
+    - По ключу (key_hash % n)
+4) Компрессация сообщения. Сжатие при помощи кодеков
+5) Сообщения объединяются в батчи (`batch.size` - мин размер батча до отправки, 
+`linger.mc` - сколько максимум мы ждём до формирования батча)
+
+### Kafka performance
+
+- Масштабируемость
+- Последовательное чтение и запись (на диск запись происходит последовательно, а знаичт быстро)
+- **Zero-copy** - данные копируются из памяти сразу в сокет клиента
+- Множество настроек
 
 [к оглавлению](#Architect)
 

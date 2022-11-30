@@ -2,11 +2,13 @@
 
 # Code Style
 
-+ [Creating a project from scratch](#Creating-a-project-from-scratch)
-+ [OWASP top 10](#OWASP-top-10)
-+ [Работа с Legacy](#Работа-с-Legacy)
-+ [Чистый код](#Чистый-код)
-+ [New technology implementation](#New-technology-implementation)
++ [Creating a project from scratch](code-style.md#Creating-a-project-from-scratch)
++ [OWASP top 10](code-style.md#OWASP-top-10)
++ [Работа с Legacy](code-style.md#Работа-с-Legacy)
++ [Чистый код](code-style.md#Чистый-код)
++ [New technology implementation](code-style.md#New-technology-implementation)
++ [Code Coverage](code-style.md#Code-Coverage)
++ [Code Review](code-style.md#Code-Review)
 
 [к оглавлению](#Code-Style)
 
@@ -208,5 +210,195 @@ developers, updated deliver fast and easier
 - Smts need to be rewritten
 
 [к оглавлению](#Code-Style)
+
+## Code Coverage
+
+CC = lines of code executed with unit test / total number of code lines
+- (+) Code coverage metrics may be useful to track the high-level project trend of 
+unit testing activities
+- (+) Identify areas of project with low coverage
+- (-) Code coverage does not give any insight into what code is tested or the 
+quality of the executed tests.
+
+[к оглавлению](#Code-Style)
+
+## Code Review
+
+### Best practices
+- The key goals of code review are to identify initial development bugs and 
+facilitate a maintainable codebase
+
+### Benefits
+- Fewer defects – to identify structural errors (e.g. dead code, logic or algorithm bugs,
+performance or architecture concerns, etc.) and functional errors 
+(when code does not work as expected
+- Knowledge sharing
+- Consistent standards
+- Compliance
+- Feedback and grow for developers
+
+### Risk of neglecting
+- Lower structural code quality
+- Lower functional code quality
+- Lack of knowledge sharing
+- Possible rework
+- Possible tech issues
+
+### Code review types
+- Peer review
+- Specialist review
+- Instant code review (pair programming)
+
+### Key areas of Code review
+- **Functional correctness / Business logic**
+  - Check if code author implemented all requested behaviors.
+- **Structural correctness / Design**
+  - Handle enough edge(corner) cases
+  - Shorten/Faster/Safer
+  - Replaced with more effective functional equivalent
+  - Appropriate usage of patterns
+  - Redundancies are eliminated
+  - Dependencies are needed or worthwhile
+  - Follow other clean code principles
+- **Readability / Complexity**
+  - Am I able to grasp the concepts in a reasonable amount of time?
+  - Is the flow logical, and are the variables and the method names easy to follow?
+  - Am I able to keep track through multiple files or functions?
+  - Is there any inconsistent naming that is confusing?
+  - Is the code consistent with the project in terms of style, API conventions, etc.?
+  - Does this code have TODO comments?
+- **Test correctness**
+  - Read the tests. If there are no tests, but there should be, 
+  ask the author to write them. While truly untestable features are rare, 
+  untested implementations of features are unfortunately common.
+  - Check the tests themselves. Are they covering edge cases? Are they readable? 
+  Does the code change lower overall test coverage?
+  - Think of ways the code could break and check if they are handled. 
+  Does the change request introduce the risk of breaking test code, staging stacks, 
+  or integration tests? Specific things to look for are changes in artifact 
+  layout/structure and removal of test utilities or path changes in configuration.
+  - Verify consistency. Style standards for tests are often different from the core code, 
+  but they are still important.
+  - Check if there is enough documentation or if the test covers all use 
+  cases of business logic.
+- **Non-functional requirements**
+  - Security vulnerabilities
+  - Common weakness – weak configuration, malicious input
+  - Library usage, etc
+
+### Code Review Checklist doc
+
+- Useful for reviewers
+- Quality metrics
+- For newcomers
+
+### Checklist best practices
+
+- Require a different number of reviewers with a range of expertise. 
+For KT it is better to engage more reviewers, including new or juniors. 
+focusing on quality or security standards requires experienced devs.
+- Peer review should be mandatory for each piece of code your team produces, 
+while a specialist’s review is mandatory for critical parts only.
+- Pay special attention to high-risk code that implements critical business logic, 
+is performance-critical, or handles sensitive data.
+- Checklists are living documents that evolve, and every team member 
+must be responsible for updating them.
+- Checklists must be accessible to everyone on the team through a shared space
+
+### Tips for MR
+
+- Limit changes per merge request
+- Set time limit
+- Person responsible for initial code review
+- SonarQube and other code analysis tools
+- Tests are OK
+
+### Ethical aspects
+
+- Be polite, positive and friendly
+- Based on well-defined code standards
+- Use checklist
+- Constructive communication
+
+### Best practice
+
+- Practice mandatory peer code review on a pull/merge request basis.
+- Identify how to choose and assign reviewers in the code review strategy 
+for your project
+- Work with your team to develop a code review checklist: a guide that every team 
+member reviews regularly.
+- Ensure that during the code review process, all team members:
+  - Follow the coding standards.
+  - Validate business logic.
+  - Validate unit tests for changed logic as a part of the code review process.
+  
+
+[к оглавлению](#Code-Style)
+
+## Knowledge Sharing
+
+### Impacts of Unhealthy Knowledge Sharing
+
+- Unclear Project Priorities - double work because team members might complete 
+unnecessary tasks or complete tasks in the wrong way
+- Unclear Project Standards - miscommunication and misunderstandings can arise, 
+quality of work diminishing
+- Waste of Project Resources (human, time, and money) – too much time for investigations, 
+searching for task implementation, other people involved into discussions
+- Bus Factor
+- Missing Information – it can be easily lost or misunderstood during communication
+- Ineffective Onboarding – lengthy and challenging.
+
+### Benefits
+
+- A Stable Team, Alignment Through Documented Standards, 
+Available Comprehensive Information, Smooth Onboarding
+
+
+### Effective Team’s Knowledge Sharing
+
+- **Development process**
+  - Review artifacts with rotating peers
+  - Diversify task assignments
+  - Keep breadcrumbs of your work – useful info
+  - Plan time for documentation
+- **Knowledge base**
+  - The project goal and description
+  - The project team structure and roles
+  - Links to project resources
+  - Links to environments
+  - Project standards, rules, and conventions (for all competencies: 
+  Managers, Developers, Quality Assurance Engineers (QA), Business Analysts (BA), 
+  DevOps Engineers, etc.)
+  - The development process description (branching, release process, 
+  task life cycle, etc.)
+- **Onboarding procedures**
+  - A newcomer’s guidebook 
+  - Assigning a mentor
+- **Team communication**
+  - Conduct knowledge sharing sessions/sync-ups
+  - Keep team chats focused and diverse
+  - Post important updates in news channels
+  - Participate in project townhalls
+  - Send meeting follow-ups
+
+### Improvements when?
+You have new ideas, find less sharable info, knowledge existed only in verbal form, 
+discover missing info in documentation, find outdated pages
+
+### Best Practices
+
+- Establish a knowledge sharing process among development team members.
+- Use a technical knowledge base stored in a collaboration system 
+(Confluence, Wiki, etc.).
+- Keep the technical knowledge base up to date, so it properly reflects the 
+current project details.
+- Ensure team members pick development tasks for all parts of the system evenly 
+to prevent situations where some parts of the system are known by only one person 
+(Bus Factor > 1).
+- Support your project onboarding with a newcomer’s handbook or guide that 
+covers the project system, teams, and development setup.
+  - Update the handbook so that it properly reflects the current project details.
+  - Coach or mentor newcomers throughout the onboarding period.
 
 [Заглавная](README.md)

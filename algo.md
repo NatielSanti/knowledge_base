@@ -1,8 +1,8 @@
 [Заглавная](README.md)
 
 # Algorithms
-+ [Сравнение алгоритмов](abstract.md#Сравнение-алгоритмов)
-+ [Бинарный поиск](abstract.md#Бинарный-поиск)
++ [Сравнение алгоритмов](algo.md#Сравнение-алгоритмов)
++ [Бинарный поиск](algo.md#Бинарный-поиск)
 
 [algo-growing]:img/algorithms/algo-growing.png
 [binary-search]:img/algorithms/binary-search.png

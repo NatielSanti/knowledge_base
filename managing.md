@@ -2,16 +2,17 @@
 
 # Managering
 
-+ [Choosing methodology](#Choosing-methodology)
-+ [Agile](#Agile)
-+ [Scrum](#Scrum)
++ [Choosing methodology](managing.md#Choosing-methodology)
++ [Agile](managing.md#Agile)
++ [Scrum](managing.md#Scrum)
 + [Extreme Programming](managing.md#Extreme-programming)
 + [Техники оценки задач](managing.md#Техники-оценки-задач)
 + [SDLC](managing.md#SDLC)
 + [NFR and FR](managing.md#NRF-and-FR)
-+ [Доверие клиента](#Доверие-клиента)
-+ [New technology implementation](#New-technology-implementation)
-+ [Падение качества продукта](#Падение-качества-продукта)
++ [Доверие клиента](managing.md#Доверие-клиента)
++ [New technology implementation](managing.md#New-technology-implementation)
++ [Падение качества продукта](managing.md#Падение-качества-продукта)
++ [Technical Debt](managing.md#Technical-Debt)
 
 [к оглавлению](#Managering)
 
@@ -402,6 +403,65 @@ NFR достигается путём код-ревью, статических 
 так что старайтесь их избегать.
 
 8) ***Неправильный рекрутинг***
+
+[к оглавлению](#Managering)
+
+## Technical Debt
+
+Tech debt – cost of additional rework caused by choosing an easy (limited) 
+solution now instead of using a better approach that would take longer
+
+### Reasons for Technical Debt
+
+- Code design violation
+- Business pressures
+
+### Types:
+
+- Intentional
+  - Meeting time-to-market deadline
+  - PoC & MVP
+- Unintentional
+  - Lack of Tech Experience
+  - Internal process issues
+
+
+### Technical Debt Indicators
+
+- Delivery Indicators
+  - Quality degradations. Production, Regression issues, Known issues
+  - High Cost of system changes
+  - Inability to experiment – spikes, poc produce issues, side effects, etc
+  - Barriers to entry
+- Architecture Indicators
+  - Hard to integrate, reuse, grow, support 
+- Team Indicators
+  - Delays, bad scope estimation, demotivation
+
+### Managing
+
+- Keep registry of TechDebt is up-to-date
+- Backlog or labels for TD
+- Automation tool like sonar for TB
+- Red, Amber, Green reports for delivery
+
+### Risks
+
+- Damage to Quality
+- Scalability/Performance issues
+- Team issues for fixing bugs
+- Reputation from client
+
+### Best practices
+
+- Reserve time
+- Motivate team
+- Report statistics
+- Regular review meetings with stakeholders
+- Avoid code smells
+- Code reviews
+- Share knowledge
+- Autotests + code analysis tools
 
 [к оглавлению](#Managering)
 
