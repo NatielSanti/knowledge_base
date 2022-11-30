@@ -34,6 +34,7 @@
 + [Docker](docker.md)
 + [Managing](managing.md)
 + [DEVOPS](ops.md)
++ [Architect](architect.md)
 
 ## Android
 + [Android](android.md)
@@ -48,6 +49,8 @@
 + [IoC,DI,IoC-контейнер](theory.md#IoC,DI,IoC)
 + [SOLID](theory.md#SOLID)
 + [AUTH](theory.md#AUTH)
++ [Algo](algo.md)
++ [Code style](code-style.md)
 
 ## Конспекты
 + [Конспект по Java Core Video](abstract.md)

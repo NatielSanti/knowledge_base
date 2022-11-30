@@ -4,16 +4,13 @@
 
 + [Choosing methodology](#Choosing-methodology)
 + [Agile](#Agile)
++ [Scrum](#Scrum)
 + [Extreme Programming](managing.md#Extreme-programming)
 + [Техники оценки задач](managing.md#Техники-оценки-задач)
 + [SDLC](managing.md#SDLC)
 + [NFR and FR](managing.md#NRF-and-FR)
-+ [OWASP top 10](#OWASP-top-10)
-+ [Creating a project from scratch](#Creating-a-project-from-scratch)
-+ [Работа с Legacy](#Работа-с-Legacy)
 + [Доверие клиента](#Доверие-клиента)
 + [New technology implementation](#New-technology-implementation)
-+ [Чистый код](#Чистый-код)
 + [Падение качества продукта](#Падение-качества-продукта)
 
 [к оглавлению](#Managering)
@@ -35,6 +32,7 @@
 - The speed of delivery is not a priority
 
 ### Agile Frameworks
+
 - Scrum
 - Kanban
   - Devops
@@ -52,6 +50,19 @@
 - DSDM (dyn systems dev method)
   - feasibility + business studies
   - Reduce risk for budget
+
+### Scrum vs Kanban
+
+1) The time-boxed sprints are optional in Kanban, unlike scrum where 
+iterations are time-bound to 2-4 weeks.
+2) Work is pulled from the backlog, as a single unit, as and when needed, 
+unlike Scrum where we pick up batches of work from the product.
+3) In addition to the above, the client can add new features during an ongoing 
+iteration, unlike Scrum, where no addition of new features can happen 
+once an iteration starts.
+4) Multiple teams share the Kanban board.
+5) Moreover, there are no defined roles in Kanban like Product Owner (PO), 
+Scrum Master (SM) or Scrum team, etc.
 
 [к оглавлению](#Managering)
 
@@ -87,6 +98,81 @@ delivery of valuable software.
 
 Three key areas: **adaptability**, **user experience**, and **testing**
 
+[к оглавлению](#Managering)
+
+## Scrum
+
+### Principles
+- **Transparency** – all team members involved, daily scrum
+- **Inspection** – team prioritize task to achieve high quality scrum, 
+sprint review
+- **Adaptation** – flex accommodate all customer needs
+
+### Values
+- **Commitment** (achieve the goal)
+- **Focus** (on the work in sprint)
+- **Openness** (to changes)
+- **Respect** (each other)
+- **Courage** (to do right thing)
+
+### Scrum Team (Roles)
+
+1) **Development Team**
+  - Creating a plan for the **Sprint**, the **Sprint Backlog**;
+  - the team sets a **Definition of Done**;
+  - Adapting their plan each day toward the Sprint Goal; and,
+  - Holding each other accountable as professionals.
+  
+2) **Product Owner** - in a product development team is responsible 
+for managing the product backlog to achieve the desired result that 
+a team seeks to accomplish. Key activities to accomplish this include:
+  - Clearly expressing Product Backlog items.
+  - Ordering the items in the Product Backlog to best achieve goals and missions.
+  - Optimizing the value of the work the Development Team performs.
+  - Ensuring that the Product Backlog is visible, transparent, and clear to all, 
+and shows what the Scrum Team will work on next.
+  - Ensuring the Development Team understands items in the Product Backlog to 
+the level needed.
+
+3) **Scrum Master** - The Scrum Master is accountable for establishing 
+Scrum as defined in the Scrum Guide. They do this by helping everyone understand 
+Scrum theory and practice, both within the Scrum Team and the organization. 
+The responsibilities of a Scrum Master include:
+   - Clearing obstacles
+   - Establishing an environment where the team can be effective
+   - Addressing team dynamics
+   - Ensuring a good relationship between the team and the Product Owner 
+   as well as others outside the team
+   - Protecting the team from outside interruptions and distractions.
+
+### Artifacts
+1) **Product Backlog** – Here, the Product owner meets the client and takes 
+down all the requirements. 
+A document referred to as Product Backlog captures these requirements 
+Product Goal, Product backlog refinements
+   - Product Goal - describes a future state of the product which can serve 
+   as a target for the Scrum Team to plan against
+2) **Sprint Backlog**- the set of Product Backlog items selected for the Sprint. 
+Is is a plan by and for the Developers
+   - Sprint Goal - is the single objective for the Sprint. 
+   Although the Sprint Goal is a commitment by the Developers, 
+   it provides flexibility in terms of the exact work needed to achieve it.
+3) **Increment** – An Increment is a concrete stepping stone toward the 
+Product Goal. Multiple Increments may be created within a Sprint. 
+The sum of the Increments is presented at the Sprint Review thus supporting 
+empiricism.
+   - Definition Of Done - The Definition of Done is a formal description of 
+   the state of the Increment when it meets the quality measures required for 
+   the product.
+
+### Events – need to adapt scrum artifacts
+- The Sprint – one iteration which consist of set of other events.
+- Sprint Planning
+- Daily Scrum
+- Sprint Review
+- Sprint Retrospective
+- Grooming
+- Demonstration
 
 [к оглавлению](#Managering)
 
@@ -176,9 +262,8 @@ Three key areas: **adaptability**, **user experience**, and **testing**
 
 [к оглавлению](#Managering)
 
-## NRF and FR
+## NFR and FR
 
-#### *Функциональное требование* 
 описывает, что должна делать программная система, 
 в то время как нефункциональные требования накладывают ограничения на то, 
 как система будет это делать.
@@ -190,8 +275,14 @@ Three key areas: **adaptability**, **user experience**, and **testing**
 
 Связанное *нефункциональное требование* к системе может быть:
 
-- Письма должны быть отправлены с задержкой не более 12 часов после такой активности.
-Функциональное требование описывает поведение системы, поскольку оно относится к функциональности системы. Нефункциональное требование разрабатывает характеристику производительности системы.
+- Письма должны быть отправлены с задержкой не более 12 часов 
+после такой активности.
+
+Функциональное требование описывает поведение системы, поскольку 
+оно относится к функциональности системы. Бизнес требования.
+
+Нефункциональное требование разрабатывает характеристику производительности 
+системы. Оптимизация, стабильность, чистый код
 
 Обычно *нефункциональные требования8 относятся к таким областям, как:
 
@@ -225,157 +316,8 @@ Three key areas: **adaptability**, **user experience**, and **testing**
 которые не связаны с ее выполнением, а скорее с ее развитием во времени 
 (например, ремонтопригодность, расширяемость, документация и т.д.).
 
-[к оглавлению](#Managering)
-
-## OWASP top 10
-
-В последнем отчете OWASP перечислены 10 основных уязвимостей:
-
-- Инъекции (Injections).
-- Нарушенная аутентификация (Broken Authentication).
-- Раскрытие критически важных данных (Sensitive Data Exposure).
-- Внешние объекты XML (XXE) (XML External Entities (XXE)).
-- Нарушенный контроль доступа (Broken Access control).
-- Неправильная конфигурация безопасности (Security misconfigurations).
-- Межсайтовый скриптинг (XSS) (Cross Site Scripting (XSS)).
-- Небезопасная десериализация (Insecure Deserialization).
-- Использование компонентов с известными уязвимостями (Using Components with known vulnerabilities).
-- Недостаточно подробные журналы и слабый мониторинг (Insufficient logging and monitoring).
-
-[ссылка](https://proglib.io/p/chto-takoe-top-10-owasp-i-kakie-uyazvimosti-veb-prilozheniy-naibolee-opasny-2021-09-09)
-
-[к оглавлению](#Managering)
-
-## Creating a project from scratch
-
-First questions
-- A project is unique
-- A project is dynamic
-- A project is based on a management method which is defined in 
-the initial planning stages
-- A project is always subject to a run time and resources available
-- A project seeks a specific objective from the start
-- A project is not a routine operation like a process
-
-[ссылка](https://www.sinnaps.com/en/project-management-academy/creating-project-from-scratch)
-
-[к оглавлению](#Managering)
-
-## Работа с Legacy
-
-### Отмазки
-- Мы делали “просто” сайт, а теперь вы хотите получить новую “плюшку”, 
-и нам нужно все это переписать, так как у нас легаси...
-- Никто не знает, как это работает..
-- Чтобы добавить модуль, необходимо весь сайт проверить — только так мы поймем, 
-что и где может вылезти...
-- Я туда не полезу ни в коем случае, там уже все плохо…
-
-### Проблемы по сложности начиная с самой простой
-
-1) Нет техдокументации.
-2) Нет бизнес-документации.
-3) Нет никого, кто это разрабатывал.
-4) Мы не знаем, что должен получить пользователь в конечном итоге.
-5) 200+ usage каждой функции и они называются getA.
-6) Отсутствуют программисты, которые хотели бы/могли бы разрабатывать.
-
-### Плохие доводы для бизнеса 
-- Нанимаем новую команду для качественной “распилки” кода.
-- Останавливаем добавление фич, теперь только рефакторинг
-- У меня на WP уже все необходимое есть, нужно только базу мигрировать
-
-### Аргументы для переговоров с бизнесом
-
-1) Готов ли бизнес развиваться?
-2) Стадия прототипа?
-3) Разработка завершена и теперь только поддержка?
-4) Хватает ли огня в наших глазах и не потухнет ли он?
-5) Есть ли архитектор?
-
-### П — Планирование
-
-Для быстрой и эффективной работы с техническим долгом нужен план.
-
-1. *Определение задач, на которых будем паразитировать.* 
-Почему паразитировать? Часто бывает: мы продали фичу, 
-а под ней частично подразумеваем рефакторинг.
-
-2. *Определение требований высокого уровня.* 
-Необходимо прописать четкий запрос бизнеса по “высокой планке”, 
-дабы составить правильную документацию.
-
-3. *Определение основных модулей системы, наложение модулей.* 
-Перед стартом рефакторинга, нужно понять основные модули системы: где, как, 
-что и с чем может взаимодействовать и разграничивать код на секции.
-
-4. *Определение интеграции.* 
-При создании конкретного модуля мы должны заранее продумать возможность 
-вмонтировать его в соседний легаси.
-
-5. *Определение команды.* 
-Один в поле рефакторинга не воин. 
-Команда — очень важный элемент успешного результата. Задор, 
-командный драйв и отличное взаимодействие между участниками процесса must have.
-
-6. *Как будем тестить?* 
-Если вы собираетесь сдавать качественный проект, 
-то нужно заранее продумать и варианты тестирования продукта.
-   
-### Советы по коду
-1. *Не изобретать велосипед.* Для меня это главный лайфхак по написанию кода. 
-Уже все придумано до вас, не стоит прибегать к танцам с бубнами и прочим 
-экспериментам для решения вопросов с legacy code.
-
-2. *Код стандарт.* Без единого стандарта каждый разработчик будет писать по-своему. 
-“Авторский стиль” поспособствует хаосу и нарастит еще больше код-хлама.
-
-3. *Код ревью.* Мало только одного наличия код-стандарта. 
-Нужно еще, чтобы в команде был ответственный за его проверку. 
-Иначе все вернется на круги своя, то есть к уровню старого кода.
-
-4. *Static Code analyzers, PHP mess detector etc (вместо тысячи книг).* 
-Эти и другие автоматические виды техники понадобятся для ускорения процесса, 
-в частности с тем же код ревью.
-
-5. *Пробуем микросервисы.* 
-Отдельно также могут быть модули или библиотеки. 
-Почему именно микросервисы? Их преимущество в максимальной изоляции логики и 
-ограничении ее определенным API. Плюсом последней является то, 
-что API представляет собой более монолитную сущность по сравнению с 
-“адаптером в коде, которым можно поправить”. 
-Однако у API есть один недочет в виде дополнительных расходов на сеть.
-
-6. *Архитектура БД, источники данных.* 
-Именно базу данных считаю первым “узким” 
-местом любого легаси. Но каждый проектирует, как хочет, 
-и даже в SQL можно найти неафишируемые недостатки.
-
-7. *Nо SQL?* Если с архитектурной точки зрения вы можете оперировать сущностями 
-— оперируйте. Понятие чего-то определённого и конечного поможет вам не создавать 
-ненужные, дублирующие релляции.
-
-8. *Декораторы, адаптеры, медиаторы …* Эти паттерны одни из главных для интеграции 
-нового кода в старое легаси.
-
-9. *План Б, или план отката при интеграции.* Многие делают ошибку, 
-что забывают о нем. Он жизненно необходим в ситуации “когда что-то пойдет не так” 
-при заливке нового материала. То есть как только мы начинаем строить архитектуру, 
-уже на этом этапе мы должны понимать, как будем откатывать ее назад в случае бага.
-
-10. *Новый код без (доки) тестов через неделю становится легаси.* 
-Насколько красивым ни был бы ваш код, без документации через неделю он будет 
-в статусе “legacy” — по причине своей непонятности.
-
-11. *Тестирование.* Если юнит-тесты не по карману, то используем смоук, 
-функциональные и интеграционные тесты. Насколько реально продать юнит-тесты 
-бизнесу под соусом “чтобы сделать работу красиво?”. 
-В наших реалиях это скорее редкость, нежели закономерность. 
-Если же с “юнитами” по какой-то причине не складывается, то обращаемся к смоук, 
-функциональным или интеграционным тестам, а также не забываем, 
-что можем делегировать задачу, например, мануальному тестировщику.
-   
-[ссылка](https://habr.com/ru/post/431562/)
+FR  достигается путём юнит тестирования и функциональног тестирования.
+NFR достигается путём код-ревью, статических анализаторов.
 
 [к оглавлению](#Managering)
 
@@ -400,30 +342,6 @@ the initial planning stages
 Да разве это были проблемы? Ну ерунда же.
 
 [ссылка](https://habr.com/ru/post/90600/)
-
-[к оглавлению](#Managering)
-
-## New technology implementation
-
-Steps for Implementing Technology in the Workplace
-1) Research and Assess the Tech You Need. 
-It's always important to research before you buy.
-2) Develop an Implementation Blueprint.
-3) Consider Assembling an Implementation Team.
-4) Map Out the System.
-5) Train All Employees.
-6) Launch and Monitor the New Technology.
-
-[к оглавлению](#Managering)
-
-## Чистый код
-
-1. ***Используйте линтер совместно с IDE*** н-р SonarLint
-2. ***Правильный баланс комментариев***
-   Объясняйте то, что код делает, а не определяет.
-3. ***Автоматизация тестирования***  Unit, integration, e2e
-4. ***Обзор кода вручную*** Код ревью
-5. ***Quality Gates*** 
 
 [к оглавлению](#Managering)
 
