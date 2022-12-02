@@ -23,11 +23,17 @@
 [unit-test-6]:img/unit-test/unit-test-bad-6.jpeg
 [unit-test-7]:img/unit-test/unit-test-bad-7.jpeg
 [test-pyramid]:img/unit-test/test-pyramid.PNG
+[qa-type]:img/unit-test/qa-type.png
 [spring-boot-test-features]:img/unit-test/spring-boot-test-features.PNG
 
 [к оглавлению](#Java-Test)
 
 ## Виды тестирования
+
+Is about ensuring that development processes are correct and complete, 
+and the deployed product fulfills customer requirements. 
+Goal – product work according to client specs. From dev to delivery. 
+Quality control – for application. Testing
 
 Для начала нужно понять ЧТО нужно тестировать
 - *Функциональное тестирование* – как работают классы, как реализован функционал, 
@@ -43,6 +49,57 @@
 - *Компонент тест* он же интеграционный
 - *end-to-end* для всего микросервиса
 - *system test* для всей системы
+
+### Types
+- Manual
+- Automation
+- Functional
+- Non-functional
+  - Security
+  - Performance
+  - Usability
+- Code
+  - White-Box
+  - Black-Box
+  - Grey-Box
+
+![icon][qa-type]
+
+### Что тестируется?
+
+- Functionality
+- Availability
+- Performance
+- Testability
+- Security
+- Usability
+- Reliability
+
+### Issues
+
+- **Error** - mistakes by developers
+- **Failure** – app code is not functioning, unable to function as dev/ client wants
+- **Defects** – bug/fault code does not produce expected result
+
+### STLC (Software Testing Life Cycle)
+
+- Requirement analysis
+- Test planning
+- Test case development
+- QA env setup
+- Test execution
+- Test closure
+
+### Testing Documentation
+
+- Project specific Impact of testing
+- Scope of testing
+- Quality & Acceptance Criteria
+- Risk management
+- Test team, sched, deliveries
+
+[ссылка 1 - тест микросервисов](https://martinfowler.com/articles/microservice-testing/)
+[ссылка 2 - стратегии тестирования микросервисов](https://www.cigniti.com/blog/microservices-architecture-testing-strategies/)
 
 [к оглавлению](#Java-Test)
 

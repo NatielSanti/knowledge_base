@@ -13,6 +13,7 @@
 + [New technology implementation](managing.md#New-technology-implementation)
 + [Падение качества продукта](managing.md#Падение-качества-продукта)
 + [Technical Debt](managing.md#Technical-Debt)
++ [SLA](managing.md#SLA)
 
 [к оглавлению](#Managering)
 
@@ -261,6 +262,47 @@ empiricism.
 
 ![icon][sdlc]
 
+The phases a project undergoes end-to-end—to manage resources, control costs, 
+anticipate possible risks, and track the progress of each process required to develop a 
+high-quality product.
+
+### Agile SDLC
+
+- Make changes faster without increasing costs or degrading quality
+- Produce a potentially shippable (ready for detailed customer feedback) 
+product increment at the end of each iteration.
+
+### Principles
+
+- Following best code design principles
+- Shift all feedback to the left
+- Automate all repeatable tasks
+- Follow Lean (ma values, min waste(meeting, non-optimal processes) / PCDA principles
+
+### Phases
+
+- (Requirement) Analysis & Planning
+  - Functional - Specifies What The System Should Do, 
+  a particular behavior of function of the system when certain conditions are met
+    - Input -> system behavior -> output
+    - Specifications what should do, business rules, authentication, auth, audit, 
+    reports, transaction correlation
+  - Non-functional - Specifies How The System Performs A Certain Function, 
+  will describe how a system should behave and what limits there are on its functionality
+    - Performance, Scalability, Capacity, Availability, Reliability, Maintainability, 
+    Security, Usability, Compatibility
+- Design
+- Software Development (Implementation)
+- Testing
+  - Product Quality
+  - User Experience
+  - Reduce costs of bugs
+- UAT/Staging
+  - For business users and testing
+- Maintenance
+
+
+
 [к оглавлению](#Managering)
 
 ## NFR and FR
@@ -462,6 +504,28 @@ solution now instead of using a better approach that would take longer
 - Code reviews
 - Share knowledge
 - Autotests + code analysis tools
+
+[к оглавлению](#Managering)
+
+## SLA
+
+- **SLA** (service level agreement) is an agreement between provider and client 
+about measurable metrics like uptime, responsiveness, and responsibilities.
+These agreements are typically drawn up by a company’s new business and legal teams 
+and they represent the promises you’re making to customers—and the consequences if 
+you fail to live up to those promises.
+
+
+- **SLO** (service level objective) is an agreement within an SLA about a specific 
+metric like uptime or response time. So, if the SLA is the formal agreement between 
+you and your customer, SLOs are the individual promises you’re making to that customer.
+
+
+- **SLI** (service level indicator) measures compliance with an SLO (service level objective). 
+So, for example, if your SLA specifies that your systems will be available 99.95% of the time, 
+your SLO is likely 99.95% uptime and your SLI is the actual measurement of your uptime. 
+Maybe it’s 99.96%. Maybe 99.99%. To stay in compliance with your SLA, 
+the SLI will need to meet or exceed the promises made in that document.
 
 [к оглавлению](#Managering)
 

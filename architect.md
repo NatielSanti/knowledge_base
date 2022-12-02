@@ -10,9 +10,11 @@
 + [Enterprise integration patterns](architect.md#Enterprise-integration-patterns)
 + [Fault tolerant microservice](architect.md#Fault-tolerant-microservice)
 + [MS vs Monolith](architect.md#MS-vs-Monolith)
-+ [SOA vs MSA](architect.md#SOA-vs-MSA)
++ [MS vs SOA](architect.md#SOA-vs-MSA)
++ [Spring Cloud](architect.md#Spring-Cloud)
 + [Patterns for distributed transactions](architect.md#Patterns-for-distributed-transactions)
 + [Kafka](architect.md#Kafka)
++ [UML](architect.md#UML)
 
 [example-1]:img/dist_systems/example-1.png
 [2pc-ok]:img/dist_systems/2pc-ok.png
@@ -20,6 +22,7 @@
 [saga-ok]:img/dist_systems/saga-ok.png
 [saga-fail]:img/dist_systems/saga-fail.png
 [soa-vs-msa]:img/dist_systems/soa-vs-msa.png
+[spring-cloud]:img/spring/spring-cloud.png
 
 [kube1]:img/dist_systems/kubernates/node-pod.png
 [kube2]:img/dist_systems/kubernates/pod-types.png
@@ -37,6 +40,22 @@
 
 [kafka-storage-1]:img/architect/kafka-storage-1.png
 [kafka-storage-2]:img/architect/kafka-storage-2.png
+
+[uml]:img/architect/uml/uml.png
+[uml-str-class]:img/architect/uml/uml-str-class.png
+[uml-str-component]:img/architect/uml/uml-str-component.png
+[uml-str-composite]:img/architect/uml/uml-str-composite.png
+[uml-str-deployment]:img/architect/uml/uml-str-deployment.png
+[uml-str-object]:img/architect/uml/uml-str-object.png
+[uml-str-package]:img/architect/uml/uml-str-package.png
+[uml-str-profile]:img/architect/uml/uml-str-profile.png
+[uml-beh-activity]:img/architect/uml/uml-beh-activity.png
+[uml-beh-communication]:img/architect/uml/uml-beh-communication.png
+[uml-beh-interaction]:img/architect/uml/uml-beh-interaction.png
+[uml-beh-sequence]:img/architect/uml/uml-beh-sequence.png
+[uml-beh-state-machine]:img/architect/uml/uml-beh-state-machine.png
+[uml-beh-timing]:img/architect/uml/uml-beh-timing.png
+[uml-beh-use-case]:img/architect/uml/uml-beh-use-case.png
 
 [//]: # ([docker_1]:img/microservices/docker_1.JPG)
 [//]: # (![icon][docker_1])
@@ -236,6 +255,12 @@ Message Endpoint
 
 [к оглавлению](#Architect)
 
+## Spring Cloud
+
+![icon][spring-cloud]
+
+[к оглавлению](#Architect)
+
 ## Patterns for distributed transactions
 
 In a monolithic system, we have a database system to ensure ACIDity.
@@ -372,6 +397,10 @@ The process manager is responsible for listening to events and triggering endpoi
 
 ### Решаемая задача
 
+1) Обмен сообщений, особенно когда нужно чтобы одинаковые сообщения читали разные приложения
+2) Потоковая передача данных
+3) Ведение журналов
+
 Решает задачу передачи данных от продюсеров к потребителям и 
 распределению их между потребителями по какому-либо признаку.
 Но тут возникают сложности:
@@ -482,6 +511,124 @@ Timestamp сегмента это максимальный timestamp сообщ�
 - Последовательное чтение и запись (на диск запись происходит последовательно, а знаичт быстро)
 - **Zero-copy** - данные копируются из памяти сразу в сокет клиента
 - Множество настроек
+
+[к оглавлению](#Architect)
+
+## UML
+
+![icon][uml]
+
+### Class UML diagram
+
+Software engineers use class diagrams to show the classes, attributes, 
+and methods involved in a system and to describe their relationships to each other. 
+Class diagrams let developers sketch a static view of a system before they go on to create it.
+
+![icon][uml-str-class]
+
+### Object UML diagram
+
+Object diagrams focus on representing a system at a particular point in time. 
+An object diagram shows the real-world instances of classes and the 
+relationships between these instances.
+
+![icon][uml-str-object]
+
+### Component UML diagram
+
+In any software system, the various components can be composed of other, 
+smaller components. A component diagram shows how these individual software 
+components interact and the dependencies between them.
+
+![icon][uml-str-component]
+
+### Deployment UML diagram
+
+Deployment diagrams don’t deal with abstract elements in a system. 
+Instead, a deployment diagram models the physical deployment of the components, 
+or nodes, in that system. It is concerned with real-world entities such as servers 
+and computing resources, and with the
+interaction between them as described in terms of connectivity and APIs.
+
+![icon][uml-str-deployment]
+
+### Packages UML diagram
+
+Packages in UML are hierarchical groupings of elements that allow for the 
+manageable organization of the various components in a system. For instance, 
+packages can enable a developer to represent the different layers of code used 
+in the system and show how these different layers interact.
+
+![icon][uml-str-package]
+
+### Composite UML diagram
+
+Composite structure diagrams are concerned with the internal structure of a class, 
+or classifier, and how its internal parts collaborate via particular ports 
+at runtime to achieve their desired purpose.
+
+![icon][uml-str-composite]
+
+### Profile UML diagram
+
+Profile diagrams enable the extension of a UML model with stereotypes. 
+These stereotypes can be assigned to individual UML elements or connectors 
+and used when modeling particular domains.
+
+![icon][uml-str-profile]
+
+### Sequence UML diagram
+
+Sequence diagrams are based on the modeling of interactions between objects in a
+particular time sequence. They provide an overview of how the different 
+parts of a system
+interact over time and how processes are carried out.
+
+![icon][uml-beh-sequence]
+
+### Use case UML diagram
+
+Use case diagrams just show how a user can interact with a system. 
+They depict actors and
+the actions they can take to have an impact on the system.
+
+![icon][uml-beh-use-case]
+
+### State machine UML diagram
+
+State machine diagrams are designed to capture the dynamic nature 
+of a system and how it
+can change from one state to another. These diagrams show possible states 
+and transitions,
+along with the actions or events that cause the system to change states.
+
+![icon][uml-beh-state-machine]
+
+### Communication UML diagram
+
+A communication diagram is similar to a sequence diagram, as it shows the dynamic
+interactions between objects over time. But a communication diagram gives more of an
+overview of the entire system, with less focus on timing.
+
+![icon][uml-beh-communication]
+
+
+### Interaction UML diagram 
+Interaction overview diagrams are concerned with the holistic view of a system. These
+diagrams are similar to the activity diagram, because interaction overview diagrams visualize
+the sequence of activities and flow of control. But they also allow for frames around activities
+that enable complex inline interactions to be described.
+
+![icon][uml-beh-interaction]
+
+### Timing UML diagram
+
+The timing diagram brings us to the end of our journey through UML diagram types.
+Timing diagrams are a bit like sequence diagrams, because they show the behavior of
+objects in the system over time. But the timing diagram uses a linear time axis that moves
+from left to right and shows how conditions change in terms of levels of lifelines.
+
+![icon][uml-beh-timing]
 
 [к оглавлению](#Architect)
 
