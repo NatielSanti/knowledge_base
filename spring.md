@@ -1,6 +1,7 @@
 [Заглавная](README.md)
 
 # Spring Questions
+
 + [What Is Spring Framework](spring.md#What-Is-Spring-Framework)
 + [Виды конфигураций Spring приложений](spring.md#Виды-конфигураций-Spring-приложений)
 + [Spring Benefits](spring.md#Spring-Benefits)
@@ -8,13 +9,17 @@
 + [Difference between JavaEE and Spring](spring.md#Difference-between-JavaEE-and-Spring)
 + [Spring Sub-Projects](spring.md#Spring-Sub-Projects)
 + [Best Way of Injecting Beans](spring.md#Best-Way-of-Injecting-Beans)
-+ [Difference Between BeanFactory and ApplicationContext](spring.md#Difference-Between-BeanFactory-and-ApplicationContext)
++ [Difference Between BeanFactory and ApplicationContext](
+spring.md#Difference-Between-BeanFactory-and-ApplicationContext)
 + [Bean Life Cycle](spring.md#Bean-Life-Cycle)
 + [Bean Creation Process](spring.md#Bean-Creation-Process)
-+ [Differance between @Component, @Service and @Repository](spring.md#Differance-between-@Component,-@Service-and-@Repository)
-+ [Design Patterns Used in the Spring Framework](spring.md#Design-Patterns-Used-in-the-Spring-Framework)
++ [Difference between @Component, @Service and @Repository](
+spring.md#Difference-between-@Component,-@Service-and-@Repository)
++ [Design Patterns Used in the Spring Framework](
+spring.md#Design-Patterns-Used-in-the-Spring-Framework)
 + [Controller in Spring MVC](spring.md#Controller-in-Spring-MVC)
 + [@RequestMapping Annotation](spring.md#@RequestMapping-Annotation)
++ [Spring Boot](spring.md#Spring-Boot)
 + [Spring Boot Main Features](spring.md#Spring-Boot-Main-Features)
 + [Spring Boot Basic Annotations](spring.md#Spring-Boot-Basic-Annotations)
 + [Injection of Prototype into Singleton](spring.md#Injection-of-Prototype-into-Singleton)
@@ -27,15 +32,16 @@
 [spel]:img/spring/spel.PNG
 [localization]:img/spring/localization.PNG
 [cross-cutting]:img/spring/cross-cutting.PNG
+[sprint-boot-init]:img/spring/sprint-boot-init.png
 
-[к оглавлению](#Spring-Questions)
+[к оглавлению](spring.md#Spring-Boot)
 
 ## What Is Spring Framework
 Spring is a powerful open-source, loosely coupled, lightweight, java framework meant for reducing the 
 complexity of developing enterprise-level applications. This framework is also called the “framework of frameworks” 
 as spring provides support to various other important frameworks like JSF, Hibernate, Structs, EJB, etc.
 
-[к оглавлению](#Spring-Questions)
+[к оглавлению](spring.md#Spring-Boot)
 
 ## Виды конфигураций Spring приложений
 
@@ -197,9 +203,10 @@ public MessageSource messageSource() {
 
 ![icon][localization]
 
-[к оглавлению](#Spring-Questions)
+[к оглавлению](spring.md#Spring-Boot)
 
 ## Spring Benefits
+
 Spring targets to make Jakarta EE development easier, so let's look at the advantages:
 
 - **Lightweight** – There is a slight overhead of using the framework in development.
@@ -213,7 +220,7 @@ either by using Java annotations or by Spring Bean XML configuration file
 - **Exception Handling** – Spring provides a convenient API for translating technology-specific exceptions into 
 unchecked exceptions.
 
-[к оглавлению](#Spring-Questions)
+[к оглавлению](spring.md#Spring-Boot)
 
 ## Spring advantages and disadvantages
 
@@ -257,7 +264,7 @@ web-oriented application context functionalities
 - **AOP module** – aspect-oriented programming implementation allowing the definition of clean method-interceptors 
 and pointcuts
 
-[к оглавлению](#Spring-Questions)
+[к оглавлению](spring.md#Spring-Boot)
 
 ## Best Way of Injecting Beans
 The recommended approach is to use constructor arguments for mandatory dependencies and setters for optional ones. 
@@ -270,7 +277,7 @@ This is because constructor injection allows injecting values to immutable field
 - Вы всегда получаете готовый к работе класс.
 - C property может быть NPE.
 
-[к оглавлению](#Spring-Questions)
+[к оглавлению](spring.md#Spring-Boot)
 
 ## Difference Between BeanFactory and ApplicationContext
 
@@ -286,19 +293,35 @@ This is because constructor injection allows injecting values to immutable field
 - Convenient MessageSource access (for i18n)
 - ApplicationEvent publication
 
-[к оглавлению](#Spring-Questions)
+[к оглавлению](spring.md#Spring-Boot)
 
 ## Bean Life Cycle
 
 ![icon][bean-life-cycle]
 
-[к оглавлению](#Spring-Questions)
+[к оглавлению](spring.md#Spring-Boot)
 
 ## Bean Creation Process
 
 ![icon][spring-bean-creation]
 
-[к оглавлению](#Spring-Questions)
+- Самовпрыскивание
+  - `До 4.2` - Resource, XML
+  - `После 4.2` - Resource, XML, @Inject, @Autowired
+- Циркулярные зависимости в Spring работают, но лучше без бизнес-логики в `@PostConstruct`, 
+  а если это необходимо, то нужно писать свои BPP. Лучше вообще делить
+  классы на части
+- `@PostConstruct` может быть несколько, но `init()` только один
+- При инжекте листа бинов (chain of responsibility)
+  - `ArrayList<String>` вместо `List<String>`
+  - `@Qualifier`
+  - не нужно делать бины `List<?>`
+  - Версия Spring выше 4.3
+- Несколько `@Qualifier` работают через `И`
+
+[ссылка на видео](https://www.youtube.com/watch?v=nGfeSo52_8A)
+
+[к оглавлению](spring.md#Spring-Boot)
 
 ## Design Patterns Used in the Spring Framework
 - **Singleton Pattern** – singleton-scoped beans
@@ -315,7 +338,7 @@ This is because constructor injection allows injecting values to immutable field
 Simply put, all the requests processed by the DispatcherServlet are directed to classes annotated with @Controller. 
 Each controller class maps one or more requests to methods that process and execute the requests with provided inputs.
 
-[к оглавлению](#Spring-Questions)
+[к оглавлению](spring.md#Spring-Boot)
 
 ## Differance between @Component, @Service and @Repository
 
@@ -324,7 +347,7 @@ In fact they are aliases to @Component.
 2) Exception handling inside of spring.
 3) Maybe in future Spring will add some logic to those annotations
 
-[к оглавлению](#Spring-Questions)
+[к оглавлению](spring.md#Spring-Boot)
 
 ## @RequestMapping Annotation
 The ```@RequestMapping``` annotation is used to map web requests to Spring Controller methods. 
@@ -332,13 +355,75 @@ In addition to simple use cases, we can use it for mapping of HTTP headers, bind
 ```@PathVariable```, 
 and working with URI parameters and the ```@RequestParam``` annotation.
 
-[к оглавлению](#Spring-Questions)
+[к оглавлению](spring.md#Spring-Boot)
+
+## Spring Boot
+
+- Взял на себя - зависимости, версии, запуск
+- Стартеры укомплектованы артефактами и их версиями. В parent.pom.
+Все версии артефактов указаны в `dependencies-management`. А главное - они согласованы.
+- Стартеры агрегируют все зависимости от которых они зависят, а так же конфигурации бинов
+- `Spring Boot` создаёт **web-context** `AnnotationConfigEmbeddedWebApplicationContext` 
+(если есть `javax.servlet.Servlet` и `ConfigurableWebApplicationContext`) 
+либо **generic-context** `AnnotationConfigApplicationContext` (если их нет)
+- Spring factories - соответствие интерфейсов и имплементаций. 
+Физически это файлик с конфигурацией в `META-INF`. 
+В каждом стартере есть такой и он включает всю информацию стартера для `SpringFactoriesLoader`.
+В нём нужно указывать всё, что должно автоматически запускать из стартера при 
+запуске приложения
+- `@...ImportSelector` - подтягивает все стартеры с помощью `SpringFactoriesLoader`, 
+который сканирует все джарники и Spring Factories проекта и подтягивает нужные бины, 
+конфиги и прочее
+- Часть конфигураций идут автоматом с `Spring Boot`, но благодаря `@Conditional` 
+большая часть из них отключается
+- `@Conditional` отрабатывает каждый раз отдельно для каждого применения
+- `@Conditional` советуют не завязываться на имена классов, которых нет, 
+потому что тогда будет работать через ASM, а это рефлекшен и работает медленно
+- `AllNestedConditions.class`  позволяет объединить несколько `@Conditional`
+- `ApplicationContextInitializer<?>` позволяет совершать какие-то операции 
+до инициализации контекста спринга. Отрабатывает когда контекст уже создан, 
+но в нём есть только environment (ни бинов, ни BeanPostProcessor, ни BeanFactoryPostProcessor). 
+Environment создаётся при помощи Spring Boot Application и наполняется разной мета-информацией 
+(`@Value`, `@Profile`, разные проперти)
+- `EnvironmentPostProcessor` EPP отрабатывает до `ApplicationContextInitializer<?>`, 
+сразу после построения среды
+- Spring Boot после упаковки в JAR сначала подменяет `main` класс на JarLauncher, 
+который перед запуском нашего приложения подготавливает `class-path`.
+- Spring Boot в начало jar архива вставляет баш код!
+
+### Порядок построения контекста
+1) Spring Application строит Environment. 
+2) Env настраивается при помощи EPP `ConfigFileApplicationListener` (наследник EPP и ApplicationListener). `ConfigFileApplicationListener` 
+    ожидает эвентов `ApplicationPreparedEvent` и `ApplicationEnvironmentPreparedEvent` 
+    и загружает все:
+  - application.yml
+  - application.properties
+  - env vars
+  - cmd args
+3) `ConfigFileApplicationListener` заказывает у `SpringFactoriesLoader` все остальные EPP
+4) `ConfigFileApplicationListener` собирает все EPP, включая себя 
+(нарушение Single responsibility) и вызывает у каждого метод `postProcessEnvironment()`
+5) Среда построена и Spring Application запускает `ApplicationContextInitializer<?>`, 
+чтобы начать строить контекст
+
+**серое** - туда нельзя залезть без доступа к исходникам спринга
+**розовое** - процессы Spring Boot
+**зелёное** - процессы обычного Spring (Spring потрошитель)
+**синее** - запуск приложения
+
+![icon][sprint-boot-init]
+
+[ссылка на видео](https://www.youtube.com/watch?v=yy43NOreJG4)
+
+[к оглавлению](spring.md#Spring-Boot)
 
 ## Spring Boot Main Features
 
-Spring Boot is essentially a framework for rapid application development built on top of the Spring Framework. 
-With its auto-configuration and embedded application server support, combined with the extensive documentation 
-and community support it enjoys, Spring Boot is one of the most popular technologies in the Java ecosystem as of date.
+Spring Boot is essentially a framework for rapid application development 
+built on top of the Spring Framework. With its auto-configuration and embedded 
+application server support, combined with the extensive documentation 
+and community support it enjoys, Spring Boot is one of the most popular 
+technologies in the Java ecosystem as of date.
 
 Here are a few salient features:
 
@@ -358,7 +443,7 @@ such as setting up a `DispatcherServlet`. Spring Boot adds it automatically when
 - `@ComponentScan`: Tells Spring to look for other components, configurations, 
 and services in the the `com.example.testingweb` package, letting it find the `HelloController` class.
 
-[к оглавлению](#Spring-Questions)
+[к оглавлению](spring.md#Spring-Boot)
 
 ## Spring Boot Basic Annotations
 The primary annotations that Spring Boot offers reside in its ```org.springframework.boot.autoconfigure``` 
@@ -372,7 +457,7 @@ automatically apply them
 ```@Configuration```, ```@EnableAutoConfiguration``` and ```@ComponentScan``` annotations with their default 
 attributes.
 
-[к оглавлению](#Spring-Questions)
+[к оглавлению](spring.md#Spring-Boot)
 
 ## EntityManager и основные его функции
 
@@ -388,7 +473,7 @@ getDelegate
 4) Работа с EntityGraph: createEntityGraph, getEntityGraph
 4) Общие операции над EntityManager или всеми Entities: close, isOpen, getProperties, setProperty, clear
 
-[к оглавлению](#Spring-Questions)
+[к оглавлению](spring.md#Spring-Boot)
 
 ## Injection of Prototype into Singleton
 
@@ -576,7 +661,7 @@ public class AppConfig {
 }
 ```
 
-[к оглавлению](#Spring-Questions)
+[к оглавлению](spring.md#Spring-Boot)
 
 ## Что класть и не класть в контекст
 
@@ -596,12 +681,12 @@ public class AppConfig {
 (временные).
 - Стандартные классы (String, InputStream, Locale*)
 
-[к оглавлению](#Spring-Questions)
+[к оглавлению](spring.md#Spring-Boot)
 
 ## Применение AOP
 
 ![icon][cross-cutting]
 
-[к оглавлению](#Spring-Questions)
+[к оглавлению](spring.md#Spring-Boot)
 
 [Заглавная](README.md)

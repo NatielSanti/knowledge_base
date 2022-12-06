@@ -56,4 +56,7 @@
 + [Конспект по Java Core Video](abstract.md)
 + [Крис Ричардсон - Микросервисы](chris-richardson-microservoces.md)
 
+## Языки
++ [Bashkort](bashkort.md)
+
 [к оглавлению](#Моя-база-знаний)

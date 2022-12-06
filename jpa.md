@@ -9,16 +9,19 @@
 + [JDBC, JPA, Hibernate, Spring Data JPA](#JDBC,-JPA,-Hibernate,-Spring-Data-JPA)
 + [Требования JPA к Entity классам](jpa.md#Требования-JPA-к-Entity-классам)
 + [Difference between save() and persist() in Hibernate](
-jpa.md#Difference-between-save()-and-persist()-in-Hibernate)
+jpa.md##Difference-between-save()-and-persist()-in-Hibernate)
 + [Advantages and disadvantages of hibernate compared to jdbc](
 jpa.md#Advantages-and-disadvantages-of-hibernate-compared-to-jdbc)
 + [Database Transactions](jpa.md#Database-Transactions)
++ [Spring Transactions](jpa.md#Spring-Transactions)
 
 [entity-state]:img/db/entity-state.png
 [state-entity]:img/db/state_entity.PNG
 [transaction-isolation-level]:img/db/transaction_isolation_level.PNG
 [transaction-propagation]:img/db/transaction_propagation.PNG
 [hybernate_cache]:img/db/hybernate_cache.png
+[cglib-proxy-1]:img/db/cglib-proxy-1.png
+[cglib-proxy-2]:img/db/cglib-proxy-2.png
 
 [к оглавлению](#ORM-and-JPA)
 
@@ -210,6 +213,7 @@ criteria.setCacheRegion("STATIC_DATA");
 [к оглавлению](#ORM-and-JPA)
 
 ##Difference between save() and persist() in Hibernate
+
 #### `save()`	
 - The return type of `save()` method is `Serializable`, returns generated id.	
 - The `save()` method is only supported by Hibernate i.e hibernate specific.
@@ -341,6 +345,267 @@ SQL-операторы:
 - По умолчанию Spring Data JPA использует Hibernate, в качестве ORM провайдера (чтобы выполнять запросы)
 - Единственное, что нужно указать – это хост для Вашей базы данных, имя пользователя и пароль для доступа к ней. 
 Spring Boot обеспечивает автоматическую настройку для всего подключения к базе. В том числе и пул соединений.
-  [к оглавлению](#ORM-and-JPA)
+
+[к оглавлению](#ORM-and-JPA)
+
+## Spring Transactions
+
+### JDBC
+
+Не имеет значения, используете ли вы аннотацию `@Transactional` от Spring, обычный 
+`Hibernate`, `jOOQ` или любую другую библиотеку баз данных.
+
+В конечном счёте, все они делают одно и то же - открывают и закрывают 
+(назовём это "управлением") транзакции базы данных. 
+Обычный код управления транзакциями `JDBC` выглядит следующим образом:
+
+```java
+import java.sql.Connection;
+
+Connection connection = dataSource.getConnection(); // (1)
+
+try (connection) {
+    connection.setAutoCommit(false); // (2)
+    // выполнить несколько SQL-запросов...
+    connection.commit(); // (3)
+
+} catch (SQLException e) {
+    connection.rollback(); // (4)
+}
+```
+
+1) Для запуска транзакций необходимо подключение к базе данных. 
+`DriverManager.getConnection(url, user, password)` тоже подойдёт, 
+хотя в большинстве корпоративных приложений вы будете иметь настроенный источник 
+данных и получать соединения из него.
+2) Это единственный способ "начать" транзакцию базы данных в Java, 
+даже несмотря на то, что название может звучать немного странно. `setAutoCommit(true)` 
+гарантирует, что каждый SQL-оператор будет автоматически завёрнут в собственную 
+транзакцию, а `setAutoCommit(false)` - наоборот: Вы являетесь хозяином 
+транзакции (транзакций), и Вам придётся начать вызывать `commit` и друзей. 
+Обратите внимание, что флаг `autoCommit` действует в течение всего времени, 
+пока ваше соединение открыто, что означает, что вам нужно вызвать метод только один раз, 
+а не несколько.
+3) Давайте зафиксируем нашу транзакцию...
+4) Или откатим наши изменения, если произошло исключение.
+
+Это происходит на базовом уровне вне зависимости от уровня абстракции, котоырй мы используем.
+
+```java
+@Transactional(
+  propagation=TransactionDefinition.NESTED,
+  isolation=TransactionDefinition.ISOLATION_READ_UNCOMMITTED
+)
+```
+Преобразуется в нечто подобное 
+```java
+import java.sql.Connection;
+
+// isolation=TransactionDefinition.ISOLATION_READ_UNCOMMITTED
+
+connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED); // (1)
+
+// propagation=TransactionDefinition.NESTED
+
+Savepoint savePoint = connection.setSavepoint(); // (2)
+...
+connection.rollback(savePoint);
+```
+
+Вложенные транзакции в Spring - это просто точки сохранения JDBC / базы данных.
+
+### Как работает управление транзакциями в Spring или Spring boot
+
+#### 1) `TransactionTemplate`, либо непосредственно через `PlatformTransactionManager`
+
+```java
+@Service
+public class UserService {
+
+    @Autowired
+    private TransactionTemplate template;
+
+    public Long registerUser(User user) {
+        Long id = template.execute(status ->  {
+            // выполнить некоторый SQL, который, например,
+            // вставляет пользователя в базу данных 
+            // и возвращает автогенерированный идентификатор
+          return id;
+        });
+    }
+}
+```
+
+- Вам не нужно возиться с открытием и закрытием соединений с базой данных 
+самостоятельно (`try-finally`). 
+Вместо этого вы используете обратные вызовы транзакций.
+- Вам также не нужно ловить `SQLExceptions`, поскольку Spring преобразует эти 
+исключения в исключения времени выполнения (`runtime exceptions`)
+- TransactionTemplate будет использовать TransactionManager внутри, 
+который будет использовать источник данных.
+
+#### 2) Декларативное управление транзакциями XML от Spring
+
+```xml
+<!-- транзакционный совет (advice) (что "происходит"; см. <aop:advisor/> бин ниже) -->
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <!-- семантика транзакций... -->
+        <tx:attributes>
+            <!--все методы, начинающиеся с 'get', доступны только для чтения -->
+            <tx:method name="get*" read-only="true"/>
+            <!-- другие методы используют настройки транзакции по умолчанию (см. ниже) -->
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+```
+
+Вы определяете advice `AOP` (Aspect Oriented Programming, 
+аспектно-ориентированное программировие) с помощью приведенного выше блока XML, 
+который затем можно применить к бин `UserService` следующим образом:
+
+```xml
+<aop:config>
+    <aop:pointcut id="userServiceOperation" expression="execution(* x.y.service.UserService.*(..))"/>
+    <aop:advisor advice-ref="txAdvice" pointcut-ref="userServiceOperation"/>
+</aop:config>
+
+<bean id="userService" class="x.y.service.UserService"/>
+```
+```java
+public class UserService {
+
+    public Long registerUser(User user) { 
+        // выполняем SQL, который, например.
+        // вставляет пользователя в базу данных 
+        // и извлекает автогенерированный id
+      return id;
+    }
+}
+```
+
+С точки зрения кода Java, этот декларативный подход к транзакциям выглядит намного проще, 
+чем программный подход. Но он приводит к большому количеству сложного, 
+многословного XML с конфигурациями указателей и советников (advisor).
+
+#### 3) аннотацию `@Transactional` Spring (декларативное управление транзакциями, 
+`Declarative Transaction Management`) 
+
+- Убедитесь, что ваша Configuration Spring сопровождена аннотацией 
+`@EnableTransactionManagement` Spring boot это будет сделано автоматически).
+
+- Убедитесь, что вы указали менеджер транзакций в вашей Configuration Spring 
+(это
+
+И тогда Spring покажет себя достаточно умным, чтобы явно обрабатывать 
+транзакции для вас: Любой публичный public метод бин, который вы 
+сопровождаете аннотацией `@Transactional` , будет выполняться внутри 
+транзакции базы данных (обратите внимание: есть некоторые подводные камни).
+
+```java
+@Configuration
+@EnableTransactionManagement
+public class MySpringConfig {
+
+    @Bean
+    public PlatformTransactionManager txManager() {
+        return yourTxManager; // подробнее об этом позже
+    }
+
+}
+```
+
+### CGlib и JDK прокси - @Transactional под прикрытием
+
+Теперь, когда вы используете `@Transactional` над бинами, 
+Spring использует маленькую хитрость. Он не просто инстанцирует `UserService`, 
+но и транзакционный прокси этого UserService.
+
+Он делает это с помощью метода под названием `proxy-through-subclassing` с 
+помощью библиотеки `Cglib`. Существуют и другие способы построения прокси 
+(например, `Dynamic JDK proxies`), но пока оставим это на потом.
+
+![icon][cglib-proxy-1]
+
+- Открытие и закрытие соединений/транзакций с базой данных.
+- А затем делегирование настоящему `UserService`, тому, который вы написали.
+- А другие бины, такие как ваш `UserRestController`, 
+никогда не узнают, что они разговаривают с прокси, а не с настоящим.
+
+### Менеджер транзакций (например, PlatformTransactionManager)
+
+```java
+@Bean
+public DataSource dataSource() {
+    return new MysqlDataSource(); // (1)
+} 
+// Здесь вы создаёте источник данных, специфичный для базы данных или для пула соединений.
+// В данном примере используется MySQL.
+
+@Bean
+public PlatformTransactionManager txManager() {
+    return new DataSourceTransactionManager(dataSource()); // (2)
+}
+// Здесь вы создаёте свой менеджер транзакций, которому нужен источник данных,
+// чтобы иметь возможность управлять транзакциями.
+```
+
+Всё просто. Все менеджеры транзакций имеют методы типа `doBegin` 
+(для запуска транзакции) или `doCommit`, которые выглядят следующим образом - 
+взяты прямо из исходного кода Spring с некоторым упрощением:
+
+```java
+public class DataSourceTransactionManager implements PlatformTransactionManager {
+
+    @Override
+    protected void doBegin(Object transaction, TransactionDefinition definition) {
+        Connection newCon = obtainDataSource().getConnection();
+        // ...
+        con.setAutoCommit(false);
+        // Да, вот так.!
+    }
+
+    @Override
+    protected void doCommit(DefaultTransactionStatus status) {
+        // ...
+        Connection connection = status.getTransaction().getConnectionHolder().getConnection();
+        try {
+            con.commit();
+        } catch (SQLException ex) {
+            throw new TransactionSystemException("Could not commit JDBC transaction", ex);
+        }
+    }
+}
+```
+
+Таким образом, менеджер транзакций источника данных использует при управлении 
+транзакциями точно такой же код, который вы видели в разделе JDBC.
+
+![icon][cglib-proxy-2]
+
+
+**Физические транзакции**: это ваши фактические транзакции `JDBC`.
+
+**Логические транзакции**: это (потенциально вложенные) аннотированные 
+`@Transactional` методы Spring.
+
+
+### Самый распространенный "подводный камень" @Transactional
+
+Кейс с вызовом одного транзакционного метода из транзакционного метода того класса.
+Давайте вернемся к разделу "Прокси" этого руководства. 
+Spring создает для вас транзакционный прокси UserService, 
+но как только вы оказываетесь внутри класса UserService и вызываете другие 
+внутренние методы, прокси больше не задействован. Это означает, 
+что новой транзакции не будет
+
+### Spring Boot
+
+Однако единственное отличие Spring заключается в том, что он автоматически 
+устанавливает аннотацию `@EnableTransactionManager` и создает `PlatformTransactionManager` 
+для вас - с помощью автоконфигураций `JDBC`.
+
+[ссылка](https://habr.com/ru/post/682362/)
+
+[к оглавлению](#ORM-and-JPA)
 
 [Заглавная](README.md)
