@@ -18,6 +18,11 @@
 [happens-before]:img/jmm/happens-before.png
 [semaphore]:img/concurrent/semaphore.PNG
 [livelock]:img/concurrent/livelock.PNG
+[happens-before-2]:img/concurrent/happens-before-2.png
+[happens-before-3]:img/concurrent/happens-before-3.png
+[jmm]:img/concurrent/jmm.png
+[jmm-2]:img/concurrent/jmm-2.png
+[jmm-3]:img/concurrent/jmm-3.png
 
 ## Проблемы многопоточки
 
@@ -721,13 +726,12 @@ public class App {
 
 ### Happens Before
 
-
 «Выполняется прежде» (англ. `happens before`) — отношение строгого частичного порядка 
 (арефлексивное, антисимметричное, транзитивное), введённое между атомарными командами 
 (++ и -- не атомарны!), придуманное Лесли Лэмпортом и не означающее «физически прежде». 
 Оно значит, что вторая команда будет «в курсе» изменений, проведённых первой.
 
-Модель памяти Java
+#### Модель памяти Java
 
 В частности, одно выполняется прежде другого для таких операций (список не исчерпывающий):
 
@@ -746,6 +750,11 @@ public class App {
 что предшествует записи, выполняется раньше всего, что идёт после чтения; см. иллюстрацию.
 
 ![icon][happens-before]
+![icon][happens-before-2]
+![icon][happens-before-3]
+![icon][jmm]
+![icon][jmm-2]
+![icon][jmm-3]
 
 - Для объектных переменных (например, `volatile List x;`) столь сильные гарантии выполняются для ссылки на объект, 
 но не для его содержимого.
