@@ -33,7 +33,7 @@
 Когда наш поток придёт делать операцию CAS ссылка будет схожа с той прошлой, но не обязательно той же самой, 
 возможно у неё будет изменено состояние. Для решения было создано `AtomicMarkableReference`.
 
-### DCL
+### DCL Singleton
 
 Double checked locking
  
@@ -146,6 +146,103 @@ class Foo {
     // и остальные члены класса…
 }
 ```
+
+Возможно лучшая версия.
+Потому что в момент создания инстанса, есть момент, когда инстанс не `null`, 
+но поля еще не заполнены. Для решения этой проблемы - вводится новая временная переменная, 
+которая копирует в ссылку `singleton` уже полностью сконфигурированный инстанс.
+Представим ситуацию, когда первый поток еще не заполнил поля, но уже создал объект, 
+в это время второй поток забирает ссылку на не до конца сконфигурированный объект.
+Сокращает количество чтений из статических полей.
+
+Еще вводится приватный лок, который нельзя утащить из этого объекта наружу.
+
+```java
+class Singleton {
+    
+    private static volatile Singleton INSTANCE = null;
+    private static final Object lock = new Object();
+    
+    private String name;
+    private int age;
+    
+    public static Singleton getInstance() {
+        Singleton temp = INSTANCE;
+        if (temp == null) {
+            synchronized(lock) {
+                temp = INSTANCE;
+                if (temp == null){
+                    INSTANCE = temp = new Singleton("name", age);
+                }
+            }
+        }
+        return temp;
+    }
+    
+    private Singleton(String name, int age){
+        this.name = name;
+        this.age = age;
+    }
+}
+```
+
+Еще есть варианты через `ENUM`.
+Инстанциируется во время обращения к классу из-за логики работы ENUM.
+
+```java
+public enum Singleton{
+    INSTANCE("name", 12);
+ 
+    private final String name;
+    private final int age;
+    
+    Singleton(String name, int age){
+        this.name = name;
+        this.age = age;
+    }
+    
+    public static void staticMethod(){
+        System.out.println("do static method");
+    }
+
+    public void nonStaticMethod(){
+         System.out.println("do nonstatic method");
+    }
+}
+
+class Main{
+    public static void main(String[] args) {
+        Singleton.staticMethod();
+        Singleton.INSTANCE.nonStaticMethod();
+    }
+}
+```
+
+Через вложенный статический класс.
+Инстанс синглтона не будет создан при обращении к статическому методу, но будет 
+создан при обращении к внутреннему статическому классу `SingletonCreator`.
+Потокобезопасность гарантируется тем, что загрузка классов потокобезопасна.
+
+```java
+public class Singleton{
+    
+    private Singleton(){}
+ 
+    public static void doSomething(){
+        System.out.println("Something");
+    }
+    
+    private static Singleton getInstance(){
+        return SingletonCreator.INSTANCE; // при обращении к статик методу инстанс не будет создан
+    }
+    
+    private static class SingletonCreator {
+        private static Singleton INSTANCE = new Singleton();
+    }
+}
+```
+
+
 [к оглавлению](concurrent.md#Java-Concurrent)
 
 ## Основные характеристики Thread
@@ -887,6 +984,12 @@ public class Main {
 [к оглавлению](concurrent.md#Java-Concurrent)
 
 ## CompletableFuture
+
+Важно, что в момент получения результата при помощи метода `get` 
+выполнение становится синхронным. Как вы думаете, какой механизм тут будет использован? 
+Правильно, нет блока синхронизации — поэтому `WAITING` в `JVisualVM` мы 
+увидим не как `monitor` или `wait`, а как тот самый `park` 
+(т.к. используется механизм `LockSupport`).
 
 Шло время, и в `Java 1.8` появился новый класс, который зовётся `CompletableFuture`. 
 Он реализует интерфейс `Future`, то есть наши `task` будут выполнены в будущем, 
