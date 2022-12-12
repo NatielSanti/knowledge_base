@@ -24,6 +24,7 @@
 [jmm-2]:img/concurrent/jmm-2.png
 [jmm-3]:img/concurrent/jmm-3.png
 
+
 ## Проблемы многопоточки
 
 ### ABA
@@ -1018,92 +1019,103 @@ public class App {
 }
 ```
 
-Если мы выполним этот код, то увидим, что создание `CompletableFuture` подразумевает запуск и всей цепочки. 
-Поэтому при некоторой схожести со `SteamAPI` из `Java8` в этом отличие этих подходов. Например:
+#### Основные методы
 
+- **Группы методов**
+  - создание `completedFuture`, `completedStage`, `failedFuture`, `failedStage`, `runAsync`, `supplyAsync`
+  - по синхронности `somethingAsync(...)`, `somethingAsync(..., Executor)`, `something(...)`
+  - по типу обработки данных `apply\combine(Function<T,U> fun):ComplitionStage<U>`, 
+  `accept<Consumer<T>>:ComplitionStage<Void>`, `run(Runnable):ComplitionStage<U>`
+  - логические 
+    - унарные `thenApply`, `thenAccept`, `thenRun`
+    - ИЛИ `applyToEither`, `acceptEither`, `runAfterEither`
+    - И `thenCombine`, `thenAcceptBoth`, `runAfterBoth`
+  - остальные методы обработки
+    - `thenCompose()` `flatMap` - для слияния  CF в плоскую структуру
+    - `handle`, `whenComplete` - обработка значения либо ошибок в одном методе
+    - `exceptionally`, `exceptionallyComplete` - обработка ошибок
+    - `toCompleteFuture` - создание  CF
+  - завершение вычислений
+    - `complete`, `completeAsync`, `completeExceptionally`
+    - `cancel`
+    - `obtrudeValue`, `obtrudeException`
+    - `completeOnTimeout`, `completeOrTimeout`
+  - получение результатов `get()`, `getNow()`, `get(time, TimeUnit)`
+
+- По умолчанию использует `ForkJoinPool`
+- **Создание**
 ```java
-List<String> array = Arrays.asList("one", "two");
-Stream<String> stringStream = array.stream().map(value -> {
-	System.out.println("Executed");
-	return value.toUpperCase();
-});
+completedFuture(U value):CompletableFuture<U> // из какого-то значения
+supplyAsync(Supplier<U> sup, [Executor]):CompletableFuture<U> // из поставщика
+runAsync(Runnable run, [Executor]):CompletableFuture<U> // из задачи
+
 ```
-
-Это пример `Java 8 Stream Api` (подробнее можно с ним ознакомиться здесь "Руководство по Java 8 Stream API 
-в картинках и примерах"). Если запустить этот код, то Executed не отобразится. 
-То есть при создании стрима в Java стрим не запускается сразу, а ждёт, когда из него захотят значение. 
-А вот `CompletableFuture` запускает цепочку на выполнение сразу, не дожидаясь того, 
-что у него попросят посчитанное значение
-
-Второе, что надо помнить, что `CompletalbeFuture` в своей работе использует `Runnable`, 
-потребителей и функции. Учитывая это, вы всегда сможете вспомнить, что с `CompletableFuture` можно делать так:
-
+- **Трансформаторы** как map() в стримах
+- **Подписка** на выполнение
 ```java
-public static void main(String []args) throws Exception {
-        AtomicLong longValue = new AtomicLong(0);
-        Runnable task = () -> longValue.set(new Date().getTime());
-        Function<Long, Date> dateConverter = (longvalue) -> new Date(longvalue);
-        Consumer<Date> printer = date -> {
-            System.out.println(date);
-            System.out.flush();
-        };
-        // CompletableFuture computation
-        CompletableFuture.runAsync(task)
-                         .thenApply((v) -> longValue.get())
-                         .thenApply(dateConverter)
-                         .thenAccept(printer);
-}
+thenApply(Function<I, U> fun):CompletableFuture<U>
+thenApplyAsync(Function<I, U> fun, [Executor]):CompletableFuture<U>
+
+thenAccept(Consumer<T> con):CompletableFuture<Void>`
+thenRun(Runnable task):CompletableFuture<Void>`
+
+CompletableFuture.completedFuture(42)
+        .thenApply(num -> num + 100)
+        .thenAccept(System.out::println);  
 ```
-
-#### Мы можем объединять результат `CompletableFuture` с результатом другого `CompletableFuture`
-
+- **Обработчик ошибок** пробрасывается дальше по цепочке до этих блоков, 
+при этом вычисления выше не выполняются. Пишутся обычно в конце вычислений. 
+Позволяет создать один обработчик ошибок при последовательном вызове функций.
 ```java
-Supplier newsSupplier = () -> {
-        try {
-			Thread.currentThread().sleep(3000);
-			return "Message";
-		} catch (InterruptedException e) {
-			throw new IllegalStateException(e);
-		}};
-
-CompletableFuture<String> reader = CompletableFuture.supplyAsync(newsSupplier);
-CompletableFuture.completedFuture("!!")
-				 .thenCombine(reader, (a, b) -> b + a)
-				 .thenAccept(result -> System.out.println(result))
-				 .get();
+exceptionally(Function<Throwable, U>):CompletableFuture<U> // обрабатывает только ошибку
+handle(BiFunction<I, Throwable, U>):CompletableFuture<U>` // может обработать и результат и ошибку
 ```
-
-#### А ещё мы можем не только объединить (combine), но и возвращать `CompletableFuture`
-
-Тут хочется отметить, что для краткости использован метод `CompletableFuture.completedFuture`. 
-Данный метод не создаёт новый поток, поэтому остальная цепочка будет выполнена в том же потоке, 
-в котором был вызван `completedFuture`.
-
-Также есть метод `thenAcceptBoth`. Он очень похож на accept, но если `thenAccept` принимает `consumer`, 
-то `thenAcceptBoth` принимает на вход ещё один `CompletableStage` + `BiConsumer`, то есть `consumer`, 
-который на вход принимает 2 источника, а не один.
-
-Есть ещё интересная возможность со словом `Either`.
-
+- **Комбинация**  `reduce()` в стримах
 ```java
-CompletableFuture.completedFuture(2L)
-				.thenCompose((val) -> CompletableFuture.completedFuture(val + 2))
-                               .thenAccept(result -> System.out.println(result));
+thenCombine(CompletionStage<U> other,
+            BiFunction<T,U,V>):CompletableFuture<V>
 ```
-
-#### `CompletableFuture` — обработкой ошибок
-
-Данный код ничего не сделает, т.к. упадёт исключение и ничего не будет. 
-Но если мы раскомментируем `exceptionally`, то мы определим поведение.
-
+- **Выборка** `any(...)`, `allOf(...)` выбор из списка CF на выполнение. 
+Остальные не отменяются, а честно выполняются
+- **Композиция** `flatMap()`. Как в стримах - схлопывает все стримы, тут схлопываются все CF
 ```java
-CompletableFuture.completedFuture(2L)
-				 .thenApply((a) -> {
-					throw new IllegalStateException("error");
-				 }).thenApply((a) -> 3L)
-				 //.exceptionally(ex -> 0L)
-				 .thenAccept(val -> System.out.println(val));
+thenCompose(Function<T, CompletableFuture<U>> fn):CompletableFuture<U>
+
+CompletableFuture<Long> cff = CompletableFuture
+        .supplyAsync(() -> 42L)
+        .thenCompose( x -> CompletableFuture.supplyAsync(() -> x + 100));
+
+CompletableFuture<CompletableFuture<Long>> cff = CompletableFuture
+        .supplyAsync(() -> 42L)
+        .thenApply( x -> CompletableFuture.supplyAsync(() -> x + 100));
 ```
+- **Получение результата** 
+```java
+T get() throws InterruptedException, ExecutionException
+T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException
+T getNow( T defaultValue)
+T join() // нет checkedException. Можно подкладывать в стримы. Блокирующий вызов
+        
+stream().map(x -> CompletableFuture ...).map(CompletableFuture::join) :Stream<T>
+    // Ждём результатов выполнения, на выходе получает стрим результатов
+```
+- **Параллельная обработка** в стримах и CF. По умолчанию стримы выполняются параллельно `parallel()` 
+в дефолтном ForkJoinPool, но если внутрь CF передать свой `Executor`, то они будут выполнятсья в нём
+- Если к моменту запроса на асинхронное выполнение CF уже выполнена, 
+то она будет выполняться в текущем потоке, то же самое и с обработкой ошибок
+- **Копирования** CF происходит в текущем состоянии. То есть если над родителем произвести операции, 
+они не отрозятся на клоне
+- `join()` превращает вызов в блокирующий, а методы типа `runAsync` превращают вызов в ассинхронный
+- Действия могут завершить где угодно
+  - в завершающем потоке `complete()`, `completeExceptionally()`
+  - в конструирующем потоке `thenApply()`, `thenCompose()`
+  - в запрашивающем потоке `get()`, `join()`
+- асинхронные действия нужны для Предсказуемости, а синхронные для производительности
+- `ForkJoinPool` - work stealing pool. Не гарантирует очередность выполнения задач, 
+хотя формально это `FILO` first in last out
+
+[ссылка на видео](https://www.youtube.com/watch?v=hqR41XVx3kM)
+
 [к оглавлению](concurrent.md#Java-Concurrent)
 
 ## Executor и ThreadPool

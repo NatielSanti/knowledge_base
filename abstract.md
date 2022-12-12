@@ -19,6 +19,7 @@
 + [Executor](abstract.md#Executor)
 + [Callable and Future](abstract.md#Callable-and-Future)
 + [Locks](abstract.md#Locks)
++ [ArrayBlockingQueue](abstract.md#ArrayBlockingQueue)
 ---
 + [Интерфейсы](abstract.md#Интерфейсы)
 + [Лямбды](abstract.md#Лямбды)
@@ -516,6 +517,58 @@ try {
 - `ReentrantLock(boolean)` честный или нечестный розыгрыш лока. Честный медленнее. 
 С выключенным параметров `ReentrantLock()` быстрее критического блока, 
 с включенным - медленнее
+- `ReentrantReadWriteLock implement ReadWriteLock` - реализация лока для блокировок 
+по чтению и записи отдельно. Тоже может быть честным или нечестным.
+```java
+class App {
+    private final Lock readLock;
+    private final Lock writeLock;
+    private String storage;
+    
+    public App(){
+        ReadWriteLock lock = new ReentrantReadWriteLock();
+        readLock = lock.readLock();
+        writeLock = lock.writeLock();
+    }
+    
+    @SneakyThrow
+    public String read(){
+        readLock.lock();
+        try {
+            TimeUnit.SECONDS.sleep(1);
+            return storage;
+        } finally {
+            readLock.unlock();
+        }
+    }
+
+  @SneakyThrow
+  public String write(String newValue){
+    writeLock.lock();
+    try {
+      TimeUnit.SECONDS.sleep(2);
+      storage = newValue;
+    } finally {
+      writeLock.unlock();
+    }
+  }
+} 
+```
+- `lock.newCondition():Condition`. `Condition` это абстракция над механизмом `wait-notify`.
+  - Плюсы в том, что не нужно владеть монитором объекта, на котором происходит `wait()`
+  - не ограничены критической секцией (это одновременно и минус)
+  - возможно будить НЕ только один поток или все объекты, а лишь часть потоков по какому-то принципу
+
+[к оглавлению](#Abstract)
+
+## ArrayBlockingQueue
+
+- фиксированный размер, честная\нечестная
+- три метода на добавление / удаление-получение
+  - `add()`, `remove()` - бросает ошибку
+  - `offer():boolean`, `poll()`- возвращает результат успешности добавления
+  - `put()`, `take()` - блокируемая
+- методы для получения без модификации `peek()`, `element()` 
 
 [к оглавлению](#Abstract)
 
