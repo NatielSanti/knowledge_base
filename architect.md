@@ -15,6 +15,7 @@
 + [UML](architect.md#UML)
 + [Software Architectural Patterns](architect.md#Software-Architectural-Patterns)
 + [Microservice Patterns](architect.md#Microservice-Patterns)
++ [Istio](architect.md#istio)
 
 [example-1]:img/dist_systems/example-1.png
 [2pc-ok]:img/dist_systems/2pc-ok.png
@@ -1495,6 +1496,10 @@ External Configuration, предлагающий `хранить все конф
 - Сокращение работ по обслуживанию и отладке.
 
 [ссылка](https://mcs.mail.ru/blog/26-osnovnyh-patternov-mikroservisnoj-razrabotki)
+
+[к оглавлению](architect.md#Architect)
+
+## Istio
 
 [к оглавлению](architect.md#Architect)
 
