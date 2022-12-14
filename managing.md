@@ -21,6 +21,11 @@
 [xp]:img/manage/xp.png
 [choose_methodology]:img/manage/methodologies-flowchart.png
 [agile]:img/manage/agile.png
+[kanban-vs-scrum-1]:img/manage/kanban-vs-scrum/kanban-vs-scrum-1.jpeg
+[kanban-vs-scrum-2]:img/manage/kanban-vs-scrum/kanban-vs-scrum-2.jpeg
+[kanban-vs-scrum-3]:img/manage/kanban-vs-scrum/kanban-vs-scrum-3.jpeg
+[kanban-vs-scrum-4]:img/manage/kanban-vs-scrum/kanban-vs-scrum-4.jpeg
+[kanban-vs-scrum-5]:img/manage/kanban-vs-scrum/kanban-vs-scrum-5.jpeg
 
 ## Choosing methodology
 
@@ -65,6 +70,12 @@ once an iteration starts.
 4) Multiple teams share the Kanban board.
 5) Moreover, there are no defined roles in Kanban like Product Owner (PO), 
 Scrum Master (SM) or Scrum team, etc.
+
+![icon][kanban-vs-scrum-1]
+![icon][kanban-vs-scrum-2]
+![icon][kanban-vs-scrum-3]
+![icon][kanban-vs-scrum-4]
+![icon][kanban-vs-scrum-5]
 
 [к оглавлению](#Managering)
 
