@@ -98,6 +98,12 @@
 ![icon][kube4]
 ![icon][kube5]
 
+Получение списка подов
+`kuberctl get pods -n dev`
+
+Получение логов пода
+`kuberctl logs -n dev abc -c name`
+
 [к оглавлению](#DEVOPS)
 
 [Заглавная](README.md)
