@@ -14,13 +14,23 @@
 + [Падение качества продукта](managing.md#Падение-качества-продукта)
 + [Technical Debt](managing.md#Technical-Debt)
 + [SLA](managing.md#SLA)
++ [Self Presentation](managing.md#Self-Presentation)
++ [Cover letter](managing.md#Cover-letter)
 
 [к оглавлению](#Managering)
 
 [sdlc]:img/manage/sdlc.png
+[self-presentation-1]:img/manage/selfpresentation/1.jpeg
+[self-presentation-2]:img/manage/selfpresentation/2.jpeg
+[self-presentation-3]:img/manage/selfpresentation/3.jpeg
+[self-presentation-4]:img/manage/selfpresentation/4.jpeg
+[self-presentation-5]:img/manage/selfpresentation/5.jpeg
+[self-presentation-7]:img/manage/selfpresentation/7.jpeg
+[self-presentation-8]:img/manage/selfpresentation/8.jpeg
 [xp]:img/manage/xp.png
 [choose_methodology]:img/manage/methodologies-flowchart.png
 [agile]:img/manage/agile.png
+[cover-letter]:img/manage/cover-letter.png
 [kanban-vs-scrum-1]:img/manage/kanban-vs-scrum/kanban-vs-scrum-1.jpeg
 [kanban-vs-scrum-2]:img/manage/kanban-vs-scrum/kanban-vs-scrum-2.jpeg
 [kanban-vs-scrum-3]:img/manage/kanban-vs-scrum/kanban-vs-scrum-3.jpeg
@@ -537,6 +547,24 @@ So, for example, if your SLA specifies that your systems will be available 99.95
 your SLO is likely 99.95% uptime and your SLI is the actual measurement of your uptime. 
 Maybe it’s 99.96%. Maybe 99.99%. To stay in compliance with your SLA, 
 the SLI will need to meet or exceed the promises made in that document.
+
+[к оглавлению](#Managering)
+
+## Self Presentation
+
+![icon][self-presentation-1]
+![icon][self-presentation-2]
+![icon][self-presentation-3]
+![icon][self-presentation-4]
+![icon][self-presentation-5]
+![icon][self-presentation-7]
+![icon][self-presentation-8]
+
+[к оглавлению](#Managering)
+
+## Cover letter
+
+![icon][cover-letter]
 
 [к оглавлению](#Managering)
 
