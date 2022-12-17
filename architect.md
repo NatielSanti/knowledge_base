@@ -15,7 +15,8 @@
 + [UML](architect.md#UML)
 + [Software Architectural Patterns](architect.md#Software-Architectural-Patterns)
 + [Microservice Patterns](architect.md#Microservice-Patterns)
-+ [Istio](architect.md#istio)
++ [Задержки](architect.md#Задержки)
++ [System Design Template](architect.md#System-Design-Template)
 
 [example-1]:img/dist_systems/example-1.png
 [2pc-ok]:img/dist_systems/2pc-ok.png
@@ -79,6 +80,7 @@
 [discovery-server]:img/architect/microservice-pattern/discovery-server.png
 [deploy-blue-green]:img/architect/microservice-pattern/deploy-blue-green.png
 [deploy-host]:img/architect/microservice-pattern/deploy-host.png
+[deploy-canary-release]:img/architect/microservice-pattern/deploy-canary-release.png
 [fault-tolerance-circuit]:img/architect/microservice-pattern/fault-tolerance-circuit.png
 [fault-tolerance-bulkhead-1]:img/architect/microservice-pattern/fault-tolerance-bulkhead-1.png
 [fault-tolerance-bulkhead-2]:img/architect/microservice-pattern/fault-tolerance-bulkhead-2.png
@@ -180,6 +182,10 @@ SaaS-сервисы могут предоставлять место для хр
 
 
 ## DDD
+
+Предметно-ориентированное проектирование (DDD), описанное в книге 
+Эрика Эванса `Domain-Driven Design`, — это более узкая разновидность ООП, 
+предназначенная для разработки сложной бизнес-логики.
 
 ![icon][domain]
 ![icon][aggregate]
@@ -1249,6 +1255,29 @@ DNS-имени сервиса`. Запрос поступает в маршру�
 
 ![icon][deploy-blue-green]
 
+#### 7.3) Canary release
+
+Подвид Blue-Green Deployment, где на прод выкатывается новая версия и
+направляется небольшой трафик для проверки.
+
+- балансировка
+  - одна нода всегда canary
+  - Canary-нода задается в процессе деплоя
+- мониторинг, так как важно знать, что ожидает каждый пользователь, 
+и как детально работают наши сервисы
+  - Количество ошибок, Время выполнения запросов, Размер очереди, 
+  Количество успешных ответов в секунду, Время выполнения 95% всех запросов, Бизнес-метрики
+    (Counter, Gauge, Summary). Инструменты - ELK Stack, Prometheus
+- анализ версий, чтобы понимать, насколько хорошо новая версия будет работать в продакшн
+  - Смотреть метрики только canary-ноды
+  - Canary-нода сравнивается с любой другой нодой
+  - Canary-нода сравнивается с собой в прошлом
+- автоматизация — пишем последовательность развертывания (deployment pipeline).
+
+![icon][deploy-canary-release]
+
+[Ссылка на статью](https://habr.com/ru/company/oleg-bunin/blog/493026/)
+
 ### 8) Паттерны повышения отказоустойчивости
 
 Эта группа шаблонов предназначена для повышения надежности приложений с 
@@ -1523,7 +1552,133 @@ External Configuration, предлагающий `хранить все конф
 
 [к оглавлению](architect.md#Architect)
 
-## Istio
+## Задержки
+
+```roomsql
+Latency Comparison Numbers
+--------------------------
+L1 cache reference                           0.5 ns
+Branch mispredict                            5   ns
+L2 cache reference                           7   ns                      14x L1 cache
+Mutex lock/unlock                           25   ns
+Main memory reference                      100   ns                      20x L2 cache, 200x L1 cache
+Compress 1K bytes with Zippy            10,000   ns       10 us
+Send 1 KB bytes over 1 Gbps network     10,000   ns       10 us
+Read 4 KB randomly from SSD*           150,000   ns      150 us          ~1GB/sec SSD
+Read 1 MB sequentially from memory     250,000   ns      250 us
+Round trip within same datacenter      500,000   ns      500 us
+Read 1 MB sequentially from SSD*     1,000,000   ns    1,000 us    1 ms  ~1GB/sec SSD, 4X memory
+HDD seek                            10,000,000   ns   10,000 us   10 ms  20x datacenter roundtrip
+Read 1 MB sequentially from 1 Gbps  10,000,000   ns   10,000 us   10 ms  40x memory, 10X SSD
+Read 1 MB sequentially from HDD     30,000,000   ns   30,000 us   30 ms 120x memory, 30X SSD
+Send packet CA->Netherlands->CA    150,000,000   ns  150,000 us  150 ms
+
+Notes
+-----
+1 ns = 10^-9 seconds
+1 us = 10^-6 seconds = 1,000 ns
+1 ms = 10^-3 seconds = 1,000 us = 1,000,000 ns
+```
+
+[Ссылка на статью](
+http://highscalability.com/blog/2011/1/26/google-pro-tip-use-back-of-the-envelope-calculations-to-choo.html)
+
+[к оглавлению](architect.md#Architect)
+
+## System Design Template
+
+#### (1) FEATURE EXPECTATIONS [5 min]
+
+```
+(1) Use cases
+(2) Scenarios that will not be covered
+(3) Who will use
+(4) How many will use
+(5) Usage patterns
+```
+
+#### (2) ESTIMATIONS [5 min]
+
+```
+(1) Throughput (QPS for read and write queries)
+(2) Latency expected from the system (for read and write queries)
+(3) Read/Write ratio
+(4) Traffic estimates
+- Write (QPS, Volume of data)
+- Read  (QPS, Volume of data)
+(5) Storage estimates
+(6) Memory estimates
+- If we are using a cache, what is the kind of data we want to store in cache
+- How much RAM and how many machines do we need for us to achieve this ?
+- Amount of data you want to store in disk/ssd
+```
+
+#### (3) DESIGN GOALS [5 min]
+
+```
+(1) Latency and Throughput requirements
+(2) Consistency vs Availability  [Weak/strong/eventual => consistency | Failover/replication => availability]
+```
+
+#### (4) HIGH LEVEL DESIGN [5-10 min]
+
+```
+(1) APIs for Read/Write scenarios for crucial components
+(2) Database schema
+(3) Basic algorithm
+(4) High level design for Read/Write scenario
+```
+
+#### (5) DEEP DIVE [15-20 min]
+
+```
+(1) Scaling the algorithm
+        (2) Scaling individual components: 
+                -> Availability, Consistency and Scale story for each component
+                -> Consistency and availability patterns
+        (3) Think about the following components, how they would fit in and how it would help
+                a) DNS
+                b) CDN [Push vs Pull]
+                c) Load Balancers [Active-Passive, Active-Active, Layer 4, Layer 7]
+                d) Reverse Proxy
+                e) Application layer scaling [Microservices, Service Discovery]
+                f) DB [RDBMS, NoSQL]
+                        > RDBMS 
+                            >> Master-slave, Master-master, Federation, Sharding, Denormalization, SQL Tuning
+                        > NoSQL
+                            >> Key-Value, Wide-Column, Graph, Document
+                                Fast-lookups:
+                                -------------
+                                    >>> RAM  [Bounded size] => Redis, Memcached
+                                    >>> AP [Unbounded size] => Cassandra, RIAK, Voldemort
+                                    >>> CP [Unbounded size] => HBase, MongoDB, Couchbase, DynamoDB
+                g) Caches
+                        > Client caching, CDN caching, Webserver caching, Database caching, Application caching, Cache @Query level, Cache @Object level
+                        > Eviction policies:
+                                >> Cache aside
+                                >> Write through
+                                >> Write behind
+                                >> Refresh ahead
+                h) Asynchronism
+                        > Message queues
+                        > Task queues
+                        > Back pressure
+                i) Communication
+                        > TCP
+                        > UDP
+                        > REST
+                        > RPC
+```
+
+#### (6) JUSTIFY [5 min]
+
+```
+(1) Throughput of each layer
+(2) Latency caused between each layer
+(3) Overall latency justification
+```
+
+[Примеры](https://github.com/donnemartin/system-design-primer#system-design-interview-questions-with-solutions)
 
 [к оглавлению](architect.md#Architect)
 

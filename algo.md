@@ -6,12 +6,23 @@
 
 [algo-growing]:img/algorithms/algo-growing.png
 [binary-search]:img/algorithms/binary-search.png
+[notations]:img/algorithms/notations.png
+[memory]:img/algorithms/memory.png
+
 
 [к оглавлению](#Algorithms)
 
 ## Сравнение алгоритмов
 
 ![icon][algo-growing]
+
+### Нотации
+
+![icon][notations]
+
+### Память
+
+![icon][memory]
 
 [к оглавлению](#Algorithms)
 
