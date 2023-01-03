@@ -21,6 +21,7 @@
 [saga-types]:img/books/chris-richardson/saga-types.png
 [domain-model]:img/books/chris-richardson/domain-model.png
 [transaction-scenario]:img/books/chris-richardson/transaction-scenario.png
+[non-ddd-web]:img/books/chris-richardson/non-ddd-web.png
 
 [к оглавлению](#Chris-Richardson-Microservices)
 
@@ -271,6 +272,18 @@ Consumer, может оказаться непрактично. Еще один 
 нескольких мелких классов, у каждого из которых есть свой небольшой набор обязанностей`. 
 Кроме того, такие классы, как `Account`, `BankingTransaction` и `Overdraftpolicy`, довольно 
 точно отражают реальный мир, благодаря чему их роль в архитектуре проще понять.
+
+В традиционной доменной модели не хватает четких границ между разными бизнес-объектами.
+
+![icon][non-ddd-web]
+
+`Агрегаты` - граф объектов, с которыми можно работать как с единым целым. Н-р Заказ
+Правила работы с агрегатами:
+1) **Ссылайтесь только на корень агрегата**
+2) **Межагрегатные ссылки должны применять первичные ключи** 
+Агрегаты ссылаются друг на друга с помощью первичных ключей, а не объектных ссылок. 
+У агрегата Order есть идентификаторы агрегатов Consumer и Restaurant. 
+Внутри одного агрегата объекты могут ссылаться друг на друга
 
 [к оглавлению](#Chris-Richardson-Microservices)
 
