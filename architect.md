@@ -94,6 +94,7 @@
 [other-external-conf]:img/architect/microservice-pattern/other-external-conf.png
 
 [Continuous-integration-vs-delivery-vs-deployment.png]:img/ops/Continuous-integration-vs-delivery-vs-deployment.png
+[arch-patterns]:img/architect/arch_patterns.jpg
 
 [к оглавлению](architect.md#Architect)
 
@@ -814,6 +815,8 @@ The basic idea is to have a class for each symbol of the language.
 [к оглавлению](architect.md#Architect)
 
 ## Microservice Patterns
+
+![icon][arch-patterns]
 
 26 паттернов по группам:
 

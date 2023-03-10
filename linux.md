@@ -64,6 +64,11 @@ ps -ax
 ```linux
 while true; do echo "Hello"; sleep 2; done;
 ```
+Завершить процесс
+```linux
+kill -9 2811
+```
+
 
 [к оглавлению](#Linux)
 
