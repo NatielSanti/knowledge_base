@@ -240,6 +240,8 @@ PATCH -- partial update/modify
 
 ![icon][request-flow]
 
+[rest api sheet](documents/rest_api.pdf)
+
 [к оглавлению](#Theory)
 
 ## Richardson Maturity Model
