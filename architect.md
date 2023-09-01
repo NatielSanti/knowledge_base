@@ -12,11 +12,14 @@
 + [Spring Cloud](architect.md#Spring-Cloud)
 + [Patterns for distributed transactions](architect.md#Patterns-for-distributed-transactions)
 + [Kafka](architect.md#Kafka)
++ [RabbitMQ vs Kafka vs ActiveMQ](architect.md#RabbitMQ-vs-Kafka-vs-ActiveMQ)
 + [UML](architect.md#UML)
 + [Software Architectural Patterns](architect.md#Software-Architectural-Patterns)
 + [Microservice Patterns](architect.md#Microservice-Patterns)
 + [Задержки](architect.md#Задержки)
 + [System Design Template](architect.md#System-Design-Template)
++ [Horizontal vs Vertical Scaling](architect.md#Horizontal-vs-Vertical-Scaling)
++ [Consistent hashing](architect.md#Consistent-hashing)
 
 [example-1]:img/dist_systems/example-1.png
 [2pc-ok]:img/dist_systems/2pc-ok.png
@@ -516,6 +519,34 @@ Timestamp сегмента это максимальный timestamp сообщ�
 - Последовательное чтение и запись (на диск запись происходит последовательно, а знаичт быстро)
 - **Zero-copy** - данные копируются из памяти сразу в сокет клиента
 - Множество настроек
+
+[к оглавлению](architect.md#Architect)
+
+## RabbitMQ vs Kafka vs ActiveMQ
+
+🔹𝗣𝗲𝗿𝗳𝗼𝗿𝗺𝗮𝗻𝗰𝗲 𝗮𝗻𝗱 𝗦𝗰𝗮𝗹𝗮𝗯𝗶𝗹𝗶𝘁𝘆: Kafka is designed for high throughput and horizontal scalability, 
+making it well-suited for handling large volumes of data. RabbitMQ and ActiveMQ both offer high performance, 
+but Kafka generally outperforms them in terms of throughput, particularly in scenarios with high data volume.
+
+🔹𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗣𝗿𝗶𝗼𝗿𝗶𝘁𝘆: RabbitMQ and ActiveMQ support message prioritization, allowing messages with higher priority to be 
+processed before those with lower priority. Kafka does not have built-in message priority support.
+
+🔹𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗢𝗿𝗱𝗲𝗿𝗶𝗻𝗴: RabbitMQ and ActiveMQ guarantee message ordering within a single queue or topic, respectively. 
+Kafka ensures message ordering within a partition but not across partitions within a topic.
+
+🔹𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗠𝗼𝗱𝗲𝗹: RabbitMQ uses a queue-based message model following the Advanced Message Queuing Protocol (AMQP), 
+while Kafka utilizes a distributed log-based model. ActiveMQ is built on the Java Message Service (JMS) standard 
+and also uses a queue-based message model.
+
+🔹𝗗𝘂𝗿𝗮𝗯𝗶𝗹𝗶𝘁𝘆: All three message brokers support durable messaging, ensuring that messages are not lost in case 
+of failures. However, the mechanisms for achieving durability differ among the three, with RabbitMQ and 
+ActiveMQ offering configurable durability options and Kafka providing built-in durability through log replication.
+
+🔹𝗥𝗲𝗽𝗹𝗶𝗰𝗮𝘁𝗶𝗼𝗻: RabbitMQ supports replication through Mirrored Queues, while Kafka features built-in partition 
+replication. ActiveMQ uses a Primary-Replica replication mechanism.
+
+🔹𝗦𝘁𝗿𝗲𝗮𝗺 𝗣𝗿𝗼𝗰𝗲𝘀𝘀𝗶𝗻𝗴: Kafka provides native stream processing capabilities through Kafka Streams, similarly 
+RabbitMQ offers stream processing too, while ActiveMQ relies on third-party libraries for stream processing.
 
 [к оглавлению](architect.md#Architect)
 
@@ -1701,6 +1732,36 @@ http://highscalability.com/blog/2011/1/26/google-pro-tip-use-back-of-the-envelop
 ```
 
 [Примеры](https://github.com/donnemartin/system-design-primer#system-design-interview-questions-with-solutions)
+
+[к оглавлению](architect.md#Architect)
+
+## Horizontal vs Vertical Scaling
+
+| Horizontal Scaling      | Vertical Scaling               |
+|-------------------------|--------------------------------|
+| Requires Load Balancing | n/a                            |
+| ++ Resilient            | Single point of failure        |
+| Network call            | ++ Inter process communication |
+| Data inconsistency      | ++ Consistent                  |
+| ++ Scales well          | Hardware limit                 |
+
+[к оглавлению](architect.md#Architect)
+
+## Consistent hashing
+
+Механизм помогающий реализовать load balancing. RequestId - случайно генерированное число от клиента от 1 до М-1.
+
+1) Деление на сектора. Через хеш функцию RequestId -> m1, например **RequestId % n** - где n количество серверов
+- если мы добавим новый сервер - может начаться проблема из-за привязки к n. 
+- Старые операции, обрабатываемые на старом сервисе выполняются на новом, а база может быть неконсистентной. 
+- Бьёт старые кеши. Например, хеши с 0 по 25 на 1 сервер, хеши с 26 по 50 на 2 сервер, с 51-75 на 3, с 76 по 100 на 4. 
+Добавляем пятый сервер и тогда хеши сдвинутся - 0-20 на 1, 21-40 на 2, 41-60 на 3, 61-80 на 4, 81-100 на 5. 
+И того хеши с 20-25, 41-50, 60-100. То есть мы теряем в итоге 55 процентов кешей.
+
+2) Деление по кольцу. Запросы сыпятся на следующий по хешу сервер. 
+- При добавлении нового сервера или убавлении только 1 сервер будет затронут
+- Множество хеш-функций позволяют разделить это кольцо на много участков, 
+так что при отключении одного сервера его нагрузка не ляжет на другой один, а разпределится.
 
 [к оглавлению](architect.md#Architect)
 
