@@ -19,6 +19,9 @@
 
 ![icon][sql-cheatsheet]
 
+[sql basics](documents/sql_basic.pdf)
+[sql sheet](documents/sql_sheet.pdf)
+
 [к оглавлению](#DB)
 
 ## Типы БД

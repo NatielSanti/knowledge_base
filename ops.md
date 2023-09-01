@@ -2,6 +2,7 @@
 
 # DEVOPS
 
++ [CI/CD Jenkins](#CI/CD-Jenkins)
 + [Continuous integration vs delivery vs deployment](#Continuous-integration-vs-delivery-vs-deployment)
 + [Kubernetes](#Kubernetes)
 
@@ -26,9 +27,17 @@
 [eventsourcing_cqrs]:img/ops/eventsourcing_cqrs.png
 [domain]:img/ops/domain.png
 
+[cicd]:img/ops/CICD.jpg
+
 [//]: # ([docker_1]:img/microservices/docker_1.JPG)
 [//]: # (![icon][docker_1])
 [Continuous-integration-vs-delivery-vs-deployment.png]:img/ops/Continuous-integration-vs-delivery-vs-deployment.png
+
+[к оглавлению](#DEVOPS)
+
+## CI/CD Jenkins
+
+![icon][cicd]
 
 [к оглавлению](#DEVOPS)
 
