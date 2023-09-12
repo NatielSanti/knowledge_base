@@ -35,6 +35,7 @@
 + [Managing](managing.md)
 + [DEVOPS](ops.md)
 + [Architect](architect.md)
++ [System example](system-example.md)
 
 ## Android
 + [Android](android.md)

@@ -27,6 +27,8 @@
 + [Лямбды](abstract.md#Лямбды)
 ---
 + [Дополнение](abstract.md#Дополнение)
+---
+
 
 [hateoas]:img/hateoas.png
 [volatile]:img/concurrent/volatile.png
@@ -692,6 +694,12 @@ do {
 из-за переиспользования потоков.
 - `ThreadLocalRandom` объект `Random` на основе `ThreadLocal`
 - `Exchanger<T>` двусторонний обменник, а `SyncronousQueue` - односторонний
+
+[к оглавлению](#Abstract)
+
+## Дополнение
+
+
 
 [к оглавлению](#Abstract)
 
