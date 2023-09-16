@@ -22,6 +22,8 @@
 + [Consistent hashing](architect.md#Consistent-hashing)
 + [Distributed cache](architect.md#Distributed-cache)
 + [Design API](architect.md#Design-API)
++ [Оценка ёмкости хранилищ](architect.md#Оценка-ёмкости-хранилищ)
++ [Publisher Subscriber Model](architect.md#Publisher-Subscriber-Model)
 
 [example-1]:img/dist_systems/example-1.png
 [2pc-ok]:img/dist_systems/2pc-ok.png
@@ -101,6 +103,9 @@
 [Continuous-integration-vs-delivery-vs-deployment.png]:img/ops/Continuous-integration-vs-delivery-vs-deployment.png
 [arch-patterns]:img/architect/arch_patterns.jpg
 [micro-patterns]:img/architect/10-arch-patterns.png
+
+[youtube-capacity]:img/architect/youtube-capacity.png
+[processor-time]:img/architect/processor-time.png
 
 [к оглавлению](architect.md#Architect)
 
@@ -1844,6 +1849,59 @@ http://highscalability.com/blog/2011/1/26/google-pro-tip-use-back-of-the-envelop
 - пагинацию или фрагментацию
 - Уменьшение размера ответов
 - Использовать кеш
+
+[к оглавлению](architect.md#Architect)
+
+## Оценка ёмкости хранилищ
+
+### Само видео
+- Час видео в среднем на ютубе весит 200 мегабайт. 200/60 = 3.3 мегабайт/ минута
+- (**1 миллиард пользователей** * **1/1000** (те кто загружает видео)) * 10 (средняя длина видео).
+(1000000000*1/1000)*10 = 10 000 000 минут в день
+
+- 10 000 000 * 3,3 = 33 000 000 мегабайт = 33 терабайта в день.
+- Желательно хранить копии видео. Умножаем на 3 и того 100 терабайт в день.
+- Видео должны быть в разных разрешениях. 720 + 480+320+240+144 в среднем займёт как 2 видео 720. 
+И того 200 терабайт в день.
+
+![icon][youtube-capacity]
+
+Тут много допущений. Например, размер видео и количество пользователей каждый день, прцоент загрузок.
+На самом деле ютуб сообщал о 600 терабайт в день.
+
+
+### Кеш
+Это картинка превью видео, плюс текстовые данные описания, информация об авторе и прочее.
+10кб(превью) * 90 (просматриваемых превью в день) * 1000000 видео = 1Тб памяти для кеша.
+
+Выгоднее брать компьютеры по 16гигов оперативки. И того 64 компьютеров для кеша. 
+Умножаем на 3 для реплик и еще на 2 про запас. И того оно 500 машин.
+
+### Процессоры
+1 000 000 видео в день. Каждое по 10 минут и того 1 * 10^7минут видео в день надо обработать.
+Это 10^4/3 часов видео в день. Это 40 мегабайт в секунду. Умножаем на 10, 
+чтобы обработать видео в разные форматы и разрешения. И того 400мб/сек
+Процессор должен - считать видео с диска + обработать видео + записать назад.
+10 мс(считать данные) + 20мс(обработать видео) + 20 мс(записать данные). И того 50мс на обработка 1мб данных.
+Это 1с на 20мб данных. Это значит нужно 20 процессоров. Умножаем на 2 про запас. И того 40.
+
+![icon][processor-time]
+
+[к оглавлению](architect.md#Architect)
+
+## Publisher Subscriber Model
+
+Использования очередей
+
+1) Decouples a system's services.
+2) Easily add subscribers and publishers without informing the other.
+3) Converts multiple points of failure to single point of failure.
+4) Interaction logic can be moved to services/ message broker.
+
+Disadvantages:
+1) An extra layer of interaction slows services
+2) Cannot be used in systems requiring strong consistency of data
+3) Additional cost to team for redesigning, learning and maintaining the message queues.
 
 [к оглавлению](architect.md#Architect)
 
