@@ -2,6 +2,7 @@
 
 # Architect
 
++ [5 tips for system design interview](architect.md#5-tips-for-system-design-interview)
 + [IaaS, SaaS, PaaS](architect.md#IaaS,-SaaS,-PaaS)
 + [Fault tolerant microservice](architect.md#Fault-tolerant-microservice)
 + [Event Sourcing](architect.md#Event-Sourcing)
@@ -24,6 +25,12 @@
 + [Design API](architect.md#Design-API)
 + [Оценка ёмкости хранилищ](architect.md#Оценка-ёмкости-хранилищ)
 + [Publisher Subscriber Model](architect.md#Publisher-Subscriber-Model)
++ [Как избежать единой точки падения](architect.md#Как-избежать-единой-точки-падения)
++ [Event Driven System](architect.md#Event-Driven-System)
++ [Service discovery and heartbeats](architect.md#Service-discovery-and-heartbeats)
++ [Distributed Consensus and Data Replication strategies on the server](architect.md#Distributed-Consensus-and-Data-Replication-strategies-on-the-server)
++ [Designing Instagram User Feed](architect.md#Designing-Instagram-User-Feed)
++ [Avoid cascading failures in a distributed system](architect.md#Avoid-cascading-failures-in-a-distributed-system)
 
 [example-1]:img/dist_systems/example-1.png
 [2pc-ok]:img/dist_systems/2pc-ok.png
@@ -106,6 +113,51 @@
 
 [youtube-capacity]:img/architect/youtube-capacity.png
 [processor-time]:img/architect/processor-time.png
+[avoid-cascade-failure]:img/architect/avoid-cascade-failure.png
+
+[к оглавлению](architect.md#Architect)
+
+## 5 tips for system design interview
+
+1. Don't get into details prematurely. Подожди реакции, если попросят уточнить то продолжый
+2. Avoid fitting requirements to a set architecture in mind. Не нужно использовать готовые шаблоны архитектур.
+3. KISS. Keep it simple, stupid! Remember to look at the big picture and avoid too many hacks when solving.
+4. Have justifications for the points you make. Don't use buzzwords or half-hearted thoughts in your design.
+Не забывай спрашивать уточнения. Не говори необдуманные слова.
+5. Be aware of the current solutions and tech practices. A lot of solutions can be purchased off the shelf
+   which simplifies implementation. 
+You should be able to argue for a custom implementation with its pros and cons.
+Не изобретай велосипед. Если есть готовое решение используй его, не придумывай своё.
+
+### Советы
+
+1. Clarity of Thought
+   - a. Express your thoughts in a clear manner.
+   - b. Justify your decisions. Critical reasoning and argument are key to a successful software design.
+   - c. When faced with a problem, use standard approaches to mitigate it. 
+   For example, say you are faced with an availability problem. 
+   State that replication and partitioning help increase availability in general, 
+   and move on to offer a solution. 
+   - d. Don’t make points without thinking them through. Half-hearted attempts at solving problems are frowned upon heavily.
+
+2. Know about existing solutions 
+   - a. Stay up to date with the current solutions in the market. 
+   This includes products and design practices. If NoSQL is being adopted left right and center, 
+   you need to be aware of it. 
+   - b. Know when to pick a solution vs. building something custom. If you name a product, 
+   you should be (generally) aware of the features it provides. 
+   - c. Design practices enable you to meet custom requirements. 
+   Examples are decoupling systems, load balancing, sticky sessions, etc…
+
+3. Flexibility 
+   - a. Switch your targets as the requirements shift. If the interviewer wants to know about 
+   one particular part of the system, do it first. 
+   - b. Never have a set architecture in mind. We all try to fit requirements to a system, 
+   but only after it has been shaped by the initial ones. A rigid attitude creates a brittle architecture. 
+   It will break before you do. 
+   - c. Take a step back at times to make adjustments to the general architecture. 
+   Being focused on one part can narrow our vision and bloat those areas. 
+   There will be components which can be extracted out and extended to the rest of the system.
 
 [к оглавлению](architect.md#Architect)
 
@@ -1904,5 +1956,148 @@ Disadvantages:
 3) Additional cost to team for redesigning, learning and maintaining the message queues.
 
 [к оглавлению](architect.md#Architect)
+
+## Как избежать единой точки падения
+
+1) БОльше нод этого сервиса
+2) Мастер-слейв база данных
+3) Load-balancer. Несколько реплик
+4) Определить на уровне ДНС серверов, что каждый IP отсылает к отдельному load-balancer
+5) Сервера в разных локациях
+
+[к оглавлению](architect.md#Architect)
+
+## Event Driven System
+
+### Кто использует
+- GIT
+- ReactJS
+- NodeJS
+- GamingSystems
+
+### Плюсы
+- Доступность. Сервисы хранят получаемые эвенты в своей базе и при падении сервисе поставщика, 
+текущий сервис всё равно может продолжать работать и обрабатывать эвенты
+- Возможность отката, из-за имеющийся историчности
+- Простота заменяемости сервисов. Скачать дамп информации со старого сервиса, 
+начать считывать эвенты с очереди и можно отключать старый сервис
+
+### Минусы
+- Сервисы источники для третьих систем (например рассылка почты), 
+не так просто заменить, потому что они могут ожидать ответа от третьих систем. Необходимо 
+приостановить отсылку сообщений от очереди. Это возможно, но усложняет систему, а значит замедляет её.
+- Если нам необходимо сделать роллбэк то есть несколько способов
+    - Отыграть все эвенты с начала
+    - Хранить начальное состояние и хранить историю изменений
+    - Операция отмены UNDO
+- Сложно отследить процесс от начала до конца, из-за большого количества промежуточных очередей. 
+Как понять, где отвалился какой-то эвент? Пройти ВЕСЬ путь от начала до конца
+- Сложность миграции системы
+
+### Зачем его использовать?
+
+- Если мы хотим видеть всю историчность всех событий
+- Если нам важна архитектура подписчик-читатель
+- В системе Запрос-Ответ сервис ожидает ответа от другого сервиса, а в системе Подписчик-Читатель, 
+первый просто сообщает остальным о каких-то изменениях
+
+[к оглавлению](architect.md#Architect)
+
+## Service discovery and heartbeats
+
+reliable>efficient  (надежный сервис лучше эффективного)
+
+### heartbeats
+
+- Каждые 5 секунд сервис heartbeats опрашивает сервисы, если сервис не ответил первый раз, 
+то он помечается как критичный, если не ответил второй раз, то посылается сигнал на перезапуск, 
+либо поднятие нового контейнера
+- Иногда может случиться так, что сервис отвечает да, на запрос heartbeats, 
+но при этом приложение не может работать. Для этого само приложение тоже должно оповещать heartbeats о том, что оно живо.
+
+### load balancer
+
+- Получает информацию о запущенных сервисах (их IP и порты апи)
+- LB хранит эту информацию в памяти и постоянно обновляет
+
+[к оглавлению](architect.md#Architect)
+
+## Distributed Consensus and Data Replication strategies on the server
+
+1) Самый простой способ реплицировать данные - реплицировать данные из бд и хранить их отдельно. Мастер-Слейв
+- Хранить все данные на одном дсике опасно, поэтому Мы используем RAID card (распределенный на нескольких дисках хранилище
+    - синхронное копирование
+    - асинхронное копирование. Меньше нагрузка на бд, но есть риск потери нескопированных еще данных
+- Как сохранить консистентность между двумя репликами?
+    - Запись всегда идёт только в мастера
+    - Использовать не мастер-слейв, а P2P. Есть риск разрыва соединения между репликами бд. `Split brain problem`  ТОгда каждый из них думает, 
+   что он единственный оставшийся мастер и даёт команду на перезапуск других реплик. 
+  Как решить проблему? Создать три реплики =) И чтобы их координировать нужно использовать Distributed Consensus
+2) Distributed Consensus
+- 2PC (2 Phase commit)
+- 3PC (3 Phase commit)
+- MVCC (Multi-version Concurrency Control) PostreSQL. Подвержен Грязному чтению, но позволяет изменять уровень на более высокий
+- SAGA (long transaction)
+
+[к оглавлению](architect.md#Architect)
+
+## Designing Instagram User Feed
+
+### Фичи
+
+- Загрузка и хранение картинок
+- Лайки и комменты
+- Follow
+- Публикация постов
+
+1) Загрузка и хранение картинок
+См. Тиндер. Храним в файлах CDN для хранения их
+2) Предположим, что нельзя комментировать комментарии, для простоты
+Таблица Likes - id, parent_id (ид лайкнутого), user_id, timestamp, active, type_id (коммент или пост)
+Таблица Posts - id, user_id, text, image_id, TS
+Таблица Activity - activity_id, like
+Таблица Comment - id, text, TS
+3) Table - follower_id, followee_id, TS
+
+### Прочие фичи
+
+- Гейтвей хранит снапшоты всех нод серверов от Load balancer (обновляет снапшоты каждые ~10 секунд)
+- Сервис user feed, сервис постом, сервис подписок, сервис профиля, лайков и тд
+- Список постов калькулируется заранее. Когда кто-то постит новый пост, 
+сервис постов оповещает сервис user feed и тот получив информацию от сервиса подписок 
+обновляет ленты всех подписчиков автора поста. Хранение информации в кеше, 
+только те кто постоянно пользуются хранятся в кеше LRU
+- Подписчики получают обновления только когда их запрашивают (есть активность), до этого момента все 
+нотификации собираются в батчи и посылаются при активности, либо каждую минуту
+
+[к оглавлению](architect.md#Architect)
+
+## Avoid cascading failures in a distributed system
+
+Допустим у нас есть 4 сервера. И хеш функция рапсределила всё так, что запросы 1-100 отправляются на 1 сервер, 
+101-200 на второй, 201-300 на третий и 301-400 на четвертый. 
+
+### Проблемы
+1) Каскадное падение
+   - Отбрасывать юзеров, которые  хотели попасть в сервер 1 (ид запросов 1-100)
+   - Перераспределить между дрругими сервисами, но есть риск каскадного падения
+   - Поднять больше нод, до того как следующий сервис упадёт
+2) Аномальная активность (Черная пятница)
+   - Автоматическое поднятие новых нод (может стоить денег)
+3) Очередь задач
+4) Большая рассылка (кто-то популярный делает пост в соцсетях и всем надо его разослать)
+   - Jetter - метаданные, доп информация (количество просмотров) обновляется не так часто. 
+   Вместо отображения фактической информация в самый пик запросов отображать 
+   примерную информацию о количестве просмотров.
+   - кеширование популярных постов
+   - Gradual deployment - деплой сервисов не все разом, а пачками
+   - Coupling - связанные сервисы (например через кеш) должны деплоиться вместе, они работают быстрее из-за кешей, 
+   но в остальном связывание сервисов плохая идея
+
+![icon][avoid-cascade-failure]
+
+[к оглавлению](architect.md#Architect)
+
+
 
 [Заглавная](README.md)
