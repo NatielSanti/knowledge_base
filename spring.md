@@ -254,7 +254,7 @@ unchecked exceptions.
 09.	It is typically got a graphical user interface created from the abstract window toolkit.	This makes the same syntax independent of an IDE.
 10.	JavaEE uses JTA API with the execution.	Spring gives a certain layer to help different JTA execution merchants.
 
-##Spring Sub-Projects
+### Spring Sub-Projects
 - **Core** – a key module that provides fundamental parts of the framework, such as IoC or DI
 - **JDBC** – enables a JDBC-abstraction layer that removes the need to do JDBC coding for specific vendor databases
 - **ORM integration** – provides integration layers for popular object-relational mapping APIs, such as JPA, 
