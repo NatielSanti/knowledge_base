@@ -9,6 +9,7 @@
 + [New technology implementation](code-style.md#New-technology-implementation)
 + [Code Coverage](code-style.md#Code-Coverage)
 + [Code Review](code-style.md#Code-Review)
++ [Из MLM alfa](code-style.md#Из-MLM-alfa)
 
 [к оглавлению](#Code-Style)
 
@@ -400,5 +401,54 @@ to prevent situations where some parts of the system are known by only one perso
 covers the project system, teams, and development setup.
   - Update the handbook so that it properly reflects the current project details.
   - Coach or mentor newcomers throughout the onboarding period.
+
+### Из MLM alfa
+
+#### DB
+
+При создание сервиса с db необходимо создать scheme db и пользователей для подключений сервиса, заводится заявкой при поставке
+Требования к сервису со взаимодействию с DB
+
+    модуль db в проекте для хранения скриптов миграции db
+    скрипты миграции liquibase в формате xml
+    sql скрипт для создания схемы и пользователь сервиса и выдача нужных прав, в корне папка sql
+    Использовать Hibernate SEQUENCE-генератор id, использование иного не поддерживает многие полезные функции(пример, hibernate batch)
+
+Требования в скриптам миграции liquibase
+
+    Структура пакетов
+    Нумерация версий в зависимости от релизной политике сервиса
+    пакеты - v<major>.<minor>
+    changelog - v<major>.<minor>_<порядковый номер>_<наименование>, <наименование> - логическая группировка по сущности
+    Наименование changeSet в формате id=v<major>.<minor>_<порядковый номер changelog>_<наименование changeSet>
+    Обязательно указывать changeSet.author в формате Ivan_Ivanov
+    Обязательно начинать changeSet с проверок preCondition
+    Параметры выносить в корневой changelog
+    <property name="schema" value="cms"/>
+    <property name="prefix" value="cms_"/>
+
+Правила preCondition onFail
+
+https://docs.liquibase.com/concepts/changelogs/preconditions.html#onFail/onError
+
+Основные варианты, которые используются в большинстве проверок
+MARK_RAN	Skips over the changeset but mark it as executed. Continues with the changelog.
+WARN	Sends a warning and continues executing the changeset / changelog as normal
+
+MARK_RAN - использовать в случае когда проверка требует единого выполнения а не скрипт для миграции/исполнения функции с множеством запусков,
+к примеру создание таблиц, обновление таблицы/столбцов требуется выполнить один раз и при дальнейшем запуске миграции не стоит еще раз делать проверку, так как мы подразумеваем что если скрипт уже запускался и выполнился или нет не влияет на текущую миграцию
+
+WARN - использовать в случае когда скрипт миграции может не исполниться в текущий момент, но требует выполнения в следующий раз пока проверка не будет успешна и скрипт не завершится с успехом(пометит в логе как пройденный)
+
+Остальные варианты рассматривать как уникальные кейс и проводить технический анализ
+Pool connections
+
+hikari:
+connection-timeout: 20000 #maximum number of milliseconds that a client will wait for a connection
+minimum-idle: 10 #minimum number of idle connections maintained by HikariCP in a connection pool
+maximum-pool-size: 10 #maximum pool size
+idle-timeout: 10000 #maximum idle time for connection
+max-lifetime: 30000 # maximum lifetime in milliseconds of a connection in the pool after it is closed.
+auto-commit: false #default auto-commit behavior.
 
 [Заглавная](README.md)
