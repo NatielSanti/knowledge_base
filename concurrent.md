@@ -1378,4 +1378,13 @@ public static void main(String[] args) throws InterruptedException {
 
 [к оглавлению](concurrent.md#Java-Concurrent)
 
++ [Примечания](concurrent.md#Locks)
+
+## Примечания
+
+- synchronized метод = синхронизация всего метода на объект/класс, блок = синхронизация конкретного объекта/участка кода. В старших позициях стоит упомянуть производительность, наследование и granular locking как аргументы, почему выбираешь блок вместо метода.
+- для обычного многопоточного доступа обычно достаточно ConcurrentHashMap, но если нужны сложные атомарные комбинации, тогда уже synchronized блоки или lock-free структуры.
+
+[к оглавлению](concurrent.md#Java-Concurrent)
+
 [Заглавная](README.md)
