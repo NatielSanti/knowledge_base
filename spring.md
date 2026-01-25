@@ -736,6 +736,11 @@ class TestEnvConfig{}
 - Возможно подставлять скомпилированные файлы налету в запущенное приложение.
 - Возвращаемое значение контроллера при помощи аннотациb `@ControllerAdvice`  
 и наследования от `ResponseBodyAdvice`
+- Spring bean lifecycle consists of instantiation, dependency injection, aware callbacks, initialization, post-processing, and destruction. BeanPostProcessors play a critical role, especially for AOP and annotations like @Transactional.
+- @PostConstruct → предпочтительнее, не Spring-специфичен
+- Proxy создаётся после инициализации бина
+- @Transactional не работает в конструкторе, потому что нет proxy
+- Prototype-bean не уничтожается контейнером
 
 [ссылка на видео](https://www.youtube.com/watch?v=GL1txFxswHA)
 
