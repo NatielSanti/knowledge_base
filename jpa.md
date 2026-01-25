@@ -14,6 +14,7 @@ jpa.md##Difference-between-save()-and-persist()-in-Hibernate)
 jpa.md#Advantages-and-disadvantages-of-hibernate-compared-to-jdbc)
 + [Database Transactions](jpa.md#Database-Transactions)
 + [Spring Transactions](jpa.md#Spring-Transactions)
++ [Примечания](jpa.md#Примечания)
 
 [entity-state]:img/db/entity-state.png
 [state-entity]:img/db/state_entity.PNG
@@ -605,6 +606,12 @@ Spring создает для вас транзакционный прокси Us
 для вас - с помощью автоконфигураций `JDBC`.
 
 [ссылка](https://habr.com/ru/post/682362/)
+
+[к оглавлению](#ORM-and-JPA)
+
+## Примечания
+
+- Hibernate has two cache levels: L1 (Session) is mandatory, isolated per session; L2 (SessionFactory) is optional, shared between sessions and configurable via CacheConcurrencyStrategy. Query Cache caches query results but only IDs; actual entities are fetched from L1/L2. Proper cache strategy is essential to avoid stale data and memory issues.
 
 [к оглавлению](#ORM-and-JPA)
 
