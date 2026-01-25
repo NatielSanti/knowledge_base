@@ -612,6 +612,17 @@ Spring создает для вас транзакционный прокси Us
 ## Примечания
 
 - Hibernate has two cache levels: L1 (Session) is mandatory, isolated per session; L2 (SessionFactory) is optional, shared between sessions and configurable via CacheConcurrencyStrategy. Query Cache caches query results but only IDs; actual entities are fetched from L1/L2. Proper cache strategy is essential to avoid stale data and memory issues.
+- Hibernate entities have four lifecycle states: transient, persistent, detached, and removed. Persistent entities are managed by the session, participate in dirty checking, and are synchronized with the database during flush. Detached entities are no longer tracked and require merge to become managed again.
+- merge copies state, update reattaches instance
+- persist and save are for transient entities; update reattaches a detached instance and may cause conflicts; merge copies state into a managed instance and is safer. Cascades define propagation of operations but must reflect ownership. Detached entities combined with L2 cache can cause stale data and overwrite issues if merge is misused.
+- Optimistic locking detects conflicts at commit time using versioning.
+- Hibernate supports optimistic locking via @Version to prevent lost updates without database locks, and pessimistic locking via SELECT FOR UPDATE for high-contention scenarios. L2 cache must be configured with proper concurrency strategies and combined with versioning to avoid stale data and overwrite issues.
+- ✅ Всегда @Version для mutable entity
+- ✅ DTO → managed entity (не merge напрямую)
+- ✅ L2 cache только для: - справочников - редко меняющихся данных
+- ✅ Optimistic locking по умолчанию
+- ✅ Pessimistic — только осознанно
+- FOR UPDATE SKIP LOCKED allows concurrent consumers to safely select and lock rows without waiting for each other. It’s commonly used for database-backed work queues, providing high throughput and avoiding deadlocks, but requires careful transaction boundaries to prevent starvation and long-held locks.
 
 [к оглавлению](#ORM-and-JPA)
 
