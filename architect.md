@@ -582,6 +582,10 @@ Timestamp сегмента это максимальный timestamp сообщ�
 - **Zero-copy** - данные копируются из памяти сразу в сокет клиента
 - Множество настроек
 
+- Kafka transactions provide exactly-once semantics by allowing atomic writes across multiple partitions and committing consumer offsets as part of the same transaction. They rely on idempotent producers, transactional coordinators, ISR acknowledgements, and read_committed consumers. This ensures no message loss, no duplicates, and consistent visibility even in case of failures.
+- Kafka transactions provide exactly-once semantics only within Kafka by atomically committing produced records and consumer offsets. For real-world systems involving databases, the Outbox pattern is the preferred solution to achieve consistency. Kafka Streams builds on top of Kafka transactions to offer exactly-once stream processing with state management. Understanding failure scenarios is critical to choosing the correct approach.
+- Kafka Streams is a Java library for building stream-processing applications on top of Kafka. It abstracts away consumer and producer management, provides stateful processing, and offers exactly-once semantics out of the box.
+
 [к оглавлению](architect.md#Architect)
 
 ## RabbitMQ vs Kafka vs ActiveMQ
