@@ -14,6 +14,7 @@
 + [NoSQL databases](db.md#NoSQL-databases)
 + [Databases scaling](db.md#Databases-scaling)
 + [Location based DB](db.md#Location-based-DB)
++ [Примечания](db.md#Примечания)
 
 [sql-cheatsheet]:img/db/sql-cheatsheet.jpg
 [sql-type]:img/db/sql_type.PNG
@@ -511,6 +512,19 @@ Cassandra - может масштабировать горизонтально �
 ![icon][location-db-2]
 
 - - сложно выбрать `trashhold` отступ, для определения ближайшей точки, но вероятность такого относительно мала
+
+[к оглавлению](#DB)
+
+## Примечания
+
+- DELETE is MVCC-based and row-level, TRUNCATE is metadata-level and blocks the table, DROP removes the object entirely and requires exclusive access.
+- In PostgreSQL UPDATE creates a new row version and leaves the old one dead, so it’s more expensive than INSERT and heavily depends on VACUUM efficiency.
+- Autovacuum often fails not because it’s slow, but because long-running transactions prevent it from reclaiming dead tuples.
+- Bloat is wasted space caused by dead tuples that VACUUM cannot reclaim in time.
+- WAL guarantees durability and enables replication and crash recovery.
+- <img width="719" height="393" alt="изображение" src="https://github.com/user-attachments/assets/b5c8a5a9-7c8f-4651-8614-046ad93076c8" />
+
+
 
 [к оглавлению](#DB)
 
