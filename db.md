@@ -523,6 +523,21 @@ Cassandra - может масштабировать горизонтально �
 - Bloat is wasted space caused by dead tuples that VACUUM cannot reclaim in time.
 - WAL guarantees durability and enables replication and crash recovery.
 - <img width="719" height="393" alt="изображение" src="https://github.com/user-attachments/assets/b5c8a5a9-7c8f-4651-8614-046ad93076c8" />
+- EXPLAIN shows the estimated plan, while EXPLAIN ANALYZE executes the query and reveals real execution time and row counts.
+- PostgreSQL may choose a sequential scan if it estimates that index access would be more expensive due to low selectivity, small table size, or outdated statistics.
+- Visibility Map tracks which heap pages contain only tuples visible to all transactions, enabling Index Only Scans.
+- <img width="588" height="466" alt="изображение" src="https://github.com/user-attachments/assets/18e50b15-9413-42f8-b4d8-2cd5cef04729" />
+- FOR UPDATE SKIP LOCKED is the canonical way to implement a concurrent work queue in PostgreSQL.
+- SELECT FOR UPDATE prevents concurrent updates but still allows non-locking reads.
+- PostgreSQL enforces SERIALIZABLE isolation via SSI and resolves conflicts by aborting transactions with serialization failures.
+- Both REPEATABLE READ and SERIALIZABLE use snapshots, but SERIALIZABLE additionally tracks read-write dependencies and aborts transactions to guarantee serial execution semantics.
+<img width="702" height="172" alt="изображение" src="https://github.com/user-attachments/assets/fa11acac-a35a-42d6-9075-a09344391626" />
+- PostgreSQL heavily relies on MVCC with minimal locking, while other databases tend to compensate with stronger lock-based concurrency control.
+- NOWAIT allows failing fast instead of blocking, which is useful for low-latency systems.
+- PostgreSQL struggles with high update rates due to MVCC bloat, and common mitigations include partitioning, HOT updates, and append-only designs. HOT updates are a conditional optimization in PostgreSQL. They are automatically applied when updating non-indexed columns that fit in the same page, but cannot be forced globally because of index consistency and page size constraints.
+
+
+
 
 
 
