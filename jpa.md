@@ -638,6 +638,11 @@ Phantom ломает логику - ↑ Isolation
 4️⃣ width важнее, чем кажется
 5️⃣ INCLUDE — underrated feature
 6️⃣ Index Only Scan — не гарантирован
+- Lazy associations are fetched only when accessed (via proxy), which can lead to LazyInitializationException outside the session. Eager associations fetch immediately, which can increase SQL load and lead to unnecessary joins.
+- OneToMany typically triggers multiple selects if lazy and iterated, while ManyToOne usually issues a single join or select. Using Set enforces uniqueness but may add extra memory operations and distinct filtering.
+- The N+1 problem occurs when lazy associations are accessed in a loop, causing multiple queries. Solutions include fetch joins, batch fetching (@BatchSize), subselects, or entity graphs.
+- <img width="801" height="530" alt="изображение" src="https://github.com/user-attachments/assets/f761e580-b242-49cf-91af-a49dd9bea21c" />
+
 
 [к оглавлению](#ORM-and-JPA)
 
