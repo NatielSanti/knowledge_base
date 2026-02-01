@@ -535,6 +535,37 @@ Cassandra - может масштабировать горизонтально �
 - PostgreSQL heavily relies on MVCC with minimal locking, while other databases tend to compensate with stronger lock-based concurrency control.
 - NOWAIT allows failing fast instead of blocking, which is useful for low-latency systems.
 - PostgreSQL struggles with high update rates due to MVCC bloat, and common mitigations include partitioning, HOT updates, and append-only designs. HOT updates are a conditional optimization in PostgreSQL. They are automatically applied when updating non-indexed columns that fit in the same page, but cannot be forced globally because of index consistency and page size constraints.
+- Проверить активные и блокирующие транзакции
+```
+SELECT pid, state, wait_event_type, wait_event, query
+FROM pg_stat_activity
+WHERE state <> 'idle';
+```
+- Найти кто кого блокирует
+```
+SELECT
+  blocked.pid     AS blocked_pid,
+  blocking.pid    AS blocking_pid,
+  blocked.query   AS blocked_query,
+  blocking.query  AS blocking_query
+FROM pg_locks blocked
+JOIN pg_locks blocking
+  ON blocked.locktype = blocking.locktype
+ AND blocked.database IS NOT DISTINCT FROM blocking.database
+ AND blocked.relation IS NOT DISTINCT FROM blocking.relation
+ AND blocked.page IS NOT DISTINCT FROM blocking.page
+ AND blocked.tuple IS NOT DISTINCT FROM blocking.tuple
+ AND blocked.pid <> blocking.pid
+WHERE NOT blocked.granted;
+```
+- Проверить долгие транзакции
+```
+SELECT pid, xact_start, now() - xact_start AS duration, query
+FROM pg_stat_activity
+WHERE xact_start IS NOT NULL
+ORDER BY duration DESC;
+```
+- B-tree is the default index for ordered and equality queries, Hash supports only equality, GiST is used for complex data types like ranges or geometries, and GIN is optimized for composite values such as arrays, JSONB, and full-text search.
 
 
 
