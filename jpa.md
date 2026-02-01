@@ -622,10 +622,6 @@ Spring создает для вас транзакционный прокси Us
 - ✅ L2 cache только для: - справочников - редко меняющихся данных
 - ✅ Optimistic locking по умолчанию
 - ✅ Pessimistic — только осознанно
-- FOR UPDATE SKIP LOCKED allows concurrent consumers to safely select and lock rows without waiting for each other. It’s commonly used for database-backed work queues, providing high throughput and avoiding deadlocks, but requires careful transaction boundaries to prevent starvation and long-held locks.
-- Transaction isolation levels define which read anomalies are allowed. READ COMMITTED prevents dirty reads but allows non-repeatable and phantom reads. REPEATABLE READ guarantees stable reads within a transaction, and SERIALIZABLE provides full isolation at the cost of performance. Hibernate delegates isolation to the database, so behavior depends on the underlying DB implementation.
-- PostgreSQL Serializable provides correctness via aborts, not blocking.
-- READ COMMITTED can break business invariants due to non-repeatable and phantom reads. PostgreSQL implements SERIALIZABLE via SSI, detecting conflicts and aborting transactions instead of blocking. MVCC allows concurrent reads and writes by storing multiple row versions, with visibility determined by transaction snapshots. Explicit locks like FOR UPDATE bypass MVCC and must be used carefully.
 - Сценарий - Решение
 CRUD / UI	- Optimistic
 REST	- Optimistic
@@ -635,7 +631,6 @@ REST	- Optimistic
 Phantom ломает логику - ↑ Isolation
 Аналитика - REPEATABLE READ
 Критичный инвариант - SERIALIZABLE
-- Index Only Scan allows PostgreSQL to serve a query using only the index without accessing heap data, provided all required columns are present and visibility map permits it. When analyzing EXPLAIN ANALYZE output, it's crucial to compare estimated and actual rows, understand cost as a planner estimate, pay attention to width as an indicator of row size impact, and always interpret the plan bottom-up.
 
 1️⃣ Сначала ANALYZE, потом индексы
 2️⃣ Смотри actual, а не cost
