@@ -761,6 +761,8 @@ class TestEnvConfig{}
 
 - Constructor-based и prototype circular dependency не решаются.
 - AOP-прокси могут создаваться на этапе early reference, иначе транзакции и аспекты не сработают.
+- <img width="626" height="404" alt="изображение" src="https://github.com/user-attachments/assets/af1a9d94-7d5c-4cbf-acfd-f635484aa91b" />
+
 
 [к оглавлению](spring.md#Spring-Boot)
 
