@@ -750,6 +750,17 @@ class TestEnvConfig{}
 ## Примечания
 
 - <img width="724" height="483" alt="изображение" src="https://github.com/user-attachments/assets/e084eced-bffd-4ae4-86c4-5108938d8d0f" />
+- Spring решает circular dependency для singleton-бинов через three-level cache:
+    - singletonObjects
+    - earlySingletonObjects
+    - singletonFactories
+
+- ObjectFactory позволяет создать early reference, включая AOP-прокси. Это работает только для:
+    - singleton
+    - setter/field injection
+
+- Constructor-based и prototype circular dependency не решаются.
+- AOP-прокси могут создаваться на этапе early reference, иначе транзакции и аспекты не сработают.
 
 [к оглавлению](spring.md#Spring-Boot)
 
