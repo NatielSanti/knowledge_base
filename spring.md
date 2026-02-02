@@ -27,6 +27,7 @@ spring.md#Design-Patterns-Used-in-the-Spring-Framework)
 + [Применение AOP](spring.md#Применение-AOP)
 + [Различия Spring и Java EE](documents/Сравнение%20использования%20Sping%20и%20Java%20EE.pptx)
 + [Spring концепции](spring.md#Spring-концепции)
++ [Примечания](spring.md#Примечания)
 
 [bean-life-cycle]:img/spring/Spring-Bean-Life-Cycle.jpg
 [spring-bean-creation]:img/spring/spring-bean-creation.jpg
@@ -743,6 +744,12 @@ class TestEnvConfig{}
 - Prototype-bean не уничтожается контейнером
 
 [ссылка на видео](https://www.youtube.com/watch?v=GL1txFxswHA)
+
+[к оглавлению](spring.md#Spring-Boot)
+
+## Примечания
+
+- <img width="724" height="483" alt="изображение" src="https://github.com/user-attachments/assets/e084eced-bffd-4ae4-86c4-5108938d8d0f" />
 
 [к оглавлению](spring.md#Spring-Boot)
 
