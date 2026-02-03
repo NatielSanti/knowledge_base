@@ -762,6 +762,10 @@ class TestEnvConfig{}
 - Constructor-based и prototype circular dependency не решаются.
 - AOP-прокси могут создаваться на этапе early reference, иначе транзакции и аспекты не сработают.
 - <img width="626" height="404" alt="изображение" src="https://github.com/user-attachments/assets/af1a9d94-7d5c-4cbf-acfd-f635484aa91b" />
+- <img width="621" height="312" alt="изображение" src="https://github.com/user-attachments/assets/5eba59bb-0ff8-4555-bcc5-b4902c33f496" />
+- <img width="704" height="306" alt="изображение" src="https://github.com/user-attachments/assets/e50058fb-6b8e-4785-b598-39aad71bcd7d" />
+- Spring Security выполняет авторизацию, сравнивая GrantedAuthority из Authentication с правилами доступа; роли и пермишены обычно извлекаются из JWT claims и мапятся в authorities на этапе аутентификации.
+
 
 
 [к оглавлению](spring.md#Spring-Boot)
