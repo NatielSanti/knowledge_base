@@ -643,6 +643,7 @@ Phantom ломает логику - ↑ Isolation
 - The N+1 problem occurs when lazy associations are accessed in a loop, causing multiple queries. Solutions include fetch joins, batch fetching (@BatchSize), subselects, or entity graphs.
 - <img width="801" height="530" alt="изображение" src="https://github.com/user-attachments/assets/f761e580-b242-49cf-91af-a49dd9bea21c" />
 - CrudRepository предоставляет базовый CRUD API, PagingAndSortingRepository добавляет поддержку pagination и sorting, а JpaRepository расширяет их JPA-специфичными операциями, такими как flush, batch delete и lazy reference. В реальных проектах чаще используют JpaRepository, так как он даёт полный контроль над Persistence Context, но требует аккуратного обращения из-за N+1, lazy loading и транзакционных границ.
+- Persistence Context — это контекст управления сущностями Hibernate, который хранит managed entities и их состояние. Dirty checking сравнивает текущее состояние сущности со snapshot’ом в контексте, flush синхронизирует изменения с БД. Долгоживущие транзакции приводят к росту контекста и утечкам памяти. EntityManager не thread-safe, так как хранит состояние и привязан к транзакции.
 
 
 [к оглавлению](#ORM-and-JPA)
