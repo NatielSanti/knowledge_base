@@ -766,8 +766,9 @@ class TestEnvConfig{}
 - <img width="704" height="306" alt="изображение" src="https://github.com/user-attachments/assets/e50058fb-6b8e-4785-b598-39aad71bcd7d" />
 - Spring Security выполняет авторизацию, сравнивая GrantedAuthority из Authentication с правилами доступа; роли и пермишены обычно извлекаются из JWT claims и мапятся в authorities на этапе аутентификации.
 - Spring Cloud Config — это centralized config server, клиенты получают настройки через REST, могут автоматически обновляться через Spring Cloud Bus.
-
-
+- В Spring Security роли — это частный случай authority с префиксом ROLE_. Метод hasRole автоматически добавляет этот префикс, тогда как hasAuthority проверяет точное значение. Роли и permissions хранятся в Authentication как GrantedAuthority и участвуют в authorization после успешной аутентификации.
+- Spring Boot startup начинается с SpringApplication.run(), затем выполняются ApplicationContextInitializer, загружаются BeanDefinition, работают BeanFactoryPostProcessor, затем создаются бины с участием BeanPostProcessor. После refresh контекста вызываются ApplicationRunner и CommandLineRunner, и только после этого приложение начинает принимать запросы.
+- Authentication выполняется в отдельном Authorization Server, который выдаёт JWT. Gateway и микросервисы валидируют токен, создают SecurityContext и выполняют authorization. Identity передаётся через JWT, роли извлекаются из claims. Защита обеспечивается подписью токена, коротким сроком жизни и refresh token механизмом.
 
 [к оглавлению](spring.md#Spring-Boot)
 
