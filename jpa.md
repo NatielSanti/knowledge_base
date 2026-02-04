@@ -644,6 +644,12 @@ Phantom ломает логику - ↑ Isolation
 - <img width="801" height="530" alt="изображение" src="https://github.com/user-attachments/assets/f761e580-b242-49cf-91af-a49dd9bea21c" />
 - CrudRepository предоставляет базовый CRUD API, PagingAndSortingRepository добавляет поддержку pagination и sorting, а JpaRepository расширяет их JPA-специфичными операциями, такими как flush, batch delete и lazy reference. В реальных проектах чаще используют JpaRepository, так как он даёт полный контроль над Persistence Context, но требует аккуратного обращения из-за N+1, lazy loading и транзакционных границ.
 - Persistence Context — это контекст управления сущностями Hibernate, который хранит managed entities и их состояние. Dirty checking сравнивает текущее состояние сущности со snapshot’ом в контексте, flush синхронизирует изменения с БД. Долгоживущие транзакции приводят к росту контекста и утечкам памяти. EntityManager не thread-safe, так как хранит состояние и привязан к транзакции.
+- LAZY загружает связанные сущности при первом обращении в рамках persistence context.
+EAGER загружает сразу, что может привести к N+1 и избыточной загрузке.
+EntityGraph позволяет декларативно указать, какие связи загрузить, и является предпочтительным решением.
+Join fetch используется в JPQL для сложных запросов, но может ломать paging и приводить к дубликатам.
+- Projections позволяют выбирать подмножество данных. Interface-based projections реализуются через прокси и работают быстрее. Class-based используют конструктор DTO и удобны для сложной логики.
+- @Transactional(readOnly = true) не делает сущности detached, но отключает dirty checking и flush, снижая нагрузку на persistence context. Это важно для производительности и защиты от случайных изменений данных.
 
 
 [к оглавлению](#ORM-and-JPA)
