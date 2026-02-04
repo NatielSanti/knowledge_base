@@ -642,6 +642,7 @@ Phantom ломает логику - ↑ Isolation
 - OneToMany typically triggers multiple selects if lazy and iterated, while ManyToOne usually issues a single join or select. Using Set enforces uniqueness but may add extra memory operations and distinct filtering.
 - The N+1 problem occurs when lazy associations are accessed in a loop, causing multiple queries. Solutions include fetch joins, batch fetching (@BatchSize), subselects, or entity graphs.
 - <img width="801" height="530" alt="изображение" src="https://github.com/user-attachments/assets/f761e580-b242-49cf-91af-a49dd9bea21c" />
+- CrudRepository предоставляет базовый CRUD API, PagingAndSortingRepository добавляет поддержку pagination и sorting, а JpaRepository расширяет их JPA-специфичными операциями, такими как flush, batch delete и lazy reference. В реальных проектах чаще используют JpaRepository, так как он даёт полный контроль над Persistence Context, но требует аккуратного обращения из-за N+1, lazy loading и транзакционных границ.
 
 
 [к оглавлению](#ORM-and-JPA)
