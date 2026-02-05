@@ -7,6 +7,7 @@
 + [Java 11](java-version-features.md#Java-11)
 + [Java 12](java-version-features.md#Java-12)
 + [Java 13](java-version-features.md#Java-13)
++ [Примечания](java-version-features.md#Примечания)
 
 [к оглавлению](#Java-Version-Features)
 
@@ -463,6 +464,12 @@ API Socket (java.net.Socket и java.net.ServerSocket) — по сути неот
 Они, как и базовый абстрактный класс ```Buffer```, включают метод ```slice()``` для извлечения части буфера.
 - В ```javax.xml.parsers``` добавлены методы для создания экземпляров фабрик DOM и SAX (с поддержкой пространств имен).
 - Поддержка Unicode обновлена до версии 12.1.
+
+[к оглавлению](#Java-Version-Features)
+
+## Примечания
+
+<img width="489" height="413" alt="изображение" src="https://github.com/user-attachments/assets/741df8b6-c990-47c8-a817-8ea0df118b30" />
 
 [к оглавлению](#Java-Version-Features)
 
