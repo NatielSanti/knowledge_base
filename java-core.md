@@ -367,5 +367,7 @@ public class Main2 {
 [к оглавлению](#Java-Core)
 
 <img width="706" height="162" alt="изображение" src="https://github.com/user-attachments/assets/21e40b59-c884-46f0-b134-01db888d83ac" />
+<img width="1036" height="374" alt="изображение" src="https://github.com/user-attachments/assets/257e1082-8fc7-4e05-b2b2-2cfb942064ce" />
+
 
 [Заглавная](README.md)
