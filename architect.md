@@ -2191,6 +2191,14 @@ reliable>efficient  (надежный сервис лучше эффективн
 - Timeout ограничивает время ожидания ответа и защищает ресурсы, а Retry позволяет автоматически восстанавливаться от временных сбоев. Они должны использоваться совместно, с короткими таймаутами, ограниченным числом попыток и экспоненциальной задержкой, и всегда в комбинации с circuit breaker и bulkhead.
 - Rate Limiting ограничивает количество запросов к системе, защищая её от перегрузки и обеспечивая стабильную latency. Он тесно связан с таймаутами: rate limiting снижает вероятность таймаутов, а таймауты ограничивают последствия перегрузки, если она всё же произошла.
 - Fallback — это альтернативный сценарий выполнения, который используется при недоступности зависимости и позволяет системе корректно деградировать, сохраняя доступность и пользовательский опыт без нарушения бизнес-инвариантов.
+-
+║  Aspect             Liveness Probe                    Readiness Probe                          ║
+║  ────────────────────────────────────────────────────────────────────────────────────────────  ║
+║  Question           "Is the container alive?"         "Is the container ready for traffic?"    ║
+║  Action on failure  Restart the container             Remove from Service endpoints            ║
+║  Use case           Detect deadlocks, infinite loops  Prevent traffic during startup/overload  ║
+║  Failure is         Fatal (needs restart)             Temporary (will recover)                 ║
+║  Example            Process crashed                   Database connection not ready            ║
 
 [к оглавлению](architect.md#Architect)
 
