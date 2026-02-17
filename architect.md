@@ -2200,6 +2200,48 @@ reliable>efficient  (надежный сервис лучше эффективн
 ║  Failure is         Fatal (needs restart)             Temporary (will recover)                 ║
 ║  Example            Process crashed                   Database connection not ready            ║
 
+- Основные настройки продюсера Kafka делятся на группы: гарантии доставки (acks, retries, idempotence), производительность (batch.size, linger.ms, compression), порядок сообщений (max.in.flight) и транзакции (transactional.id). Их комбинация определяет баланс между надёжностью и throughput.
+- Настройки брокера отвечают за: Консистентность (ISR + acks), Доступность (replication + leader election), Производительность (threads + batching), Хранение (retention + segments), Безопасность (SSL/SASL)
+- Настройки consumer’а можно разделить на управление offset’ами, ребаланс группы, производительность fetch’а и гарантии доставки. Ключевые параметры — enable.auto.commit, max.poll.interval.ms, session.timeout.ms и auto.offset.reset.
+- 
+Time →
+┌───────────────────────────────────────────────────────────────┐
+| Producer TX:                                                 |
+| beginTransaction()                                           |
+| send(message offset=100)                                     |
+| sendOffsetsToTransaction(offset=100)                         |
+| commitTransaction() → message + offset зафиксированы в Kafka |
+└───────────────────────────────────────────────────────────────┘
+       │
+       ▼
+┌───────────────────────────────────────────────────────────────┐
+| Consumer (poll)                                               |
+| Точка A: пытается прочитать offset=100                        |
+| Падает до обработки                                           |
+└───────────────────────────────────────────────────────────────┘
+       │
+       ▼
+┌───────────────────────────────────────────────────────────────┐
+| Kafka хранит:                                                 |
+| - сообщение offset=100                                         |
+| - committed transaction                                         |
+| - offset=100 зафиксирован в __consumer_offsets                 |
+└───────────────────────────────────────────────────────────────┘
+       │
+       ▼
+┌───────────────────────────────────────────────────────────────┐
+| Consumer восстанавливается                                     |
+| poll() → видит committed сообщения с offset=100                |
+| process() → обработка сообщения                                 |
+| commit offset (в обычной модели) или producer commit в транзакции|
+└───────────────────────────────────────────────────────────────┘
+       │
+       ▼
+┌───────────────────────────────────────────────────────────────┐
+| Producer продолжает писать новые сообщения                     |
+| backlog топика растёт, пока consumer не прочитает всё          |
+└───────────────────────────────────────────────────────────────┘
+
 [к оглавлению](architect.md#Architect)
 
 
